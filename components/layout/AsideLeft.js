@@ -1,13 +1,12 @@
-import React, {Fragment} from 'react';
-import {Icon, Menu} from 'antd';
+import React, { Fragment } from 'react';
+import { Icon, Menu } from 'antd';
 import Brand from './brand/Brand';
 import Link from 'next/link';
-import Navs from '../../helpers/Navs';
-import {ROOT_PATH} from "../../routes/Slugs";
+import { ROOT_PATH } from "../../routes/Slugs";
 
-const {SubMenu} = Menu;
+const { SubMenu } = Menu;
 
-const AsideLeft = ({collapsed}) => {
+const AsideLeft = ({ collapsed, navs }) => {
 
     const headerLogoClassName = collapsed ? 'brand collapsed' : 'brand';
 
@@ -21,7 +20,7 @@ const AsideLeft = ({collapsed}) => {
             <Menu.Item key={item.key}>
                 {item.icon}
                 <span>{item.title}</span>
-                {item.path && <Link href={item.path}><a/></Link>}
+                {item.path && <Link href={item.path}><a /></Link>}
             </Menu.Item>
         )
     };
@@ -46,14 +45,18 @@ const AsideLeft = ({collapsed}) => {
     return (
         <Fragment>
             <Link href={ROOT_PATH}>
-                <a><Brand brandText={'Logo'} icon={<Icon style={{color: '#ff0000'}} type="dingding"/>}
-                          className={headerLogoClassName}/></a>
+                <a><Brand brandText={'Logo'} icon={<Icon style={{ color: '#ff0000' }} type="dingding" />}
+                    className={headerLogoClassName} /></a>
             </Link>
             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                {Navs.map(item => getMenuItems(item))}
+                {navs.map(item => getMenuItems(item))}
             </Menu>
         </Fragment>
     );
 };
+
+AsideLeft.defaultProps = {
+    navs: []
+}
 
 export default AsideLeft;

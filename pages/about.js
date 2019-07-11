@@ -1,6 +1,6 @@
 import {Button, DatePicker, Form, InputNumber, Select, Slider, Switch} from 'antd'
 import React from "react";
-import DefaultLayout from "../components/layout/DefaultLayout";
+import DefaultLayout from "../components/layout/default_layout/DefaultLayout";
 
 const FormItem = Form.Item;
 const Option = Select.Option;

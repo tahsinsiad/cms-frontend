@@ -10,3 +10,21 @@
         cursor: pointer;
     }
 }
+
+
+.editor_nav_header {
+    display: flex;
+    background: $white;
+    padding: 0 16px;
+
+    .left {
+        width: 50%;
+    }
+
+    .right {
+        @include flexContentRightAlign;
+        width: 50%;
+        align-items: center;
+    }
+
+}
