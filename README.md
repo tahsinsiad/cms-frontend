@@ -15,7 +15,7 @@
       npm install --save-dev @zeit/next-css
     
 - Create `.babelrc` file with following contents
-
+```json
       {
         "presets": ["next/babel"],
         "plugins": [
@@ -28,9 +28,11 @@
           ]
         ]
       }
+```
 
 - Add the following in the next.config.js
 
+```javascript
       const withCss = require('@zeit/next-css')
       
       module.exports = withCss({
@@ -58,9 +60,11 @@
           return config
         },
       })
-      
+```
+   
 - In case you also need the next-sass loader
-    
+
+```javascript
       const withSass = require('@zeit/next-sass')
       const withCss = require('@zeit/next-css')
       
@@ -89,3 +93,4 @@
           return config
         },
       }))
+```
