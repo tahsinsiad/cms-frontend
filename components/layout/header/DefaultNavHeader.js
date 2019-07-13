@@ -33,7 +33,7 @@ const NavHeader = () => {
         <Header className="nav_header">
             <Dropdown className="drop_down" overlay={menu} trigger={['click']}>
                 <div>
-                    <span>admin@ecourier.org</span> &nbsp;
+                    <span>admin@picms.org</span> &nbsp;
                     <Avatar size="large" icon="user" className="ant-dropdown-link" />
                 </div>
             </Dropdown>

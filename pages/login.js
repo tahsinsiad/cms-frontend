@@ -3,7 +3,7 @@ import { Button, Checkbox, Form, Icon, Input } from 'antd';
 /* SCSS */
 import '../static/scss/login.scss';
 
-import withContext, { GlobalContext } from "../contexts/WithContext";
+import { GlobalContext } from "../contexts/WithContext";
 import { redirectTo } from "../components/common/Redirect";
 
 const Login = (props) => {
@@ -69,7 +69,7 @@ const Login = (props) => {
                     >
                         Log in
                     </Button>
-                    Or <a href="#/">register now!</a>
+                    Or <a href="#">register now!</a>
                 </Form.Item>
             </Form>
         </div>

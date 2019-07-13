@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import EditorNavHeader from '../header/EditorNavHeader';
 import CommonLayout from '../CommonLayout';
 import LoadingSuspense from '../../common/LoadingSuspense';
 import { Layout } from 'antd';
@@ -10,7 +9,7 @@ const AsideLeft = dynamic(() => import('../AsideLeft'), { loading: () => <Loadin
 
 const { Sider } = Layout;
 
-const EditorLayout = ({ children }) => {
+const EditorLayout = ({ children, navHeader }) => {
 
     const [collapsed, setCollapsed] = useState(false);
 
@@ -25,7 +24,7 @@ const EditorLayout = ({ children }) => {
                     <AsideLeft collapsed={collapsed} navs={EditorNavs} />
                 </Sider>
             }
-            navHeader={<EditorNavHeader />}
+            navHeader={navHeader}
         >
             {children}
         </CommonLayout>
