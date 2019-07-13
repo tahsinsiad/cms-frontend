@@ -4,7 +4,7 @@ import NavHeader from '../header/DefaultNavHeader';
 import CommonLayout from '../CommonLayout';
 import LoadingSuspense from '../../common/LoadingSuspense';
 import { Layout } from 'antd';
-import DefaultNavs from '../../../helpers/DefaultNavs';
+import DefaultNavs from '../../../constants/DefaultNavs';
 
 const AsideLeft = dynamic(() => import('../AsideLeft'), { loading: () => <LoadingSuspense /> });
 

@@ -9,10 +9,10 @@ import {
 } from 'antd';
 import {Component} from "react";
 import React from "react";
-import {beforeUpload, getBase64} from "../../../helpers/uploadUtils";
+import {beforeUpload, getBase64} from "../../../utils/uploadUtils";
 // SCSS
 import './ProjectCreateForm.scss';
-import {DASHBOARD_PATH} from "../../../routes/Slugs";
+import {DASHBOARD_PATH} from "../../../constants/URLs";
 import Link from "next/link";
 
 const AutoCompleteOption = AutoComplete.Option;

@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import CommonLayout from '../CommonLayout';
 import LoadingSuspense from '../../common/LoadingSuspense';
 import { Layout } from 'antd';
-import EditorNavs from '../../../helpers/EditorNavs';
+import EditorNavs from '../../../constants/EditorNavs';
 
 const AsideLeft = dynamic(() => import('../AsideLeft'), { loading: () => <LoadingSuspense /> });
 

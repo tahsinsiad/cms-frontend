@@ -1,11 +1,13 @@
-import { API_BASE_PATH } from '../routes/Slugs'
+import {API_BASE_URL, DASHBOARD_PATH, FORGOT_PASSWORD_PATH, LOGIN_PATH, RESOLVE_USER_URL} from '../constants/URLs'
 import App, { Container } from 'next/app'
 import React from 'react'
-// import fetch from 'isomorphic-unfetch';
-import { mockFetch } from '../helpers/mockFetch';
+import fetch from 'isomorphic-unfetch';
+// import { mockFetch } from '../utils/mockFetch';
 import { redirectTo } from '../components/common/Redirect'
 import cookies from 'next-cookies';
-import withContext from "../contexts/WithContext";
+import withContext from "../contexts/withContext";
+import {ApolloProvider} from "react-apollo";
+import withApolloClient from "../utils/withApolloClient";
 
 class CMSApp extends App {
 
@@ -21,34 +23,35 @@ class CMSApp extends App {
         //if the authtoken is not found
         if (typeof c.token == 'undefined') {
             //don't do anything if we are on a page that doesn't require credentials
-            if (ctx.pathname === "/login" || ctx.pathname === "/forgot-password") return { pageProps };
+            if (ctx.pathname === LOGIN_PATH || ctx.pathname === FORGOT_PASSWORD_PATH) return { pageProps };
             //if we are on any other page, redirect to the login page
-            else redirectTo('/login', { res: ctx.res, status: 301 })
+            else redirectTo(LOGIN_PATH, { res: ctx.res, status: 301 })
         } else { //if we do have an auth token to check
-            response = await mockFetch(API_BASE_PATH + '/auth', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token: c.token })
+            // response = await mockFetch(API_BASE_URL + '/auth', {
+            response = await fetch(RESOLVE_USER_URL, {
+                method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${c.token}` },
+                // body: JSON.stringify({ token: c.token })
             })
                 .then(r => r.json())
                 .then(resp => {
-
+                    console.log("_app", resp);
                     if (ctx.pathname === "/") {
 
                         //if auth check was successful, send to dashboard
-                        if (resp.result === "success") redirectTo('/dashboard', { res: ctx.res, status: 301 });
+                        if (resp.status === "success") redirectTo(DASHBOARD_PATH, { res: ctx.res, status: 301 });
                         else {
 
                             //setting the cookie to expire way back when removes it
                             document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                            redirectTo('/login', { res: ctx.res, status: 301 })
+                            redirectTo(LOGIN_PATH, { res: ctx.res, status: 301 })
 
                         }
 
-                    } else if (ctx.pathname === "/login") {
+                    } else if (ctx.pathname === LOGIN_PATH) {
 
                         //shouldn't show the login page is we are already logged in
-                        if (resp.result === "success") {
-                            redirectTo('/dashboard', { res: ctx.res, status: 301 });
+                        if (resp.status === "success") {
+                            redirectTo(DASHBOARD_PATH, { res: ctx.res, status: 301 });
                         }
 
                         //if it wasn't successful, stay where we are
@@ -60,17 +63,18 @@ class CMSApp extends App {
                     else {
 
                         //if auth check was successful, stay where we are
-                        if (resp.result === "success") return {
+                        if (resp.status === "success") return {
                             ...pageProps, ...{
                                 query: ctx.query,
-                                token: c.token
+                                token: c.token,
+                                user: resp.data
                             }
                         };
 
                         //if it wasn't successful, clear the authtoken since it must be expired or invalid and redirect to login
                         else {
                             document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                            redirectTo('/login', { res: ctx.res, status: 301 });
+                            redirectTo(LOGIN_PATH, { res: ctx.res, status: 301 });
                         }
                     }
 
@@ -87,19 +91,20 @@ class CMSApp extends App {
 
     }
 
-
-
     render() {
-        const { Component, pageProps } = this.props;
+        const { Component, pageProps, apolloClient } = this.props;
 
-        const ComponentWithContext = withContext(Component);
+        const ComponentWithContext = withContext(Component, pageProps);
 
         return (
             <Container>
-                <ComponentWithContext {...pageProps} />
+                {/*<ApolloProvider client={apolloClient}>*/}
+                    <ComponentWithContext {...pageProps} />
+                {/*</ApolloProvider>*/}
             </Container>
         )
     }
 }
 
+// export default withApolloClient(CMSApp);
 export default CMSApp;

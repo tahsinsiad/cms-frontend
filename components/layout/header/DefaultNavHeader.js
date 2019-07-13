@@ -3,7 +3,7 @@ import { Avatar, Dropdown, Layout, Menu } from 'antd';
 import Link from 'next/link';
 /* SCSS */
 import './nav_header.scss'
-import { GlobalContext } from "../../../contexts/WithContext";
+import { GlobalContext } from "../../../contexts/withContext";
 import { redirectTo } from "../../common/Redirect";
 
 const { Header } = Layout;
@@ -33,7 +33,7 @@ const NavHeader = () => {
         <Header className="nav_header">
             <Dropdown className="drop_down" overlay={menu} trigger={['click']}>
                 <div>
-                    <span>admin@picms.org</span> &nbsp;
+                    <span>{authContext.user && authContext.user.name}</span> &nbsp;
                     <Avatar size="large" icon="user" className="ant-dropdown-link" />
                 </div>
             </Dropdown>

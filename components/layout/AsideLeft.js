@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Icon, Menu } from 'antd';
 import Brand from './brand/Brand';
 import Link from 'next/link';
-import { ROOT_PATH } from "../../routes/Slugs";
+import { ROOT_PATH } from "../../constants/URLs";
 
 const { SubMenu } = Menu;
 

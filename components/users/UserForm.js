@@ -1,6 +1,6 @@
 import React, {useContext, useEffect} from 'react';
 import {Button, Form, Input} from 'antd';
-import {GlobalContext} from "../../contexts/WithContext";
+import {GlobalContext} from "../../contexts/withContext";
 
 const {Item} = Form;
 

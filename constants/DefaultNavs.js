@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from "antd";
-import { DASHBOARD_PATH, LOGIN_PATH, PAGE_403_PATH, PAGE_500_PATH, PAGE_404_PATH, ABOUT_PATH } from '../routes/Slugs';
+import { DASHBOARD_PATH, LOGIN_PATH, ERROR_PAGE, ABOUT_PATH } from './URLs';
 
 const DefaultNavs = [
     {
@@ -30,19 +30,9 @@ const DefaultNavs = [
                 subMenu: null
             },
             {
-                key: 'page403',
-                title: 'Page403',
-                path: PAGE_403_PATH,
-            },
-            {
-                key: 'page404',
-                title: 'Page404',
-                path: PAGE_404_PATH,
-            },
-            {
-                key: 'page500',
-                title: 'Page500',
-                path: PAGE_500_PATH,
+                key: '_error',
+                title: 'Error',
+                path: ERROR_PAGE,
             }
         ]
     }

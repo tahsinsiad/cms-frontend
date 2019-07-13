@@ -8,16 +8,19 @@ export const initAuthState = {
     token: '',
     user: null,
     loading: false,
+    error: null,
 };
 
 
 /* AuthReducer */
 export const AuthReducer = (state, action) => {
+    console.log(action);
     switch (action.type) {
         case LOGIN_REQUEST:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                error: null
             };
         case LOGIN_SUCCESS: {
             const cookie = cookies();
@@ -25,20 +28,24 @@ export const AuthReducer = (state, action) => {
                 ...state,
                 ...cookie,
                 isLoggedIn: true,
-                loading: false
+                loading: false,
+                error: null,
+                user: action.payload.data
             };
         }
         case LOGIN_FAILED:
             return {
                 ...state,
-                loading: false
+                loading: false,
+                error: action.payload
             };
         case LOGOUT_REQUEST: {
             const cookie = cookies();
             return {
                 ...state,
                 ...cookie,
-                isLoggedIn: false
+                isLoggedIn: false,
+                error: null
             };
         }
         case SYNC_AUTH: {
@@ -46,7 +53,8 @@ export const AuthReducer = (state, action) => {
             return {
                 ...state,
                 ...cookie,
-                isLoggedIn: Boolean(cookie.token)
+                isLoggedIn: Boolean(cookie.token),
+                user: action.payload
             };
         }
         default:

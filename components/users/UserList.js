@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {Table} from 'antd';
-import {GlobalContext} from "../../contexts/WithContext";
+import {GlobalContext} from "../../contexts/withContext";
 
 const UserList = () => {
 

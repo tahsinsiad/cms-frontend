@@ -8,7 +8,7 @@ import cookies from "next-cookies";
 
 export const GlobalContext = createContext();
 
-const withContext = (Component) => {
+const withContext = (Component, {user}) => {
     return function GlobalContextProvider(props) {
 
         const authContext = ContextBinder(useReducer(AuthReducer, initAuthState), {
@@ -20,7 +20,7 @@ const withContext = (Component) => {
         const userContext = ContextBinder(useReducer(UserReducer, initUserState), { addUser });
 
         useEffect(() => {
-            authContext.syncAuth(cookies());
+            authContext.syncAuth(user);
         }, []);
 
         return (

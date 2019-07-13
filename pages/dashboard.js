@@ -5,7 +5,7 @@ import '../static/scss/dashboard.scss'
 
 import PageWrapper from "../components/common/PageWrapper";
 import DefaultLayout from "../components/layout/default_layout/DefaultLayout";
-import { CREATE_PROJECT_PATH } from '../routes/Slugs';
+import { CREATE_PROJECT_PATH } from '../constants/URLs';
 
 const { Meta } = Card;
 

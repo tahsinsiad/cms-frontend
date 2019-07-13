@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { Button, Checkbox, Form, Icon, Input } from 'antd';
+import {Alert, Button, Checkbox, Form, Icon, Input} from 'antd';
 /* SCSS */
 import '../static/scss/login.scss';
 
-import { GlobalContext } from "../contexts/WithContext";
+import { GlobalContext } from "../contexts/withContext";
 import { redirectTo } from "../components/common/Redirect";
+import {DASHBOARD_PATH} from "../constants/URLs";
 
 const Login = (props) => {
 
@@ -23,21 +24,26 @@ const Login = (props) => {
     const { getFieldDecorator } = props.form;
 
     if (authContext.isLoggedIn) {
-        redirectTo('/dashboard', { status: 301 });
+        redirectTo(DASHBOARD_PATH, { status: 301 });
         return null;
     }
+
+    console.log(authContext.error);
 
     return (
         <div className="login_form_wrapper">
             <Form onSubmit={handleSubmit} className="login_form">
                 <h4 className="login_title">Login</h4>
                 <Form.Item>
-                    {getFieldDecorator('username', {
-                        rules: [{ required: true, message: 'Please input your username!' }],
+                    {getFieldDecorator('email', {
+                        rules: [{
+                            type: 'email',
+                            message: 'The input is not valid E-mail!',
+                        },{ required: true, message: 'Please input your email!' }],
                     })(
                         <Input
                             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            placeholder="Username"
+                            placeholder="E-mail"
                         />,
                     )}
                 </Form.Item>
@@ -52,6 +58,9 @@ const Login = (props) => {
                         />,
                     )}
                 </Form.Item>
+                {authContext.error && <Form.Item>
+                    <Alert message={authContext.error.message} type="error" />
+                </Form.Item>}
                 <Form.Item>
                     {getFieldDecorator('remember', {
                         valuePropName: 'checked',
