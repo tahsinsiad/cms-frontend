@@ -1,71 +1,30 @@
-import {Button, DatePicker, Form, InputNumber, Select, Slider, Switch} from 'antd'
 import React from "react";
 import DefaultLayout from "../components/layout/default_layout/DefaultLayout";
 
-const FormItem = Form.Item;
-const Option = Select.Option;
-
 const About = () => (
     <DefaultLayout>
-        <div style={{marginTop: 100}}>
-            <Form layout='horizontal'>
-                <FormItem
-                    label='Input Number'
-                    labelCol={{span: 8}}
-                    wrapperCol={{span: 8}}
-                >
-                    <InputNumber
-                        size='large'
-                        min={1}
-                        max={10}
-                        style={{width: 100}}
-                        defaultValue={3}
-                        name='inputNumber'
-                    />
-                    <a href='#'>Link</a>
-                </FormItem>
+        <article>
+            <h1>The Idea Behind This Example</h1>
+            <p>
+                <a href='https://github.com/nearform/graphql-hooks'>GraphQL Hooks</a> is
+                a library from NearForm that intends to be a minimal hooks-first GraphQL
+                client. Providing it in a way familiar to Apollo users.
+            </p>
 
-                <FormItem label='Switch' labelCol={{span: 8}} wrapperCol={{span: 8}}>
-                    <Switch defaultChecked name='switch'/>
-                </FormItem>
+            <p>
+                This started life as a copy of the `with-apollo` example. We then
+                stripped out Apollo and replaced it with `graphql-hooks`. This was
+                mostly as an exercise in ensuring basic functionality could be achieved
+                in a similar way to Apollo.
+            </p>
 
-                <FormItem label='Slider' labelCol={{span: 8}} wrapperCol={{span: 8}}>
-                    <Slider defaultValue={70}/>
-                </FormItem>
-
-                <FormItem label='Select' labelCol={{span: 8}} wrapperCol={{span: 8}}>
-                    <Select
-                        size='large'
-                        defaultValue='lucy'
-                        style={{width: 192}}
-                        name='select'
-                    >
-                        <Option value='jack'>jack</Option>
-                        <Option value='lucy'>lucy</Option>
-                        <Option value='disabled' disabled>
-                            disabled
-                        </Option>
-                        <Option value='yiminghe'>yiminghe</Option>
-                    </Select>
-                </FormItem>
-
-                <FormItem
-                    label='DatePicker'
-                    labelCol={{span: 8}}
-                    wrapperCol={{span: 8}}
-                >
-                    <DatePicker name='startDate'/>
-                </FormItem>
-                <FormItem style={{marginTop: 48}} wrapperCol={{span: 8, offset: 8}}>
-                    <Button size='large' type='primary' htmlType='submit'>
-                        OK
-                    </Button>
-                    <Button size='large' style={{marginLeft: 8}}>
-                        Cancel
-                    </Button>
-                </FormItem>
-            </Form>
-        </div>
+            <p>
+                You'll see this shares the same{' '}
+                <a href='https://www.graph.cool'>graph.cool</a> backend as the Apollo
+                example, this is so you can compare the two side by side. The app itself
+                should also look identical.
+            </p>
+        </article>
     </DefaultLayout>
 );
 

@@ -5,174 +5,193 @@ import {
     Row,
     Col,
     Button,
-    AutoComplete, Upload,
+    AutoComplete, Upload, message,
 } from 'antd';
-import {Component} from "react";
+import {Component, useState} from "react";
 import React from "react";
 import {beforeUpload, getBase64} from "../../../utils/uploadUtils";
 // SCSS
 import './ProjectCreateForm.scss';
-import {DASHBOARD_PATH} from "../../../constants/URLs";
 import Link from "next/link";
+import { useMutation } from 'graphql-hooks'
+import {redirectTo} from "../../common/Redirect";
+import getConfig from 'next/config'
+const {publicRuntimeConfig} = getConfig();
+const {DASHBOARD_PATH} = publicRuntimeConfig;
 
 const AutoCompleteOption = AutoComplete.Option;
+const FormItem = Form.Item;
 
-class ProjectCreateForm extends Component {
-    state = {
-        confirmDirty: false,
-        uploading: false,
-        autoCompleteResult: [],
-    };
+const CREATE_PROJECT = `
+mutation createPost($title: String!, $description: String, $websiteUrl: String!) {
+  createProject(title: $title, description: $description, websiteUrl: $websiteUrl) {
+    id
+    title
+    description
+    websiteUrl
+    createdAt
+  }
+}`;
 
-    handleSubmit = e => {
+const ProjectCreateForm = (props) => {
+    const [createProject, project] = useMutation(CREATE_PROJECT);
+    const [confirmDirty, setDirty] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [imageUrl, setImageUrl] = useState(false);
+    const [autoCompleteResult, setAutoCompleteResult] = useState([]);
+
+    const handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
+        props.form.validateFieldsAndScroll(async (err, values) => {
+            if (err) {
+                console.error(err);
+                message.error('Unexpected error!');
             }
+            console.log('Received values of form: ', values);
+            event.preventDefault();
+            const result = await createProject({
+                variables: values
+            });
+            console.log(result);
+            redirectTo(DASHBOARD_PATH);
         });
     };
 
-    handleConfirmBlur = e => {
+    const handleConfirmBlur = e => {
         const { value } = e.target;
-        this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+        setDirty(confirmDirty || !!value);
     };
 
-    handleWebsiteChange = value => {
+    const handleWebsiteUrlChange = value => {
         let autoCompleteResult;
         if (!value) {
             autoCompleteResult = [];
         } else {
             autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
         }
-        this.setState({ autoCompleteResult });
+        setAutoCompleteResult(autoCompleteResult);
     };
 
-    // handleUploadChange = info => {
-    //     if (info.file.status === 'uploading') {
-    //         this.setState({ uploading: true });
-    //         return;
-    //     }
-    //     if (info.file.status === 'done') {
-    //         // Get this url from response in real world.
-    //         getBase64(info.file.originFileObj, imageUrl =>
-    //             this.setState({
-    //                 imageUrl,
-    //                 uploading: false,
-    //             }),
-    //         );
-    //     }
-    // };
+    const handleUploadChange = info => {
+        if (info.file.status === 'uploading') {
+            setUploading(true);
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj, imageUrl => {
+                setUploading(false);
+                setImageUrl(imageUrl);
+            });
+        }
+    };
 
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        const { autoCompleteResult, imageUrl } = this.state;
+    const { getFieldDecorator } = props.form;
 
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
+    const formItemLayout = {
+        labelCol: {
+            xs: { span: 24 },
+            sm: { span: 8 },
+        },
+        wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 16 },
+        },
+    };
+    const tailFormItemLayout = {
+        wrapperCol: {
+            xs: {
+                span: 24,
+                offset: 0,
             },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
+            sm: {
+                span: 16,
+                offset: 8,
             },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            },
-        };
+        },
+    };
 
-        const websiteOptions = autoCompleteResult.map(website => (
-            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-        ));
+    const websiteUrlOptions = autoCompleteResult.map(websiteUrl => (
+        <AutoCompleteOption key={websiteUrl}>{websiteUrl}</AutoCompleteOption>
+    ));
 
-        // const uploadButton = (
-        //     <div>
-        //         <Icon type={this.state.uploading ? 'loading' : 'plus'} />
-        //         <div className="ant-upload-text">Upload</div>
-        //     </div>
-        // );
+    // const uploadButton = (
+    //     <div>
+    //         <Icon type={uploading ? 'loading' : 'plus'} />
+    //         <div className="ant-upload-text">Upload</div>
+    //     </div>
+    // );
 
-        return (
-            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                <Form.Item label="Title">
-                    {getFieldDecorator('title', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Please input your Project title!',
-                            },
-                        ],
-                    })(<Input />)}
-                </Form.Item>
-                <Form.Item label="Description">
-                    {getFieldDecorator('description', {
-                        rules: [
-                            {
-                                required: false,
-                            }
-                        ],
-                    })(<Input.TextArea />)}
-                </Form.Item>
-                <Form.Item label="Website URL" extra="Used to create canonical URL.">
-                    {getFieldDecorator('website', {
-                        rules: [{ required: true, message: 'Please input website!' }],
-                    })(
-                        <AutoComplete
-                            dataSource={websiteOptions}
-                            onChange={this.handleWebsiteChange}
-                            placeholder="website"
-                        >
-                            <Input />
-                        </AutoComplete>,
-                    )}
-                </Form.Item>
-                {/*<Form.Item label="Brand Logo" extra="Used to create canonical URL.">*/}
-                    {/*{getFieldDecorator('website', {*/}
-                        {/*rules: [{ required: true, message: 'Please input website!' }],*/}
-                    {/*})(*/}
-                        {/*<Upload*/}
-                            {/*name="brandLogo"*/}
-                            {/*listType="picture-card"*/}
-                            {/*className="avatar-uploader"*/}
-                            {/*showUploadList={false}*/}
-                            {/*action="https://www.mocky.io/v2/5cc8019d300000980a055e76"*/}
-                            {/*beforeUpload={beforeUpload}*/}
-                            {/*onChange={this.handleUploadChange}*/}
-                        {/*>*/}
-                            {/*{imageUrl ? <img src={imageUrl} alt="project logo" /> : uploadButton}*/}
-                        {/*</Upload>*/}
-                    {/*)}*/}
-                {/*</Form.Item>*/}
-                {/*<Form.Item label="Captcha" extra="We must make sure that your are a human.">*/}
-                    {/*<Row gutter={8}>*/}
-                        {/*<Col span={12}>*/}
-                            {/*{getFieldDecorator('captcha', {*/}
-                                {/*rules: [{ required: true, message: 'Please input the captcha you got!' }],*/}
-                            {/*})(<Input />)}*/}
-                        {/*</Col>*/}
-                        {/*<Col span={12}>*/}
-                            {/*<Button>Get captcha</Button>*/}
-                        {/*</Col>*/}
-                    {/*</Row>*/}
-                {/*</Form.Item>*/}
-                <Form.Item {...tailFormItemLayout}>
-                    <Link href={DASHBOARD_PATH}><Button type='secondary'>Cancel</Button></Link>
-                    <Button type="primary" htmlType="submit" style={{marginLeft: 8}}>Create</Button>
-                </Form.Item>
-            </Form>
-        );
-    }
-}
+    return (
+        <Form {...formItemLayout} onSubmit={handleSubmit}>
+            <FormItem label="Title">
+                {getFieldDecorator('title', {
+                    rules: [
+                        {
+                            required: true,
+                            message: 'Please input your Project title!',
+                        },
+                    ],
+                })(<Input />)}
+            </FormItem>
+            <FormItem label="Description">
+                {getFieldDecorator('description', {
+                    rules: [
+                        {
+                            required: false,
+                        }
+                    ],
+                })(<Input.TextArea />)}
+            </FormItem>
+            <FormItem label="Website URL" extra="Used to create canonical URL.">
+                {getFieldDecorator('websiteUrl', {
+                    rules: [{ required: true, message: 'Please input website!' }],
+                })(
+                    <AutoComplete
+                        dataSource={websiteUrlOptions}
+                        onChange={handleWebsiteUrlChange}
+                        placeholder="website"
+                    >
+                        <Input />
+                    </AutoComplete>,
+                )}
+            </FormItem>
+            {/*<FormItem label="Brand Logo" extra="Used to create canonical URL.">*/}
+            {/*{getFieldDecorator('website', {*/}
+            {/*rules: [{ required: true, message: 'Please input website!' }],*/}
+            {/*})(*/}
+            {/*<Upload*/}
+            {/*name="brandLogo"*/}
+            {/*listType="picture-card"*/}
+            {/*className="avatar-uploader"*/}
+            {/*showUploadList={false}*/}
+            {/*action="https://www.mocky.io/v2/5cc8019d300000980a055e76"*/}
+            {/*beforeUpload={beforeUpload}*/}
+            {/*onChange={handleUploadChange}*/}
+            {/*>*/}
+            {/*{imageUrl ? <img src={imageUrl} alt="project logo" /> : uploadButton}*/}
+            {/*</Upload>*/}
+            {/*)}*/}
+            {/*</FormItem>*/}
+            {/*<FormItem label="Captcha" extra="We must make sure that your are a human.">*/}
+            {/*<Row gutter={8}>*/}
+            {/*<Col span={12}>*/}
+            {/*{getFieldDecorator('captcha', {*/}
+            {/*rules: [{ required: true, message: 'Please input the captcha you got!' }],*/}
+            {/*})(<Input />)}*/}
+            {/*</Col>*/}
+            {/*<Col span={12}>*/}
+            {/*<Button>Get captcha</Button>*/}
+            {/*</Col>*/}
+            {/*</Row>*/}
+            {/*</FormItem>*/}
+            <FormItem {...tailFormItemLayout}>
+                <Link href={DASHBOARD_PATH}><Button type='secondary'>Cancel</Button></Link>
+                <Button type="primary" htmlType="submit" style={{marginLeft: 8}}>Create</Button>
+            </FormItem>
+        </Form>
+    );
+};
 
 const WrappedProjectCreateForm = Form.create({ name: 'register' })(ProjectCreateForm);
 

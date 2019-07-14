@@ -1,6 +1,8 @@
 import React from 'react';
 import { Icon } from "antd";
-import { DASHBOARD_PATH, LOGIN_PATH, ERROR_PAGE, ABOUT_PATH } from './URLs';
+import getConfig from 'next/config'
+const {publicRuntimeConfig} = getConfig();
+const {DASHBOARD_PATH, LOGIN_PATH, ERROR_PAGE, ABOUT_PATH} = publicRuntimeConfig;
 
 const DefaultNavs = [
     {

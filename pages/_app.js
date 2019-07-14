@@ -1,4 +1,3 @@
-import {API_BASE_URL, DASHBOARD_PATH, FORGOT_PASSWORD_PATH, LOGIN_PATH, RESOLVE_USER_URL} from '../constants/URLs'
 import App, { Container } from 'next/app'
 import React from 'react'
 import fetch from 'isomorphic-unfetch';
@@ -6,12 +5,15 @@ import fetch from 'isomorphic-unfetch';
 import { redirectTo } from '../components/common/Redirect'
 import cookies from 'next-cookies';
 import withContext from "../contexts/withContext";
-import {ApolloProvider} from "react-apollo";
-import withApolloClient from "../utils/withApolloClient";
+import { ClientContext } from 'graphql-hooks'
+import withGraphQLClient from "../utils/withGraphQLClient";
+
+import getConfig from 'next/config'
+const {publicRuntimeConfig} = getConfig();
+const {API_BASE_URL, DASHBOARD_PATH, FORGOT_PASSWORD_PATH, LOGIN_PATH, RESOLVE_USER_URL} = publicRuntimeConfig;
 
 class CMSApp extends App {
-
-    static async getInitialProps({ Component, ctx }) {
+    static async getInitialProps({ Component, ctx }, graphQLClient) {
         let pageProps = {};
         let response = null;
         const c = cookies(ctx);
@@ -27,6 +29,10 @@ class CMSApp extends App {
             //if we are on any other page, redirect to the login page
             else redirectTo(LOGIN_PATH, { res: ctx.res, status: 301 })
         } else { //if we do have an auth token to check
+            graphQLClient && graphQLClient.setHeaders({
+                Authorization: `Bearer ${c.token}`
+            });
+            console.log(graphQLClient);
             // response = await mockFetch(API_BASE_URL + '/auth', {
             response = await fetch(RESOLVE_USER_URL, {
                 method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${c.token}` },
@@ -92,19 +98,20 @@ class CMSApp extends App {
     }
 
     render() {
-        const { Component, pageProps, apolloClient } = this.props;
-
+        const { Component, pageProps, graphQLClient } = this.props;
         const ComponentWithContext = withContext(Component, pageProps);
+
+        // graphQLClient.setHeader("Authorization", `Bearer ${token}`);
 
         return (
             <Container>
-                {/*<ApolloProvider client={apolloClient}>*/}
+                <ClientContext.Provider value={graphQLClient}>
                     <ComponentWithContext {...pageProps} />
-                {/*</ApolloProvider>*/}
+                </ClientContext.Provider>
             </Container>
         )
     }
 }
 
-// export default withApolloClient(CMSApp);
-export default CMSApp;
+export default withGraphQLClient(CMSApp);
+// export default CMSApp;

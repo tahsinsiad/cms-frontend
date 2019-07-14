@@ -2,7 +2,9 @@ import React, { Fragment } from 'react';
 import { Icon, Menu } from 'antd';
 import Brand from './brand/Brand';
 import Link from 'next/link';
-import { ROOT_PATH } from "../../constants/URLs";
+import getConfig from 'next/config'
+const {publicRuntimeConfig} = getConfig();
+const {ROOT_PATH} = publicRuntimeConfig;
 
 const { SubMenu } = Menu;
 

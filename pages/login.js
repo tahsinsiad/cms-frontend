@@ -5,11 +5,19 @@ import '../static/scss/login.scss';
 
 import { GlobalContext } from "../contexts/withContext";
 import { redirectTo } from "../components/common/Redirect";
-import {DASHBOARD_PATH} from "../constants/URLs";
+import getConfig from 'next/config'
+const {publicRuntimeConfig} = getConfig();
+const {DASHBOARD_PATH} = publicRuntimeConfig;
+import {ClientContext} from "graphql-hooks";
 
 const Login = (props) => {
 
     const { authContext } = useContext(GlobalContext);
+    const client = useContext(ClientContext);
+
+    useEffect(()=>{
+        client.setHeader("Authorization", `Bearer ${authContext.token}`);
+    }, [authContext.token]);
 
     const handleSubmit = e => {
         e.preventDefault();

@@ -2,7 +2,9 @@ import React from 'react';
 import { Layout, Button } from 'antd';
 import Link from "next/link";
 import './nav_header.scss'
-import { DASHBOARD_PATH } from '../../../constants/URLs';
+import getConfig from 'next/config'
+const {publicRuntimeConfig} = getConfig();
+const {DASHBOARD_PATH} = publicRuntimeConfig;
 
 const { Header } = Layout;
 

@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-unfetch';
-import {API_LOGIN_URL} from "../../constants/URLs";
+import getConfig from 'next/config'
+const {publicRuntimeConfig} = getConfig();
+const {API_LOGIN_URL} = publicRuntimeConfig;
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";

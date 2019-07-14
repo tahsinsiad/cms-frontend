@@ -1,7 +1,9 @@
 import React from 'react';
 import {Button} from 'antd';
 import Link from 'next/link';
-import {DASHBOARD_PATH, ROOT_PATH} from "../constants/URLs";
+import getConfig from 'next/config'
+const {publicRuntimeConfig} = getConfig();
+const {DASHBOARD_PATH, ROOT_PATH} = publicRuntimeConfig;
 import ErrorLayout from "../components/layout/error_layout/ErrorLayout";
 
 const ErrorPage = () => {

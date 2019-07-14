@@ -5,7 +5,10 @@ import '../static/scss/dashboard.scss'
 
 import PageWrapper from "../components/common/PageWrapper";
 import DefaultLayout from "../components/layout/default_layout/DefaultLayout";
-import { CREATE_PROJECT_PATH } from '../constants/URLs';
+import getConfig from 'next/config'
+const {publicRuntimeConfig} = getConfig();
+const {CREATE_PROJECT_PATH} = publicRuntimeConfig;
+import RecentProjects from "../components/projects/RecentProjects";
 
 const { Meta } = Card;
 
@@ -67,40 +70,7 @@ const Dashboard = () => {
             >
                 <Fragment>
                     <Title level={3}>Recent Project</Title>
-                    <Row gutter={4}>
-                        <Col xs={24} sm={6}>
-                            <Card
-                                cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
-                                actions={[<Icon type="edit" />, <Icon type="delete" />]}
-                            >
-                                <Meta title="Project Title" description="This is the description" />
-                            </Card>
-                        </Col>
-                        <Col xs={24} sm={6}>
-                            <Card
-                                cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
-                                actions={[<Icon type="edit" />, <Icon type="delete" />]}
-                            >
-                                <Meta title="Project Title" description="This is the description" />
-                            </Card>
-                        </Col>
-                        <Col xs={24} sm={6}>
-                            <Card
-                                cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
-                                actions={[<Icon type="edit" />, <Icon type="delete" />]}
-                            >
-                                <Meta title="Project Title" description="This is the description" />
-                            </Card>
-                        </Col>
-                        <Col xs={24} sm={6}>
-                            <Card
-                                cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
-                                actions={[<Icon type="edit" />, <Icon type="delete" />]}
-                            >
-                                <Meta title="Project Title" description="This is the description" />
-                            </Card>
-                        </Col>
-                    </Row>
+                    <RecentProjects/>
 
                     <Divider />
 
