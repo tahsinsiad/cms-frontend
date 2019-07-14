@@ -1,3 +1,7 @@
+/**
+ * This file is meant to be loaded by next.config.js to populate the runtimeConfig. It is not meant to be imported
+ * to be compiled by webpack.
+ */
 module.exports = function getURLConstants(env) {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
     // ---------------- API ---------------- //
