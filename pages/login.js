@@ -1,21 +1,21 @@
 import React, { useContext, useEffect } from 'react';
-import {Alert, Button, Checkbox, Form, Icon, Input} from 'antd';
+import { Alert, Button, Checkbox, Form, Icon, Input } from 'antd';
 /* SCSS */
 import '../static/scss/login.scss';
 
 import { GlobalContext } from "../contexts/withContext";
 import { redirectTo } from "../components/common/Redirect";
 import getConfig from 'next/config'
-const {publicRuntimeConfig} = getConfig();
-const {DASHBOARD_PATH} = publicRuntimeConfig;
-import {ClientContext} from "graphql-hooks";
+const { publicRuntimeConfig } = getConfig();
+const { DASHBOARD_PATH } = publicRuntimeConfig;
+import { ClientContext } from "graphql-hooks";
 
 const Login = (props) => {
 
     const { authContext } = useContext(GlobalContext);
     const client = useContext(ClientContext);
 
-    useEffect(()=>{
+    useEffect(() => {
         client.setHeader("Authorization", `Bearer ${authContext.token}`);
     }, [authContext.token]);
 
@@ -23,7 +23,6 @@ const Login = (props) => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 authContext.loginRequest(values);
             }
         });
@@ -36,8 +35,6 @@ const Login = (props) => {
         return null;
     }
 
-    console.log(authContext.error);
-
     return (
         <div className="login_form_wrapper">
             <Form onSubmit={handleSubmit} className="login_form">
@@ -47,7 +44,7 @@ const Login = (props) => {
                         rules: [{
                             type: 'email',
                             message: 'The input is not valid E-mail!',
-                        },{ required: true, message: 'Please input your email!' }],
+                        }, { required: true, message: 'Please input your email!' }],
                     })(
                         <Input
                             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}

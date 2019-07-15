@@ -3,27 +3,27 @@ import { Icon } from "antd";
 
 const EditorNavs = [
     {
-        key: 'header',
-        title: 'Header',
-        icon: <Icon type="pie-chart" />,
+        key: 'project-setting',
+        title: 'Project Setting',
+        icon: <Icon type="setting" />,
         subMenu: null
     },
     {
         key: 'pages',
         title: 'Pages',
-        icon: <Icon type="user" />,
+        icon: <Icon type="star" />,
         subMenu: null
     },
     {
-        key: 'side_nav',
-        title: 'Side Nav',
-        icon: <Icon type="user" />,
+        key: 'header',
+        title: 'Header',
+        icon: <Icon type="star" />,
         subMenu: null
     },
     {
         key: 'footer',
         title: 'Footer',
-        icon: <Icon type="user" />,
+        icon: <Icon type="star" />,
         subMenu: null
     },
 ];
