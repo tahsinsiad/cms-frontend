@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Card, Col, Icon, Row} from "antd";
 import {useQuery} from "graphql-hooks";
 import { message } from 'antd';
+import {GlobalContext} from "../../contexts/withContext";
 
 const { Meta } = Card;
 
@@ -20,32 +21,41 @@ export const recentProjectsQuery = `
   }
 `;
 
-RecentProjects.propTypes = {
-
-};
-
-function RecentProjects(props) {
+const RecentProjects = (props) => {
+    const {dataStoreContext} = useContext(GlobalContext);
     const [skip, setSkip] = useState(0);
-    const { loading, error, data, refetch } = useQuery(recentProjectsQuery, {
+    let {loading, error, data, refetch} = useQuery(recentProjectsQuery, {
         variables: { skip, limit: 4 },
         updateData: (prevResult, result) => ({
             ...result,
             projects: [...prevResult.projects, ...result.projects]
         })
     });
-
+    useEffect(()=>{
+        console.log(dataStoreContext);
+        if (dataStoreContext.projectListUpdated) {
+            // setTimeout(async ()=>{
+            console.log('refetching...');
+            dataStoreContext.synced({projectListUpdated: false});
+            refetch({variables: { skip, limit: 4 }});
+            // }, 0);
+        }
+    }, [dataStoreContext.projectListUpdated]);
+    let hideMessage;
     useEffect(()=>{
         if (error) {
             message.error('Error loading recent projects.');
-            // refetch();
         }
-        let hide;
+        console.log("loading:", loading);
         if (loading) {
-            hide = message.loading('Loading recent projects...', 0);
+            hideMessage && hideMessage();
+            hideMessage = message.loading('Loading recent projects...', 0);
         } else {
-            hide && hide();
+            hideMessage && hideMessage();
+            hideMessage = null;
         }
-    }, [error, data, loading]);
+        if (hideMessage) return hideMessage;
+    }, [error, loading]);
 
     if (error || !data) return <Row gutter={4}/>;
     const { projects, _projectsMeta } = data;
@@ -60,11 +70,16 @@ function RecentProjects(props) {
                                 src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"/>}
                     actions={[<Icon type="edit"/>, <Icon type="delete"/>]}
                 >
-                    <Meta title="Project Title" description="This is the description"/>
+                    <Meta title={project.title} description={project.description}/>
                 </Card>
             </Col>))}
         </Row>
     );
-}
+};
+
+
+RecentProjects.propTypes = {
+
+};
 
 export default RecentProjects;

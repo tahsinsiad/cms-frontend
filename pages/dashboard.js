@@ -70,7 +70,7 @@ const Dashboard = () => {
             >
                 <Fragment>
                     <Title level={3}>Recent Project</Title>
-                    <RecentProjects/>
+                    <RecentProjects />
 
                     <Divider />
 

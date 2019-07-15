@@ -11,7 +11,7 @@ export const SYNC_AUTH = "SYNC_AUTH";
 export const LOGOUT_REQUEST = "LOGOUT_REQUEST";
 
 /* Auth Actions */
-export const loginRequest = (dispatch, user) => {
+export const loginRequest = async (dispatch, user) => {
     console.log("from action", user);
     dispatch({type: LOGIN_REQUEST});
     fetch(API_LOGIN_URL, {
@@ -38,11 +38,11 @@ export const loginRequest = (dispatch, user) => {
         });
 };
 
-export const logoutRequest = (dispatch) => {
+export const logoutRequest = async (dispatch) => {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     dispatch({type: LOGOUT_REQUEST});
 };
 
-export const syncAuth = (dispatch, user) => {
+export const syncAuth = async (dispatch, user) => {
     dispatch({type: SYNC_AUTH, payload: user});
 };

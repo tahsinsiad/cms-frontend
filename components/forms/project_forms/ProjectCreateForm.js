@@ -7,7 +7,7 @@ import {
     Button,
     AutoComplete, Upload, message,
 } from 'antd';
-import {Component, useState} from "react";
+import {Component, useContext, useState} from "react";
 import React from "react";
 import {beforeUpload, getBase64} from "../../../utils/uploadUtils";
 // SCSS
@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useMutation } from 'graphql-hooks'
 import {redirectTo} from "../../common/Redirect";
 import getConfig from 'next/config'
+import {GlobalContext} from "../../../contexts/withContext";
 const {publicRuntimeConfig} = getConfig();
 const {DASHBOARD_PATH} = publicRuntimeConfig;
 
@@ -39,6 +40,7 @@ const ProjectCreateForm = (props) => {
     const [uploading, setUploading] = useState(false);
     const [imageUrl, setImageUrl] = useState(false);
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
+    const {dataStoreContext} = useContext(GlobalContext);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -53,7 +55,16 @@ const ProjectCreateForm = (props) => {
                 variables: values
             });
             console.log(result);
-            redirectTo(DASHBOARD_PATH);
+            if (!result.error) {
+                redirectTo(DASHBOARD_PATH);
+                setTimeout(()=>{
+                    console.log('redirecting...');
+                    dataStoreContext.projectCreated(result.data.createProject);
+                }, 0);
+            } else {
+                message.error((result.httpError && result.httpError.statusText) ||
+                    (result.graphQLErrors && result.graphQLErrors[0].message));
+            }
         });
     };
 

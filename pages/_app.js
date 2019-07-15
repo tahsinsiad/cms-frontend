@@ -97,6 +97,12 @@ class CMSApp extends App {
 
     }
 
+    componentDidCatch(error, _errorInfo) {
+        super.componentDidCatch(error, _errorInfo);
+        console.error(error, _errorInfo);
+        message.error(error.message);
+    }
+
     render() {
         const { Component, pageProps, graphQLClient } = this.props;
         const ComponentWithContext = withContext(Component, pageProps);
