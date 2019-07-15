@@ -1,22 +1,22 @@
 import React, { } from 'react';
+import { withRouter } from 'next/router'
 import EditorNavHeader from "../components/layout/header/EditorNavHeader";
 import EditorLayout from "../components/layout/editor_layout/EditorLayout";
 import PageWrapper from '../components/common/PageWrapper';
-import { withRouter } from "next/router";
+import { getComponentForRoute } from '../constants/ProjectSubRoutes';
 
 const navHeader = <EditorNavHeader />;
 
 const Project = (props) => {
 
-    console.log(withRouter, props)
-
+    const Component = getComponentForRoute(props.router.query);
     return (
         <EditorLayout navHeader={navHeader}>
             <PageWrapper>
-                I'm from Project.
+                <Component />
             </PageWrapper>
         </EditorLayout>
     );
 }
 
-export default Project;
+export default withRouter(Project);

@@ -52,8 +52,15 @@ app.prepare().then(() => {
         return app.render(req, res, '/posts', { id: req.params.id })
     });
 
+    // server.get('/project/:id', (req, res) => {
+    // return app.render(req, res, '/project', { id: req.params.id })
+    // });
+
+    server.get('/project/:component', (req, res) => {
+        return app.render(req, res, '/project', { component: req.params.component })
+    });
+
     server.get('*', (req, res) => {
-        console.log("***************", req.path);
         return handle(req, res)
     });
 
