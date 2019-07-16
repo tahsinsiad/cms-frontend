@@ -4,7 +4,7 @@ import { AuthReducer, initAuthState } from './auth_context/AuthReducer';
 import { DataStoreReducer, initDataStoreState } from "./datastore_context/DataStoreReducer";
 import { syncAuth, loginRequest, logoutRequest } from './auth_context/AuthActions';
 import { addUser } from './user_context/UserActions';
-import { projectCreated, synced } from './datastore_context/DataStoreActions';
+import { projectCreated, setCurrentProjectId } from './datastore_context/DataStoreActions';
 import { ContextBinder } from './ContextBinder';
 import { ClientContext } from "graphql-hooks";
 
@@ -15,7 +15,7 @@ const withContext = (Component, { user }) => {
 
         const authContext = ContextBinder(useReducer(AuthReducer, initAuthState), { syncAuth, loginRequest, logoutRequest });
         const userContext = ContextBinder(useReducer(UserReducer, initUserState), { addUser });
-        const dataStoreContext = ContextBinder(useReducer(DataStoreReducer, initDataStoreState), { projectCreated });
+        const dataStoreContext = ContextBinder(useReducer(DataStoreReducer, initDataStoreState), { projectCreated, setCurrentProjectId });
         const graphQLClient = useContext(ClientContext);
 
         useEffect(() => {

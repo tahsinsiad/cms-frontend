@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Card, Col, Icon, Row, message } from "antd";
 import { useQuery } from "graphql-hooks";
+import Link from 'next/link';
 import { GlobalContext } from "../../contexts/withContext";
 
 const { Meta } = Card;
@@ -22,6 +23,8 @@ export const recentProjectsQuery = `
 
 const RecentProjects = (props) => {
 
+    const { dataStoreContext } = useContext(GlobalContext);
+
     const [skip, setSkip] = useState(0);
 
     let { loading, error, data, refetch } = useQuery(recentProjectsQuery, {
@@ -32,10 +35,10 @@ const RecentProjects = (props) => {
         })
     });
 
-    useEffect(() => {
-        console.log('Initialize Data');
-        refetch({ variables: { skip, limit: 4 } });
-    }, []);
+    // useEffect(() => {
+    //     console.log('Initialize Data');
+    //     refetch({ variables: { skip, limit: 4 } });
+    // }, []);
 
     let hideMessage;
 
@@ -65,7 +68,7 @@ const RecentProjects = (props) => {
                     <Card
                         cover={<img alt="Default Project Cover"
                             src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
-                        actions={[<Icon type="edit" />, <Icon type="delete" />]}
+                        actions={[<Link href="/project"><a><Icon onClick={() => dataStoreContext.setCurrentProjectId(project.id)} type="edit" /></a></Link>, <Icon type="delete" />]}
                     >
                         <Meta title={project.title} description={project.description} />
                     </Card>
