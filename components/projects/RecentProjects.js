@@ -2,6 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Card, Col, Icon, Row, message } from "antd";
 import { useQuery } from "graphql-hooks";
 import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
+import getConfig from 'next/config'
+import Link from "next/link";
+const { publicRuntimeConfig } = getConfig();
+const { PROJECT_PATH } = publicRuntimeConfig;
 
 const { Meta } = Card;
 
@@ -21,7 +25,6 @@ export const recentProjectsQuery = `
 `;
 
 const RecentProjects = (props) => {
-
     const [skip, setSkip] = useState(0);
     const dataStoreContext = useContext(DataStoreContext);
 
@@ -81,7 +84,7 @@ const RecentProjects = (props) => {
                     <Card
                         cover={<img alt="Default Project Cover"
                             src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
-                        actions={[<Icon type="edit" />, <Icon type="delete" />]}
+                        actions={[<Link href={PROJECT_PATH}><a><Icon onClick={() => dataStoreContext.setCurrentProjectId(project.id)} type="edit" /></a></Link>, <Icon type="delete" />]}
                     >
                         <Meta title={project.title} description={project.description} />
                     </Card>

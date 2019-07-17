@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-import fetch from "isomorphic-unfetch";
 import getConfig from 'next/config'
-import cookie from "js-cookie";
-import {redirectTo} from "../components/common/Redirect";
 const { publicRuntimeConfig } = getConfig();
-const { API_LOGIN_URL, LOGIN_PATH, DASHBOARD_PATH } = publicRuntimeConfig;
+const { DASHBOARD_PATH } = publicRuntimeConfig;
 
 /* First we will make a new context */
 export const DataStoreContext = React.createContext();
@@ -12,7 +9,8 @@ export const DataStoreContext = React.createContext();
 /* DataStore State */
 const initDataStoreState = {
     updatedProject: null,
-    projectListUpdated: false
+    projectListUpdated: false,
+    currentProjectId: null
 };
 
 /* Then create a provider Component */
@@ -20,7 +18,7 @@ class DataStoreContextProvider extends Component {
     state = initDataStoreState;
 
     /* Project Actions */
-    projectCreated = async (project) => {
+    projectCreated = (project) => {
         console.log("new project created");
         this.setState({
             projectListUpdated: true,
@@ -28,7 +26,12 @@ class DataStoreContextProvider extends Component {
         })
     };
 
-    synced = async (dispatch, syncedStates) => {
+    setCurrentProjectId = (projectId) => {
+        console.log("set current project id");
+        this.setState({currentProjectId: projectId})
+    };
+
+    synced = (dispatch, syncedStates) => {
         console.log("data store synced", syncedStates);
         this.setState({
             ...syncedStates
@@ -41,7 +44,9 @@ class DataStoreContextProvider extends Component {
                 value={{
                     projectListUpdated: this.state.projectListUpdated,
                     updatedProject: this.state.updatedProject,
+                    currentProjectId: this.state.currentProjectId,
                     projectCreated: this.projectCreated,
+                    setCurrentProjectId: this.setCurrentProjectId,
                     synced: this.synced,
                 }}
             >

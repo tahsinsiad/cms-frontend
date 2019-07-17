@@ -1,6 +1,8 @@
 /**
+ * <html>
  * This file is meant to be loaded by next.config.js to populate the runtimeConfig. It is not meant to be imported
- * to be compiled by webpack.
+ * to be compiled by webpack. <b>Changes made in this file need to restart the server to get the change reflections.</b>
+ * </html>
  */
 module.exports = function getURLConstants(env) {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -23,6 +25,7 @@ module.exports = function getURLConstants(env) {
 
     const ABOUT_PATH = `${ROOT_PATH}about`;
 
+    const PROJECT_PATH = `${ROOT_PATH}project`;
     const CREATE_PROJECT_PATH = `${ROOT_PATH}create-project`;
 
     const ERROR_PAGE = `${ROOT_PATH}_error`;
@@ -38,6 +41,7 @@ module.exports = function getURLConstants(env) {
         LOGOUT_PATH,
         FORGOT_PASSWORD_PATH,
         ABOUT_PATH,
+        PROJECT_PATH,
         CREATE_PROJECT_PATH,
         ERROR_PAGE
     }

@@ -2,16 +2,15 @@ import {
     Form,
     Input,
     Button,
-    AutoComplete, message,
+    AutoComplete, message, Row, Col,
 } from 'antd';
 import { useContext, useState } from "react";
 import React from "react";
+
 // SCSS
 import './ProjectForm.scss';
 
-import Link from "next/link";
 import { useMutation } from 'graphql-hooks'
-import { redirectTo } from "../../common/Redirect";
 import getConfig from 'next/config'
 import {DataStoreContext} from "../../../contexts/DataStoreContextProvider";
 const { publicRuntimeConfig } = getConfig();
@@ -21,8 +20,8 @@ const AutoCompleteOption = AutoComplete.Option;
 const FormItem = Form.Item;
 
 const CREATE_PROJECT = `
-mutation createProject($title: String!, $description: String, $websiteUrl: String!) {
-  createProject(title: $title, description: $description, websiteUrl: $websiteUrl) {
+mutation UpdateProject($id: ID!, $title: String!, $description: String, $websiteUrl: String!, $icon: String, $siteTitle: String) {
+  updateProject(id: $id, title: $title, description: $description, websiteUrl: $websiteUrl, icon: $icon, siteTitle: $siteTitle) {
     id
     title
     description
@@ -31,7 +30,7 @@ mutation createProject($title: String!, $description: String, $websiteUrl: Strin
   }
 }`;
 
-const ProjectCreateForm = (props) => {
+const ProjectSettingForm = (props) => {
 
     const [createProject, project] = useMutation(CREATE_PROJECT);
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
@@ -43,12 +42,14 @@ const ProjectCreateForm = (props) => {
         props.form.validateFieldsAndScroll(async (err, values) => {
 
             if (!err) {
+                values.id = "5d2d552c4d0fb61e9892d676";
+                console.log(values);
                 const result = await createProject({
                     variables: values
                 });
+
                 if (!result.error) {
                     dataStoreContext.projectCreated(result.data.createProject);
-                    return await redirectTo(DASHBOARD_PATH, { status: 200 });
                 } else {
                     message.error((result.httpError && result.httpError.statusText) ||
                         (result.graphQLErrors && result.graphQLErrors[0].message));
@@ -57,6 +58,7 @@ const ProjectCreateForm = (props) => {
                 console.error(err);
                 message.error('Unexpected error!');
             }
+
         });
     };
 
@@ -86,7 +88,7 @@ const ProjectCreateForm = (props) => {
                             message: 'Please input your Project title!',
                         },
                     ],
-                })(<Input />)}
+                })(<Input placeholder="title" />)}
             </FormItem>
             <FormItem label="Description">
                 {getFieldDecorator('description', {
@@ -95,7 +97,7 @@ const ProjectCreateForm = (props) => {
                             required: false,
                         }
                     ],
-                })(<Input.TextArea />)}
+                })(<Input.TextArea placeholder="description" />)}
             </FormItem>
             <FormItem label="Website URL" extra="Used to create canonical URL.">
                 {getFieldDecorator('websiteUrl', {
@@ -104,21 +106,57 @@ const ProjectCreateForm = (props) => {
                     <AutoComplete
                         dataSource={websiteUrlOptions}
                         onChange={handleWebsiteUrlChange}
-                        placeholder="website"
+                        placeholder="website URL"
                     >
                         <Input />
                     </AutoComplete>,
                 )}
             </FormItem>
 
+            <Row type="flex" justify="space-between">
+                <Col span={11}>
+                    <FormItem label="Icon">
+
+                        {getFieldDecorator('icon', {
+                            rules: [
+                                {
+                                    required: false,
+                                }
+                            ],
+                        })(<Input placeholder="icon" />)}
+                    </FormItem>
+
+                </Col>
+                <Col span={12}>
+                    <FormItem label="Site Title">
+                        {getFieldDecorator('siteTitle', {
+                            rules: [
+                                {
+                                    required: false,
+                                }
+                            ],
+                        })(<Input placeholder="site title" />)}
+                    </FormItem>
+                </Col>
+            </Row>
+
+            <FormItem label="Site Meta">
+                {getFieldDecorator('siteMeta', {
+                    rules: [
+                        {
+                            required: false,
+                        }
+                    ],
+                })(<Input placeholder="sitemeta" />)}
+            </FormItem>
+
             <FormItem>
-                <Link href={DASHBOARD_PATH}><Button type='secondary'>Cancel</Button></Link>
-                <Button type="primary" htmlType="submit" style={{ marginLeft: 8 }}>Create</Button>
+                <Button type="primary" htmlType="submit">Save</Button>
             </FormItem>
         </Form>
     );
 };
 
-const WrappedProjectCreateForm = Form.create({ name: 'register' })(ProjectCreateForm);
+const WrappedProjectSettingForm = Form.create({ name: 'project_setting_form' })(ProjectSettingForm);
 
-export default WrappedProjectCreateForm;
+export default WrappedProjectSettingForm;

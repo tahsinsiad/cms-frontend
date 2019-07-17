@@ -15,9 +15,7 @@ const CreateProject = () => {
             <PageWrapper
                 pageHeader={pageHeader}
             >
-                <div style={{ maxWidth: '700px' }}>
-                    <ProjectCreateForm />
-                </div>
+                <ProjectCreateForm />
             </PageWrapper>
         </DefaultLayout>
     );

@@ -1,10 +1,9 @@
 import React from 'react';
+import ProjectSettingForm from '../forms/project_forms/ProjectSettingForm';
 
 const ProjectSettings = () => {
     return (
-        <div>
-            I'm from Project Settings.
-        </div>
+        <ProjectSettingForm />
     );
 };
 
