@@ -22,7 +22,7 @@ const AsideLeft = ({ collapsed, navs }) => {
             <Menu.Item key={item.key}>
                 {item.icon}
                 <span>{item.title}</span>
-                {item.path && <Link href={`${item.path}`}><a /></Link>}
+                {item.path && <Link href={item.path} as={item.pathAs}><a /></Link>}
             </Menu.Item>
         )
     };
@@ -59,6 +59,6 @@ const AsideLeft = ({ collapsed, navs }) => {
 
 AsideLeft.defaultProps = {
     navs: []
-}
+};
 
 export default AsideLeft;

@@ -13,21 +13,24 @@ const EditorNavs = [
         key: 'pages',
         title: 'Pages',
         icon: <Icon type="star" />,
-        path: '/project/pages',
+        path: '/project',
+        pathParam: 'pages',
         subMenu: null
     },
     {
         key: 'header',
         title: 'Header',
         icon: <Icon type="star" />,
-        path: '/project/header',
+        path: '/project',
+        pathParam: 'header',
         subMenu: null
     },
     {
         key: 'footer',
         title: 'Footer',
         icon: <Icon type="star" />,
-        path: '/project/footer',
+        path: '/project',
+        pathParam: 'footer',
         subMenu: null
     },
 ];

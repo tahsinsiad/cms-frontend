@@ -1,7 +1,6 @@
 import React, {useContext, useEffect} from 'react';
 import {withRouter} from 'next/router'
 import EditorNavHeader from "../components/layout/header/EditorNavHeader";
-import EditorLayout from "../components/layout/editor_layout/EditorLayout";
 import PageWrapper from '../components/common/PageWrapper';
 import {getComponentForRoute} from '../constants/ProjectSubRoutes';
 import {withAuthSync} from "../utils/withAuthSync";
@@ -11,13 +10,9 @@ import {message, Row, Sider} from "antd";
 import getConfig from 'next/config'
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
-import {redirectTo} from "../components/common/Redirect";
-import Router from 'next/router'
-import AsideLeft from "../components/layout/AsideLeft";
 import EditorNavs from "../constants/EditorNavs";
 import CommonLayout from "../components/layout/CommonLayout";
-import DefaultNavs from "../constants/DefaultNavs";
-import NavHeader from "../components/layout/header/DefaultNavHeader";
+import {getNavsWithParamsToPath} from "../utils/helpers";
 
 export const projectDetailsQuery = `
     query projectDetailsQuery($projectId: String!) {
@@ -76,7 +71,9 @@ const Project = (props) => {
     const { project } = data;
 
     return (
-        <CommonLayout navs={EditorNavs} navHeader={<EditorNavHeader />}>
+        <CommonLayout navs={getNavsWithParamsToPath(EditorNavs, {
+            query: {id: props.router.query.id},
+        })} navHeader={<EditorNavHeader />}>
             <PageWrapper>
                 <Component project={project}/>
             </PageWrapper>
