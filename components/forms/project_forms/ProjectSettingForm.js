@@ -4,7 +4,7 @@ import {
     Button,
     AutoComplete, message, Row, Col,
 } from 'antd';
-import { useContext, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import React from "react";
 
 // SCSS
@@ -20,13 +20,13 @@ const AutoCompleteOption = AutoComplete.Option;
 const FormItem = Form.Item;
 
 const UPDATE_PROJECT = `
-mutation UpdateProject($id: ID!, $title: String!, $description: String, $websiteUrl: String!, $icon: String, $siteTitle: String) {
-  updateProject(id: $id, title: $title, description: $description, websiteUrl: $websiteUrl, icon: $icon, siteTitle: $siteTitle) {
+mutation UpdateProject($id: String!, $title: String!, $description: String, $websiteUrl: String!, $siteMeta: String, $brand: BrandInput) {
+  updateProject(id: $id, title: $title, description: $description, websiteUrl: $websiteUrl, siteMeta: $siteMeta, brand: $brand) {
     id
     title
     description
     websiteUrl
-    createdAt
+    modifiedAt
   }
 }`;
 
@@ -42,10 +42,18 @@ const ProjectSettingForm = (props) => {
         props.form.validateFieldsAndScroll(async (err, values) => {
 
             if (!err) {
-                values.id = "5d2d552c4d0fb61e9892d676";
-                console.log(values);
                 const result = await updateProject({
-                    variables: values
+                    variables: {
+                        id: currentProject.id,
+                        title: values.title,
+                        description: values.description,
+                        websiteUrl: values.websiteUrl,
+                        siteMeta: values.siteMeta,
+                        brand: {
+                            icon: values.icon,
+                            siteTitle: values.siteTitle,
+                        }
+                    }
                 });
 
                 if (!result.error) {
@@ -72,11 +80,25 @@ const ProjectSettingForm = (props) => {
         setAutoCompleteResult(autoCompleteResult);
     };
 
-    const { getFieldDecorator } = props.form;
+    const { getFieldDecorator, setFieldsValue } = props.form;
 
     const websiteUrlOptions = autoCompleteResult.map(websiteUrl => (
         <AutoCompleteOption key={websiteUrl}>{websiteUrl}</AutoCompleteOption>
     ));
+
+    const {currentProject} = dataStoreContext;
+    useEffect(()=>{
+        if (currentProject) {
+            setFieldsValue({
+                title: currentProject.title,
+                description: currentProject.description,
+                websiteUrl: currentProject.websiteUrl,
+                siteMeta: currentProject.siteMeta,
+                icon: currentProject.brand.icon,
+                siteTitle: currentProject.brand.siteTitle,
+            });
+        }
+    }, [currentProject]);
 
     return (
         <Form className="pi_cms_form project_form" onSubmit={handleSubmit}>
