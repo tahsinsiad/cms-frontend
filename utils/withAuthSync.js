@@ -15,7 +15,7 @@ export const withAuthSync = WrappedComponent => {
         useEffect(()=>{
             console.log("setting graphql client auth header");
             graphQLClient.setHeader("Authorization", `Bearer ${authContext.token}`);
-        }, authContext.token);
+        }, [authContext.token]);
 
         return <WrappedComponent {...props} />
     };
