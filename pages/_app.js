@@ -16,7 +16,7 @@ class CMSApp extends App {
 
         // pageProps.token = token;
         // console.log("CMSApp initial props: ", {pageProps, token});
-        return {pageProps, token, user: JSON.parse(user)}
+        return {pageProps, token, user: user ? JSON.parse(user) : null}
     }
 
     componentDidCatch(error, _errorInfo) {

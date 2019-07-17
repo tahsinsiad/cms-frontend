@@ -19,7 +19,7 @@ const { DASHBOARD_PATH } = publicRuntimeConfig;
 const AutoCompleteOption = AutoComplete.Option;
 const FormItem = Form.Item;
 
-const CREATE_PROJECT = `
+const UPDATE_PROJECT = `
 mutation UpdateProject($id: ID!, $title: String!, $description: String, $websiteUrl: String!, $icon: String, $siteTitle: String) {
   updateProject(id: $id, title: $title, description: $description, websiteUrl: $websiteUrl, icon: $icon, siteTitle: $siteTitle) {
     id
@@ -32,7 +32,7 @@ mutation UpdateProject($id: ID!, $title: String!, $description: String, $website
 
 const ProjectSettingForm = (props) => {
 
-    const [createProject, project] = useMutation(CREATE_PROJECT);
+    const [updateProject, project] = useMutation(UPDATE_PROJECT);
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
     const dataStoreContext = useContext(DataStoreContext);
 
@@ -44,12 +44,12 @@ const ProjectSettingForm = (props) => {
             if (!err) {
                 values.id = "5d2d552c4d0fb61e9892d676";
                 console.log(values);
-                const result = await createProject({
+                const result = await updateProject({
                     variables: values
                 });
 
                 if (!result.error) {
-                    dataStoreContext.projectCreated(result.data.createProject);
+                    dataStoreContext.projectCreated(result.data.updateProject);
                 } else {
                     message.error((result.httpError && result.httpError.statusText) ||
                         (result.graphQLErrors && result.graphQLErrors[0].message));
