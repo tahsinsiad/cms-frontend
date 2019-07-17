@@ -1,62 +1,43 @@
 // Gets the display name of a JSX component for dev tools
-import React, {Component} from "react";
+import React, {Component, useContext, useEffect} from "react";
 import {auth} from "./auth";
+import {AuthContext} from "../contexts/AuthContextProvider";
+import {ClientContext} from "graphql-hooks";
 
 const getDisplayName = Component =>
     Component.displayName || Component.name || 'Component';
 
 export const withAuthSync = WrappedComponent => {
-    return class extends Component {
-        static displayName = `AuthSyncHooks(${getDisplayName(WrappedComponent)})`;
+    const Component = (props)=>{
+        const authContext = useContext(AuthContext);
+        const graphQLClient = useContext(ClientContext);
 
-        static async getInitialProps(ctx) {
-            const authResp = await auth(ctx);
-            let user = null;
-            let token = null;
-            if (authResp) {
-                token = authResp.token;
-                user = authResp.user;
-            }
+        useEffect(()=>{
+            console.log("setting graphql client auth header");
+            graphQLClient.setHeader("Authorization", `Bearer ${authContext.token}`);
+        }, authContext.token);
 
-            const componentProps =
-                WrappedComponent.getInitialProps &&
-                (await WrappedComponent.getInitialProps(ctx));
-
-            console.log(WrappedComponent.displayName, {...componentProps, token: authResp.token, user: authResp.user});
-            return {...componentProps, token: token, user: user}
+        return <WrappedComponent {...props} />
+    };
+    Component.displayName = `AuthSyncHooks(${getDisplayName(WrappedComponent)})`;
+    Component.getInitialProps = async (ctx) => {
+        const authResp = await auth(ctx);
+        let user = null;
+        let token = null;
+        if (authResp) {
+            token = authResp.token;
+            user = authResp.user;
         }
 
-        // We bind our methods
-        // constructor (props) {
-        //     super(props);
-        //
-        //     this.syncLogout = this.syncLogout.bind(this)
-        // }
+        const componentProps =
+            WrappedComponent.getInitialProps &&
+            (await WrappedComponent.getInitialProps(ctx));
 
-        // New: Add event listener when a restricted Page Component mounts
-        // componentDidMount () {
-        //     window.addEventListener('storage', this.syncLogout)
-        // }
+        console.log(WrappedComponent.displayName, {...componentProps, token: authResp.token, user: authResp.user});
+        return {...componentProps, token: token, user: user}
+    };
 
-        // New: Remove event listener when the Component unmount and
-        // delete all data
-        // componentWillUnmount () {
-        //     window.removeEventListener('storage', this.syncLogout)
-        //     window.localStorage.removeItem('logout')
-        // }
-
-        // New: Method to redirect the user when the event is called
-        // syncLogout (event) {
-        //     if (event.key === 'logout') {
-        //         console.log('logged out from storage!')
-        //         Router.push('/login')
-        //     }
-        // }
-
-        render() {
-            return <WrappedComponent {...this.props} />
-        }
-    }
+    return Component;
 };
 
 /**
