@@ -2,7 +2,6 @@ import React from 'react'
 import initGraphQL from './initGraphQL'
 import Head from 'next/head'
 import { getInitialState } from 'graphql-hooks-ssr'
-import cookies from "next-cookies";
 
 export default App => {
     return class GraphQLHooks extends React.Component {

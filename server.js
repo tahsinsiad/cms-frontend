@@ -57,7 +57,7 @@ app.prepare().then(() => {
     // });
 
     server.get('/project/:component', (req, res) => {
-        return app.render(req, res, '/project', { component: req.params.component })
+        return app.render(req, res, '/project', { component: req.params.component, id: req.query.id })
     });
 
     server.get('*', (req, res) => {

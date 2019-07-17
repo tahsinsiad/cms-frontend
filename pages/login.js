@@ -6,15 +6,17 @@ import getConfig from 'next/config'
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
 import {AuthContext} from "../contexts/AuthContextProvider";
+import {ClientContext} from "graphql-hooks";
 
 const Login = (props) => {
 
     const authContext = useContext(AuthContext);
-    // const client = useContext(ClientContext);
+    const client = useContext(ClientContext);
 
-    // useEffect(() => {
-    //     client.setHeader("Authorization", `Bearer ${authContext.token}`);
-    // }, [authContext.token]);
+    useEffect(() => {
+        console.log("setting graphql client auth header");
+        client.setHeader("Authorization", `Bearer ${authContext.token}`);
+    }, [authContext.token]);
 
     const handleSubmit = e => {
         e.preventDefault();

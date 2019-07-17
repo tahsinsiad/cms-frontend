@@ -9,13 +9,13 @@ const getDisplayName = Component =>
 
 export const withAuthSync = WrappedComponent => {
     const Component = (props)=>{
-        const authContext = useContext(AuthContext);
-        const graphQLClient = useContext(ClientContext);
+        // const authContext = useContext(AuthContext);
+        // const graphQLClient = useContext(ClientContext);
 
-        useEffect(()=>{
-            console.log("setting graphql client auth header");
-            graphQLClient.setHeader("Authorization", `Bearer ${authContext.token}`);
-        }, [authContext.token]);
+        // useEffect(()=>{
+        //     console.log("setting graphql client auth header");
+        //     graphQLClient.setHeader("Authorization", `Bearer ${authContext.token}`);
+        // }, [authContext.token]);
 
         return <WrappedComponent {...props} />
     };

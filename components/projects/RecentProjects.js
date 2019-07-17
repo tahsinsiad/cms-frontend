@@ -28,8 +28,7 @@ const RecentProjects = (props) => {
     const [skip, setSkip] = useState(0);
     const dataStoreContext = useContext(DataStoreContext);
 
-    // let loading, error, data, refetch;
-    let { loading, error, data, refetch } = useQuery(recentProjectsQuery, {
+    const { loading, error, data, refetch } = useQuery(recentProjectsQuery, {
         variables: { skip, limit: 4 },
         updateData: (prevResult, result) => ({
             ...result,
@@ -41,15 +40,10 @@ const RecentProjects = (props) => {
         if (dataStoreContext.projectListUpdated) {
                 dataStoreContext.synced({projectListUpdated: false});
                 refetch({variables: {skip, limit: 4}});
-                // dataStoreContext.setDataRefetchHandler('refetchRecentProjects', () => {
-                //     console.log('refetchRecentProjects');
-                //     refetch({variables: {skip, limit: 4}})
-                // });
             }
     },[dataStoreContext.projectListUpdated]);
 
     let hideMessage;
-
     useEffect(() => {
         if (error) {
             message.error('Error loading recent projects.');
@@ -62,14 +56,6 @@ const RecentProjects = (props) => {
             hideMessage && hideMessage();
             hideMessage = null;
         }
-        // if (dataStoreContext.projectListUpdated) {
-        //     dataStoreContext.synced({projectListUpdated: false});
-        //     refetch({variables: {skip, limit: 4}});
-            // dataStoreContext.setDataRefetchHandler('refetchRecentProjects', () => {
-            //     console.log('refetchRecentProjects');
-            //     refetch({variables: {skip, limit: 4}})
-            // });
-        // }
         if (hideMessage) return hideMessage;
     }, [error, loading]);
 
@@ -84,7 +70,9 @@ const RecentProjects = (props) => {
                     <Card
                         cover={<img alt="Default Project Cover"
                             src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
-                        actions={[<Link href={PROJECT_PATH}><a><Icon onClick={() => dataStoreContext.setCurrentProjectId(project.id)} type="edit" /></a></Link>, <Icon type="delete" />]}
+                        actions={[<Link href={`${PROJECT_PATH}?id=${project.id}`}><a><Icon
+                            /*onClick={() => dataStoreContext.setCurrentProject(project)}*/
+                            type="edit" /></a></Link>, <Icon type="delete" />]}
                     >
                         <Meta title={project.title} description={project.description} />
                     </Card>
