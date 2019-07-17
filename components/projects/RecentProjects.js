@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Card, Col, Icon, Row, message } from "antd";
 import { useQuery } from "graphql-hooks";
-import { GlobalContext } from "../../utils/withContext";
+import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
 
 const { Meta } = Card;
 
@@ -23,7 +23,7 @@ export const recentProjectsQuery = `
 const RecentProjects = (props) => {
 
     const [skip, setSkip] = useState(0);
-    const { dataStoreContext } = useContext(GlobalContext);
+    const dataStoreContext = useContext(DataStoreContext);
 
     // let loading, error, data, refetch;
     let { loading, error, data, refetch } = useQuery(recentProjectsQuery, {

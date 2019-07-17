@@ -3,14 +3,13 @@ import { Avatar, Dropdown, Layout, Menu } from 'antd';
 import Link from 'next/link';
 /* SCSS */
 import './nav_header.scss'
-import { GlobalContext } from "../../../utils/withContext";
-import { redirectTo } from "../../common/Redirect";
+import {AuthContext} from "../../../contexts/AuthContextProvider";
 
 const { Header } = Layout;
 
 const NavHeader = () => {
 
-    const { authContext } = useContext(GlobalContext);
+    const authContext = useContext(AuthContext);
 
     const logout = () => {
         authContext.logoutRequest();

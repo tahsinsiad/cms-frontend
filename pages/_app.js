@@ -1,14 +1,10 @@
 import App, { Container } from 'next/app'
 import React from 'react'
-import fetch from 'isomorphic-unfetch';
-// import { mockFetch } from '../utils/mockFetch';
-import { redirectTo } from '../components/common/Redirect'
 import nextCookie from 'next-cookies';
-import withContext from "../utils/withContext";
 import { ClientContext } from 'graphql-hooks'
 import withGraphQLClient from "../utils/withGraphQLClient";
-import {withAuthSync} from "../utils/withAuthSync";
-import {auth} from "../utils/auth";
+import AuthContextProvider from "../contexts/AuthContextProvider";
+import DataStoreContextProvider from "../contexts/DataStoreContextProvider";
 
 class CMSApp extends App {
     static async getInitialProps({ Component, ctx }) {
@@ -20,7 +16,7 @@ class CMSApp extends App {
 
         // pageProps.token = token;
         // console.log("CMSApp initial props: ", {pageProps, token});
-        return {pageProps, token, user}
+        return {pageProps, token, user: JSON.parse(user)}
     }
 
     componentDidCatch(error, _errorInfo) {
@@ -32,14 +28,18 @@ class CMSApp extends App {
     render() {
         // console.log(this.props);
         const { Component, pageProps, graphQLClient, user, token } = this.props;
-        const ComponentWithContext = withContext(Component, user, token);
+        // const ComponentWithContext = withContext(Component, user, token);
 
         // graphQLClient.setHeader("Authorization", `Bearer ${token}`);
 
         return (
             <Container>
                 <ClientContext.Provider value={graphQLClient}>
-                    <ComponentWithContext {...pageProps} />
+                    <AuthContextProvider {...{user, token}}>
+                        <DataStoreContextProvider>
+                            <Component {...pageProps} />
+                        </DataStoreContextProvider>
+                    </AuthContextProvider>
                 </ClientContext.Provider>
             </Container>
         )

@@ -1,7 +1,7 @@
 import React from 'react';
-import PropsTypes from 'prop-types';
 /* SCSS */
 import './error_layout.scss';
+import * as PropTypes from "prop-types";
 
 const ErrorLayout = ({status, subTitle, children}) => {
 
@@ -17,8 +17,8 @@ const ErrorLayout = ({status, subTitle, children}) => {
 };
 
 ErrorLayout.prototypes = {
-    status: PropsTypes.number.isRequired,
-    subTitle: PropsTypes.string.isRequired
+    status: PropTypes.number.isRequired,
+    subTitle: PropTypes.string.isRequired
 };
 
 export default ErrorLayout;

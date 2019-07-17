@@ -1,11 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState } from 'react';
 import CommonLayout from '../CommonLayout';
-import LoadingSuspense from '../../common/LoadingSuspense';
 import { Layout } from 'antd';
 import EditorNavs from '../../../constants/EditorNavs';
-
-const AsideLeft = dynamic(() => import('../AsideLeft'), { loading: () => <LoadingSuspense /> });
+import AsideLeft from '../AsideLeft';
 
 const { Sider } = Layout;
 

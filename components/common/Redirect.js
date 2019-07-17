@@ -2,12 +2,12 @@ import Router from 'next/router'
 import NextHead from "next/head";
 import React from "react";
 
-export const redirectTo = (destination, {res, status} = {}) => {
+export const redirectTo = async (destination, {res, status} = {}) => {
     if (res) {
         res.writeHead(status || 302, {Location: destination});
         res.end()
     } else {
-        Router.push(destination);
+        return await Router.push(destination);
     }
 };
 
@@ -19,8 +19,7 @@ const redirect = destination =>
                 return {metaRedirect: true}
             }
 
-            redirectTo(destination, {res, status: 301})
-            return {}
+            return redirectTo(destination, {res, status: 301});
         }
 
         render() {
@@ -34,6 +33,6 @@ const redirect = destination =>
 
             return null
         }
-    }
+    };
 
 export default redirect

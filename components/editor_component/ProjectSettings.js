@@ -6,6 +6,6 @@ const ProjectSettings = () => {
             I'm from Project Settings.
         </div>
     );
-}
+};
 
 export default ProjectSettings;

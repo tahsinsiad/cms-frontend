@@ -11,8 +11,7 @@ export const auth = async ctx => {
     const { token, user } = nextCookie(ctx);
 
     if (!token) {
-        redirectTo(LOGIN_PATH, { res: ctx.res, status: 301 });
-        return
+        return redirectTo(LOGIN_PATH, { res: ctx.res, status: 301 });
     }
 
     const response = await fetch(RESOLVE_USER_URL, {
@@ -26,7 +25,7 @@ export const auth = async ctx => {
             if (resp.status !== "success") {
                 //setting the cookie to expire way back when removes it
                 cookie.remove("token");
-                redirectTo(LOGIN_PATH, { res: ctx.res, status: 301 })
+                return redirectTo(LOGIN_PATH, { res: ctx.res, status: 301 })
             }
             return resp;
         })

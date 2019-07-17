@@ -2,18 +2,17 @@ import {
     Form,
     Input,
     Button,
-    AutoComplete, Upload, message,
+    AutoComplete, message,
 } from 'antd';
-import { Component, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import React from "react";
-import { beforeUpload, getBase64 } from "../../../utils/uploadUtils";
 // SCSS
 import './ProjectCreateForm.scss';
 import Link from "next/link";
 import { useMutation } from 'graphql-hooks'
 import { redirectTo } from "../../common/Redirect";
 import getConfig from 'next/config'
-import { GlobalContext } from "../../../utils/withContext";
+import {DataStoreContext} from "../../../contexts/DataStoreContextProvider";
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
 
@@ -35,7 +34,7 @@ const ProjectCreateForm = (props) => {
 
     const [createProject, project] = useMutation(CREATE_PROJECT);
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-    const { dataStoreContext } = useContext(GlobalContext);
+    const dataStoreContext = useContext(DataStoreContext);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -55,7 +54,7 @@ const ProjectCreateForm = (props) => {
 
             if (!result.error) {
                 dataStoreContext.projectCreated(result.data.createProject);
-                redirectTo(DASHBOARD_PATH, { status: 200 });
+                return await redirectTo(DASHBOARD_PATH, { status: 200 });
             } else {
                 message.error((result.httpError && result.httpError.statusText) ||
                     (result.graphQLErrors && result.graphQLErrors[0].message));

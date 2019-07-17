@@ -2,17 +2,14 @@ import React, { useContext, useEffect } from 'react';
 import { Alert, Button, Checkbox, Form, Icon, Input } from 'antd';
 /* SCSS */
 import '../static/scss/login.scss';
-
-import { GlobalContext } from "../utils/withContext";
-import { redirectTo } from "../components/common/Redirect";
 import getConfig from 'next/config'
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
-import { ClientContext } from "graphql-hooks";
+import {AuthContext} from "../contexts/AuthContextProvider";
 
 const Login = (props) => {
 
-    const { authContext } = useContext(GlobalContext);
+    const authContext = useContext(AuthContext);
     // const client = useContext(ClientContext);
 
     // useEffect(() => {

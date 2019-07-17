@@ -1,12 +1,12 @@
 import React, {useContext, useEffect} from 'react';
 import {Button, Form, Input} from 'antd';
-import {GlobalContext} from "../../utils/withContext";
+import {UserContext} from "../../contexts/UserContextProvider";
 
 const {Item} = Form;
 
 const UserForm = (props) => {
 
-    const {userContext} = useContext(GlobalContext);
+    const userContext = useContext(UserContext);
 
 
     const {getFieldDecorator, setFieldsValue} = props.form;
