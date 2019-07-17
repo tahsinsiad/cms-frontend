@@ -8,15 +8,15 @@ import cookies from "next-cookies";
 
 let graphQLClient = null;
 
-function create (initialState) {
+function create (initialState, token) {
     // const c = cookies(initialState.ctx);
     // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
     const isBrowser = typeof window !== 'undefined';
     return new GraphQLClient({
         connectToDevTools: isBrowser,
-        // headers: {
-        //     Authorization: `Bearer ${c.token}`
-        // },
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
         ssrMode: !isBrowser, // Disables forceFetch on the server (so queries are only run once)
         url: GRAPHQL_URL, // Server URL (must be absolute)
         fetch: typeof window !== 'undefined' ? fetch.bind() : unfetch, // eslint-disable-line
@@ -24,16 +24,16 @@ function create (initialState) {
     })
 }
 
-export default function initGraphQL (initialState) {
+export default function initGraphQL (initialState, token) {
     // Make sure to create a new client for every server-side request so that data
     // isn't shared between connections (which would be bad)
     if (typeof window === 'undefined') {
-        return create(initialState)
+        return create(initialState, token)
     }
 
     // Reuse client on the client-side
     if (!graphQLClient) {
-        graphQLClient = create(initialState)
+        graphQLClient = create(initialState, token)
     }
 
     return graphQLClient

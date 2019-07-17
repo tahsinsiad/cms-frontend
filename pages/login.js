@@ -3,7 +3,7 @@ import { Alert, Button, Checkbox, Form, Icon, Input } from 'antd';
 /* SCSS */
 import '../static/scss/login.scss';
 
-import { GlobalContext } from "../contexts/withContext";
+import { GlobalContext } from "../utils/withContext";
 import { redirectTo } from "../components/common/Redirect";
 import getConfig from 'next/config'
 const { publicRuntimeConfig } = getConfig();
@@ -13,11 +13,11 @@ import { ClientContext } from "graphql-hooks";
 const Login = (props) => {
 
     const { authContext } = useContext(GlobalContext);
-    const client = useContext(ClientContext);
+    // const client = useContext(ClientContext);
 
-    useEffect(() => {
-        client.setHeader("Authorization", `Bearer ${authContext.token}`);
-    }, [authContext.token]);
+    // useEffect(() => {
+    //     client.setHeader("Authorization", `Bearer ${authContext.token}`);
+    // }, [authContext.token]);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -30,10 +30,10 @@ const Login = (props) => {
 
     const { getFieldDecorator } = props.form;
 
-    if (authContext.isLoggedIn) {
-        redirectTo(DASHBOARD_PATH, { status: 301 });
-        return null;
-    }
+    // if (authContext.isLoggedIn) {
+    //     redirectTo(DASHBOARD_PATH, { status: 301 });
+    //     return null;
+    // }
 
     return (
         <div className="login_form_wrapper">

@@ -22,14 +22,14 @@ export const AuthReducer = (state, action) => {
                 error: null
             };
         case LOGIN_SUCCESS: {
-            const cookie = cookies();
+            // const cookie = cookies();
             return {
                 ...state,
-                ...cookie,
                 isLoggedIn: true,
                 loading: false,
                 error: null,
-                user: action.payload.data
+                user: action.payload.user,
+                token: action.payload.token,
             };
         }
         case LOGIN_FAILED:
@@ -39,23 +39,23 @@ export const AuthReducer = (state, action) => {
                 error: action.payload
             };
         case LOGOUT_REQUEST: {
-            const cookie = cookies();
+            // const cookie = cookies();
             return {
                 ...state,
-                ...cookie,
+                token: '',
                 isLoggedIn: false,
                 error: null
             };
         }
-        case SYNC_AUTH: {
-            const cookie = cookies();
-            return {
-                ...state,
-                ...cookie,
-                isLoggedIn: Boolean(cookie.token),
-                user: action.payload
-            };
-        }
+        // case SYNC_AUTH: {
+        //     const cookie = cookies();
+        //     return {
+        //         ...state,
+        //         ...cookie,
+        //         isLoggedIn: Boolean(cookie.token),
+        //         user: action.payload
+        //     };
+        // }
         default:
             return state;
     }

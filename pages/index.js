@@ -5,6 +5,7 @@ const {DASHBOARD_PATH} = publicRuntimeConfig;
 import { Button } from "antd";
 import ErrorLayout from "../components/layout/error_layout/ErrorLayout";
 import React from "react";
+import {withAuthSync} from "../utils/withAuthSync";
 
 const Home = () => {
     return (
@@ -18,4 +19,4 @@ const Home = () => {
     )
 };
 
-export default Home;
+export default withAuthSync(Home);

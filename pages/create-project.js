@@ -4,6 +4,7 @@ import { PageHeader } from 'antd';
 import PageWrapper from "../components/common/PageWrapper";
 import ProjectCreateForm from "../components/forms/project_forms/ProjectCreateForm";
 import DefaultLayout from "../components/layout/default_layout/DefaultLayout";
+import {withAuthSync} from "../utils/withAuthSync";
 
 const CreateProject = () => {
 
@@ -23,4 +24,4 @@ const CreateProject = () => {
 };
 
 
-export default CreateProject;
+export default withAuthSync(CreateProject);

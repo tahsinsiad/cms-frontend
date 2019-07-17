@@ -9,6 +9,7 @@ import getConfig from 'next/config'
 const {publicRuntimeConfig} = getConfig();
 const {CREATE_PROJECT_PATH} = publicRuntimeConfig;
 import RecentProjects from "../components/projects/RecentProjects";
+import {withAuthSync} from "../utils/withAuthSync";
 
 const { Meta } = Card;
 
@@ -84,4 +85,4 @@ const Dashboard = () => {
 };
 
 
-export default Dashboard;
+export default withAuthSync(Dashboard);

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Card, Col, Icon, Row, message } from "antd";
 import { useQuery } from "graphql-hooks";
-import { GlobalContext } from "../../contexts/withContext";
+import { GlobalContext } from "../../utils/withContext";
 
 const { Meta } = Card;
 
@@ -23,7 +23,9 @@ export const recentProjectsQuery = `
 const RecentProjects = (props) => {
 
     const [skip, setSkip] = useState(0);
+    const { dataStoreContext } = useContext(GlobalContext);
 
+    // let loading, error, data, refetch;
     let { loading, error, data, refetch } = useQuery(recentProjectsQuery, {
         variables: { skip, limit: 4 },
         updateData: (prevResult, result) => ({
@@ -33,9 +35,15 @@ const RecentProjects = (props) => {
     });
 
     useEffect(() => {
-        console.log('Initialize Data');
-        refetch({ variables: { skip, limit: 4 } });
-    }, []);
+        if (dataStoreContext.projectListUpdated) {
+                dataStoreContext.synced({projectListUpdated: false});
+                refetch({variables: {skip, limit: 4}});
+                // dataStoreContext.setDataRefetchHandler('refetchRecentProjects', () => {
+                //     console.log('refetchRecentProjects');
+                //     refetch({variables: {skip, limit: 4}})
+                // });
+            }
+    },[dataStoreContext.projectListUpdated]);
 
     let hideMessage;
 
@@ -51,6 +59,14 @@ const RecentProjects = (props) => {
             hideMessage && hideMessage();
             hideMessage = null;
         }
+        // if (dataStoreContext.projectListUpdated) {
+        //     dataStoreContext.synced({projectListUpdated: false});
+        //     refetch({variables: {skip, limit: 4}});
+            // dataStoreContext.setDataRefetchHandler('refetchRecentProjects', () => {
+            //     console.log('refetchRecentProjects');
+            //     refetch({variables: {skip, limit: 4}})
+            // });
+        // }
         if (hideMessage) return hideMessage;
     }, [error, loading]);
 

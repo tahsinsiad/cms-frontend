@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useMutation } from 'graphql-hooks'
 import { redirectTo } from "../../common/Redirect";
 import getConfig from 'next/config'
-import { GlobalContext } from "../../../contexts/withContext";
+import { GlobalContext } from "../../../utils/withContext";
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
 
@@ -21,7 +21,7 @@ const AutoCompleteOption = AutoComplete.Option;
 const FormItem = Form.Item;
 
 const CREATE_PROJECT = `
-mutation createPost($title: String!, $description: String, $websiteUrl: String!) {
+mutation createProject($title: String!, $description: String, $websiteUrl: String!) {
   createProject(title: $title, description: $description, websiteUrl: $websiteUrl) {
     id
     title
@@ -54,10 +54,8 @@ const ProjectCreateForm = (props) => {
             });
 
             if (!result.error) {
-                setTimeout(() => {
-                    redirectTo(DASHBOARD_PATH, { status: 301 });
-                    dataStoreContext.projectCreated(result.data.createProject);
-                }, 0);
+                dataStoreContext.projectCreated(result.data.createProject);
+                redirectTo(DASHBOARD_PATH, { status: 200 });
             } else {
                 message.error((result.httpError && result.httpError.statusText) ||
                     (result.graphQLErrors && result.graphQLErrors[0].message));

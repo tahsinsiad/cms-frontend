@@ -3,7 +3,7 @@ import { Avatar, Dropdown, Layout, Menu } from 'antd';
 import Link from 'next/link';
 /* SCSS */
 import './nav_header.scss'
-import { GlobalContext } from "../../../contexts/withContext";
+import { GlobalContext } from "../../../utils/withContext";
 import { redirectTo } from "../../common/Redirect";
 
 const { Header } = Layout;
@@ -14,7 +14,6 @@ const NavHeader = () => {
 
     const logout = () => {
         authContext.logoutRequest();
-        redirectTo('/login');
     };
 
     const menu = (

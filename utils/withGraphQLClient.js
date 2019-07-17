@@ -9,15 +9,15 @@ export default App => {
         static displayName = 'GraphQLHooks(App)';
         static async getInitialProps (ctx) {
             const { Component, router } = ctx;
-            const graphQLClient = initGraphQL();
 
             let appProps = {};
             if (App.getInitialProps) {
-                appProps = await App.getInitialProps(ctx, graphQLClient)
+                appProps = await App.getInitialProps(ctx);
             }
 
             // Run all GraphQL queries in the component tree
             // and extract the resulting data
+            const graphQLClient = initGraphQL({}, appProps.token);
             let graphQLState = {};
             if (typeof window === 'undefined') {
                 try {
@@ -47,13 +47,15 @@ export default App => {
 
             return {
                 ...appProps,
-                graphQLState
+                graphQLState,
+                token: appProps.token,
+                user: appProps.user
             }
         }
 
         constructor (props) {
             super(props);
-            this.graphQLClient = initGraphQL(props.graphQLState);
+            this.graphQLClient = initGraphQL(props.graphQLState, props.token);
         }
 
         render () {

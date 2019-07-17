@@ -4,6 +4,7 @@ import EditorNavHeader from "../components/layout/header/EditorNavHeader";
 import EditorLayout from "../components/layout/editor_layout/EditorLayout";
 import PageWrapper from '../components/common/PageWrapper';
 import { getComponentForRoute } from '../constants/ProjectSubRoutes';
+import {withAuthSync} from "../utils/withAuthSync";
 
 const navHeader = <EditorNavHeader />;
 
@@ -17,6 +18,6 @@ const Project = (props) => {
             </PageWrapper>
         </EditorLayout>
     );
-}
+};
 
-export default withRouter(Project);
+export default withRouter(withAuthSync(Project));
