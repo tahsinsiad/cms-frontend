@@ -44,6 +44,8 @@ const Project = (props) => {
         })
     });
 
+    // TODO refetch and update the cache if the updated project is the current project
+
     let hideMessage;
     useEffect(() => {
         if (error) {
