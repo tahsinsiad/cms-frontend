@@ -18,14 +18,6 @@ class DataStoreContextProvider extends Component {
     state = initDataStoreState;
 
     /* Project Actions */
-    projectCreated = (project) => {
-        console.log("new project created");
-        this.setState({
-            projectListUpdated: true,
-            updatedProject: project
-        })
-    };
-
     setCurrentProject = (project) => {
         console.log("set current project id");
         this.setState({ currentProject: project })
@@ -36,10 +28,10 @@ class DataStoreContextProvider extends Component {
         this.setState({ projectUpdated: isUpdate })
     };
 
-    synced = (dispatch, syncedStates) => {
-        console.log("data store synced", syncedStates);
+    setProjectListUpdated = (isUpdated) => {
+        console.log("data store synced", isUpdated);
         this.setState({
-            ...syncedStates
+            projectListUpdated: isUpdated
         })
     };
 
@@ -50,10 +42,10 @@ class DataStoreContextProvider extends Component {
                     projectListUpdated: this.state.projectListUpdated,
                     projectUpdated: this.state.projectUpdated,
                     currentProject: this.state.currentProject,
-                    projectCreated: this.projectCreated,
+                    updateProject: this.updateProject,
                     setCurrentProject: this.setCurrentProject,
                     setProjectUpdated: this.setProjectUpdated,
-                    synced: this.synced,
+                    setProjectListUpdated: this.setProjectListUpdated
                 }}
             >
                 {this.props.children}

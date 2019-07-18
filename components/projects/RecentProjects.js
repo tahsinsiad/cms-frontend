@@ -38,7 +38,7 @@ const RecentProjects = (props) => {
 
     useEffect(() => {
         if (dataStoreContext.projectListUpdated) {
-            dataStoreContext.synced({ projectListUpdated: false });
+            dataStoreContext.setProjectListUpdated(false);
             refetch({ variables: { skip, limit: 4 } });
         }
     }, [dataStoreContext.projectListUpdated]);

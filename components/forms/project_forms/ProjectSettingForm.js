@@ -23,14 +23,6 @@ const UPDATE_PROJECT = `
 mutation UpdateProject($id: String!, $title: String!, $description: String, $websiteUrl: String!, $siteMeta: String, $brand: BrandInput) {
   updateProject(id: $id, title: $title, description: $description, websiteUrl: $websiteUrl, siteMeta: $siteMeta, brand: $brand) {
     id
-    title
-    description
-    websiteUrl
-    modifiedAt
-    brand {
-        icon
-        siteTitle
-    }
   }
 }`;
 
@@ -61,7 +53,6 @@ const ProjectSettingForm = (props) => {
                 });
 
                 if (!result.error) {
-                    dataStoreContext.projectCreated(result.data.updateProject);
                     dataStoreContext.setProjectUpdated(true);
                 } else {
                     message.error((result.httpError && result.httpError.statusText) ||

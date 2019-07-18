@@ -47,7 +47,7 @@ const ProjectCreateForm = (props) => {
                     variables: values
                 });
                 if (!result.error) {
-                    dataStoreContext.projectCreated(result.data.createProject);
+                    dataStoreContext.setProjectListUpdated(true);
                     return await redirectTo(DASHBOARD_PATH, { status: 200 });
                 } else {
                     message.error((result.httpError && result.httpError.statusText) ||
