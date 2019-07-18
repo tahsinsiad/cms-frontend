@@ -8,7 +8,7 @@ export const DataStoreContext = React.createContext();
 
 /* DataStore State */
 const initDataStoreState = {
-    updatedProject: null,
+    projectUpdated: false,
     projectListUpdated: false,
     currentProject: null
 };
@@ -28,7 +28,12 @@ class DataStoreContextProvider extends Component {
 
     setCurrentProject = (project) => {
         console.log("set current project id");
-        this.setState({currentProject: project})
+        this.setState({ currentProject: project })
+    };
+
+    setProjectUpdated = (isUpdate) => {
+        console.log("set project update");
+        this.setState({ projectUpdated: isUpdate })
     };
 
     synced = (dispatch, syncedStates) => {
@@ -38,15 +43,16 @@ class DataStoreContextProvider extends Component {
         })
     };
 
-    render () {
+    render() {
         return (
             <DataStoreContext.Provider
                 value={{
                     projectListUpdated: this.state.projectListUpdated,
-                    updatedProject: this.state.updatedProject,
+                    projectUpdated: this.state.projectUpdated,
                     currentProject: this.state.currentProject,
                     projectCreated: this.projectCreated,
                     setCurrentProject: this.setCurrentProject,
+                    setProjectUpdated: this.setProjectUpdated,
                     synced: this.synced,
                 }}
             >

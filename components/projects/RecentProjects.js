@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Card, Col, Icon, Row, message } from "antd";
 import { useQuery } from "graphql-hooks";
-import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
+import { DataStoreContext } from "../../contexts/DataStoreContextProvider";
 import getConfig from 'next/config'
 import Link from "next/link";
 const { publicRuntimeConfig } = getConfig();
@@ -38,10 +38,10 @@ const RecentProjects = (props) => {
 
     useEffect(() => {
         if (dataStoreContext.projectListUpdated) {
-                dataStoreContext.synced({projectListUpdated: false});
-                refetch({variables: {skip, limit: 4}});
-            }
-    },[dataStoreContext.projectListUpdated]);
+            dataStoreContext.synced({ projectListUpdated: false });
+            refetch({ variables: { skip, limit: 4 } });
+        }
+    }, [dataStoreContext.projectListUpdated]);
 
     let hideMessage;
     useEffect(() => {
@@ -71,7 +71,6 @@ const RecentProjects = (props) => {
                         cover={<img alt="Default Project Cover"
                             src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
                         actions={[<Link href={`${PROJECT_PATH}?id=${project.id}`}><a><Icon
-                            /*onClick={() => dataStoreContext.setCurrentProject(project)}*/
                             type="edit" /></a></Link>, <Icon type="delete" />]}
                     >
                         <Meta title={project.title} description={project.description} />

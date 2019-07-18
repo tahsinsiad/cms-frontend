@@ -4,7 +4,7 @@ import {
     Button,
     AutoComplete, message, Row, Col,
 } from 'antd';
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import React from "react";
 
 // SCSS
@@ -12,7 +12,7 @@ import './ProjectForm.scss';
 
 import { useMutation } from 'graphql-hooks'
 import getConfig from 'next/config'
-import {DataStoreContext} from "../../../contexts/DataStoreContextProvider";
+import { DataStoreContext } from "../../../contexts/DataStoreContextProvider";
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
 
@@ -27,6 +27,10 @@ mutation UpdateProject($id: String!, $title: String!, $description: String, $web
     description
     websiteUrl
     modifiedAt
+    brand {
+        icon
+        siteTitle
+    }
   }
 }`;
 
@@ -58,6 +62,7 @@ const ProjectSettingForm = (props) => {
 
                 if (!result.error) {
                     dataStoreContext.projectCreated(result.data.updateProject);
+                    dataStoreContext.setProjectUpdated(true);
                 } else {
                     message.error((result.httpError && result.httpError.statusText) ||
                         (result.graphQLErrors && result.graphQLErrors[0].message));
@@ -86,8 +91,8 @@ const ProjectSettingForm = (props) => {
         <AutoCompleteOption key={websiteUrl}>{websiteUrl}</AutoCompleteOption>
     ));
 
-    const {currentProject} = dataStoreContext;
-    useEffect(()=>{
+    const { currentProject } = dataStoreContext;
+    useEffect(() => {
         if (currentProject) {
             setFieldsValue({
                 title: currentProject.title,

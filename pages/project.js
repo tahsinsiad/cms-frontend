@@ -1,18 +1,18 @@
-import React, {useContext, useEffect} from 'react';
-import {withRouter} from 'next/router'
+import React, { useContext, useEffect } from 'react';
+import { withRouter } from 'next/router'
 import EditorNavHeader from "../components/layout/header/EditorNavHeader";
 import PageWrapper from '../components/common/PageWrapper';
-import {getComponentForRoute} from '../constants/ProjectSubRoutes';
-import {withAuthSync} from "../utils/withAuthSync";
-import {useQuery} from "graphql-hooks";
-import {DataStoreContext} from "../contexts/DataStoreContextProvider";
-import {message, Row, Sider} from "antd";
+import { getComponentForRoute } from '../constants/ProjectSubRoutes';
+import { withAuthSync } from "../utils/withAuthSync";
+import { useQuery } from "graphql-hooks";
+import { DataStoreContext } from "../contexts/DataStoreContextProvider";
+import { message, Row, Sider } from "antd";
 import getConfig from 'next/config'
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
 import EditorNavs from "../constants/EditorNavs";
 import CommonLayout from "../components/layout/CommonLayout";
-import {getNavsWithParamsToPath} from "../utils/helpers";
+import { getNavsWithParamsToPath } from "../utils/helpers";
 
 export const projectDetailsQuery = `
     query projectDetailsQuery($projectId: String!) {
@@ -32,10 +32,12 @@ export const projectDetailsQuery = `
 `;
 
 const Project = (props) => {
-    console.log("router", props.router);
+
     const Component = getComponentForRoute(props.router.query);
-    let projectId = props.router.query.id;
+
     const dataStoreContext = useContext(DataStoreContext);
+
+    let projectId = props.router.query.id;
 
     const { loading, error, data, refetch } = useQuery(projectDetailsQuery, {
         variables: { projectId: projectId },
@@ -62,6 +64,12 @@ const Project = (props) => {
         if (hideMessage) return hideMessage;
     }, [error, loading]);
 
+    useEffect(() => {
+        if (dataStoreContext.projectUpdated) {
+            refetch();
+            dataStoreContext.setProjectUpdated(false);
+        }
+    }, [dataStoreContext.projectUpdated]);
 
     useEffect(() => {
         if (data && data.project) {
@@ -74,10 +82,10 @@ const Project = (props) => {
 
     return (
         <CommonLayout navs={getNavsWithParamsToPath(EditorNavs, {
-            query: {id: props.router.query.id},
+            query: { id: props.router.query.id },
         })} navHeader={<EditorNavHeader />}>
             <PageWrapper>
-                <Component project={project}/>
+                <Component project={project} />
             </PageWrapper>
         </CommonLayout>
     );
