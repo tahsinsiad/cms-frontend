@@ -13,7 +13,6 @@ export function concatQueryParamsToPath(path, params) {
 }
 
 export function concatPathParamsToPath(path, params) {
-    console.log("concatPathParamsToPath", params);
     let modifiedPath = path;
     for (const param of Object.values(params)) {
         if (typeof param != 'undefined') {
@@ -23,18 +22,25 @@ export function concatPathParamsToPath(path, params) {
     return modifiedPath;
 }
 
-export function getNewNavWithParamsToPath(nav, params) {
-    return {
-        ...nav,
-        path: concatQueryParamsToPath(nav.path, {...params.query, component: nav.pathParam}),
-        pathAs: concatQueryParamsToPath(concatPathParamsToPath(nav.path, {pathParam: nav.pathParam}), params.query)
+export function injectParamsToPathOfNav(nav, params) {
+    nav.queryParam = params.query;
+    nav.pathAs = concatQueryParamsToPath(concatPathParamsToPath(nav.path, {pathParam: nav.pathParam}), params.query);
+    nav.path = concatQueryParamsToPath(nav.path, {...params.query, component: nav.pathParam});
+}
+
+function injectGraphQLClient(nav, graphQLClient) {
+    nav.graphQLClient = graphQLClient;
+}
+
+export function injectParamsToPathOfNavs(navs, params) {
+    for (const nav of navs) {
+        injectParamsToPathOfNav(nav, params)
     }
 }
 
-export function getNavsWithParamsToPath(navs, params) {
-    let modifiedNavs = [];
+export function injectParamsAndGraphQLClient(navs, params, graphQLClient) {
     for (const nav of navs) {
-        modifiedNavs.push(getNewNavWithParamsToPath(nav, params))
+        injectParamsToPathOfNav(nav, params);
+        injectGraphQLClient(nav, graphQLClient);
     }
-    return modifiedNavs;
 }

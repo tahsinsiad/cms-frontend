@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Layout} from 'antd';
 import CustomFooter from './Footer';
 import '../../static/scss/layout.scss';
-import AsideLeft from "./AsideLeft";
+import AsideLeft from "./aside/AsideLeft";
 
 const { Content, Sider } = Layout;
 

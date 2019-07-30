@@ -4,15 +4,15 @@ import EditorNavHeader from "../components/layout/header/EditorNavHeader";
 import PageWrapper from '../components/common/PageWrapper';
 import { getComponentForRoute } from '../constants/ProjectSubRoutes';
 import { withAuthSync } from "../utils/withAuthSync";
-import { useQuery } from "graphql-hooks";
+import {ClientContext, useQuery} from "graphql-hooks";
 import { DataStoreContext } from "../contexts/DataStoreContextProvider";
 import { message, Row, Sider } from "antd";
 import getConfig from 'next/config'
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
-import EditorNavs from "../constants/EditorNavs";
+import {getProjectNavs} from "../components/layout/aside/ProjectNavs";
 import CommonLayout from "../components/layout/CommonLayout";
-import { getNavsWithParamsToPath } from "../utils/helpers";
+import { injectParamsAndGraphQLClient } from "../utils/helpers";
 
 export const projectDetailsQuery = `
     query projectDetailsQuery($projectId: String!) {
@@ -36,6 +36,7 @@ const Project = (props) => {
     const Component = getComponentForRoute(props.router.query);
 
     const dataStoreContext = useContext(DataStoreContext);
+    const graphQLClient = useContext(ClientContext);
 
     let projectId = props.router.query.id;
 
@@ -77,11 +78,11 @@ const Project = (props) => {
 
     if (error || !data) return <Row gutter={4} />;
     const { project } = data;
-
+    const navs = getProjectNavs({
+        query: { id: props.router.query.id },
+    }, graphQLClient);
     return (
-        <CommonLayout navs={getNavsWithParamsToPath(EditorNavs, {
-            query: { id: props.router.query.id },
-        })} navHeader={<EditorNavHeader />}>
+        <CommonLayout navs={navs} navHeader={<EditorNavHeader />}>
             <PageWrapper>
                 <Component project={project} />
             </PageWrapper>

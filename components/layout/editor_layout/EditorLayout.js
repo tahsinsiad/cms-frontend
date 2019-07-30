@@ -1,10 +1,10 @@
 import React from 'react';
 import CommonLayout from '../CommonLayout';
-import EditorNavs from '../../../constants/EditorNavs';
+import ProjectNavs from '../aside/ProjectNavs';
 
 const EditorLayout = ({ children, navHeader }) => {
     return (
-        <CommonLayout navs={EditorNavs} navHeader={navHeader}>
+        <CommonLayout navs={ProjectNavs} navHeader={navHeader}>
             {children}
         </CommonLayout>
     );

@@ -4,7 +4,6 @@ import unfetch from 'isomorphic-unfetch';
 import getConfig from 'next/config'
 const {publicRuntimeConfig} = getConfig();
 const {GRAPHQL_URL} = publicRuntimeConfig;
-import cookies from "next-cookies";
 
 let graphQLClient = null;
 

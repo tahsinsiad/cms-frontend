@@ -1,7 +1,7 @@
 import React from 'react';
 import NavHeader from '../header/DefaultNavHeader';
 import CommonLayout from '../CommonLayout';
-import DefaultNavs from '../../../constants/DefaultNavs';
+import DefaultNavs from '../aside/DefaultNavs';
 
 const DefaultLayout = ({ children }) => {
     return (
