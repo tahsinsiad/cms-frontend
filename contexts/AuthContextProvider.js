@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import fetch from "isomorphic-unfetch";
-import getConfig from 'next/config'
+import getConfig from "next/config";
 import cookie from "js-cookie";
 import {redirectTo} from "../components/common/Redirect";
+import * as PropTypes from "prop-types";
 const { publicRuntimeConfig } = getConfig();
 const { API_LOGIN_URL, LOGIN_PATH, DASHBOARD_PATH } = publicRuntimeConfig;
 
@@ -11,7 +12,7 @@ export const AuthContext = React.createContext();
 
 const initAuthState = {
     isLoggedIn: false,
-    token: '',
+    token: "",
     user: null,
     loading: false,
     error: null,
@@ -35,7 +36,7 @@ class AuthContextProvider extends Component {
             error: null
         });
         fetch(API_LOGIN_URL, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify(user)
         })
             .then(r => r.json())
@@ -54,8 +55,8 @@ class AuthContextProvider extends Component {
     };
 
     loginSuccess = async (user, token) => {
-        cookie.set('user', user, {expires: 1})
-        cookie.set('token', token, {expires: 1})
+        cookie.set("user", user, {expires: 1});
+        cookie.set("token", token, {expires: 1});
         this.setState({
             isLoggedIn: true,
             loading: false,
@@ -67,8 +68,8 @@ class AuthContextProvider extends Component {
     };
 
     loginFailed = async (err) => {
-        cookie.remove('user');
-        cookie.remove('token');
+        cookie.remove("user");
+        cookie.remove("token");
         this.setState({
             isLoggedIn: false,
             loading: false,
@@ -76,12 +77,12 @@ class AuthContextProvider extends Component {
             user: null,
             token: null,
         });
-        return await redirectTo(LOGIN_PATH)
+        return await redirectTo(LOGIN_PATH);
     };
 
     logoutRequest = async () => {
-        cookie.remove('user');
-        cookie.remove('token');
+        cookie.remove("user");
+        cookie.remove("token");
         this.setState({
             isLoggedIn: false,
             loading: false,
@@ -89,13 +90,13 @@ class AuthContextProvider extends Component {
             user: null,
             token: null,
         });
-        return await redirectTo(LOGIN_PATH)
+        return await redirectTo(LOGIN_PATH);
     };
 
     render () {
         return (
-            <AuthContext.Provider
-                value={{
+          <AuthContext.Provider
+            value={{
                     isLoggedIn: this.state.isLoggedIn,
                     loading: this.state.loading,
                     error: this.state.error,
@@ -106,10 +107,16 @@ class AuthContextProvider extends Component {
                     loginSuccess: this.loginSuccess,
                 }}
             >
-                {this.props.children}
-            </AuthContext.Provider>
-        )
+            {this.props.children}
+          </AuthContext.Provider>
+        );
     }
 }
+
+AuthContextProvider.propTypes = {
+    user: PropTypes.object,
+    token: PropTypes.string,
+    children: PropTypes.element,
+};
 
 export default AuthContextProvider;

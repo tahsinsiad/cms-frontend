@@ -1,43 +1,43 @@
-const express = require('express');
-const next = require('next');
+const express = require("express");
+const next = require("next");
 const dotenv = require("dotenv");
 
 dotenv.config();
 const port = parseInt(process.env.SERVER_PORT, 10) || 3000;
-const dev = process.env.NODE_ENV !== 'production';
+const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 function setupRobotsTXT(server) {
     const robotsOptions = {
-        root: __dirname + '/public/',
+        root: __dirname + "/public/",
         headers: {
-            'Content-Type': 'text/plain;charset=UTF-8',
+            "Content-Type": "text/plain;charset=UTF-8",
         }
     };
-    server.get('/robots.txt', (req, res) => (
-        res.status(200).sendFile('robots.txt', robotsOptions)
+    server.get("/robots.txt", (req, res) => (
+        res.status(200).sendFile("robots.txt", robotsOptions)
     ));
 }
 
 function setupSiteMapXML(server) {
     const siteMapOptions = {
-        root: __dirname + '/public/',
+        root: __dirname + "/public/",
         headers: {
-            'Content-Type': 'text/xml;charset=UTF-8',
+            "Content-Type": "text/xml;charset=UTF-8",
         }
     };
-    server.get('/sitemap.xml', (req, res) => (
-        res.status(200).sendFile('sitemap.xml', siteMapOptions)
+    server.get("/sitemap.xml", (req, res) => (
+        res.status(200).sendFile("sitemap.xml", siteMapOptions)
     ));
 }
 
 function setupFavicon(server) {
     const faviconOptions = {
-        root: __dirname + '/public/'
+        root: __dirname + "/public/"
     };
-    server.get('/favicon.ico', (req, res) => (
-        res.status(200).sendFile('favicon.ico', faviconOptions)
+    server.get("/favicon.ico", (req, res) => (
+        res.status(200).sendFile("favicon.ico", faviconOptions)
     ));
 }
 
@@ -48,31 +48,31 @@ app.prepare().then(() => {
     setupSiteMapXML(server);
     setupFavicon(server);
 
-    server.get('/posts/:id', (req, res) => {
+    server.get("/posts/:id", (req, res) => {
         console.log(req.params, req.query);
-        return app.render(req, res, '/posts', { id: req.params.id })
+        return app.render(req, res, "/posts", { id: req.params.id });
     });
 
     // server.get('/project', (req, res) => {
     //     return app.render(req, res, '/project', { id: req.query.id })
     // });
 
-    server.get('/project/:component', (req, res) => {
+    server.get("/project/:component", (req, res) => {
         console.log(req.params, req.query);
-        return app.render(req, res, '/project', { component: req.params.component, id: req.query.id })
+        return app.render(req, res, "/project", { component: req.params.component, id: req.query.id });
     });
-    server.get('/project/pages/:page', (req, res) => {
+    server.get("/project/pages/:page", (req, res) => {
         console.log(req.params, req.query);
-        return app.render(req, res, '/project', { component: 'pages', page: req.params.page, id: req.query.id })
+        return app.render(req, res, "/project", { component: "pages", page: req.params.page, id: req.query.id });
     });
 
-    server.get('*', (req, res) => {
+    server.get("*", (req, res) => {
         // console.log(req.params, req.query);
-        return handle(req, res)
+        return handle(req, res);
     });
 
     server.listen(port, err => {
         if (err) throw err;
-        console.log(`> Ready on http://localhost:${port}`)
-    })
+        console.log(`> Ready on http://localhost:${port}`);
+    });
 });

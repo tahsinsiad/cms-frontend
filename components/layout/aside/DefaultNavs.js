@@ -1,42 +1,30 @@
-import React from 'react';
+import React from "react";
 import { Icon } from "antd";
-import getConfig from 'next/config'
+import getConfig from "next/config";
 const {publicRuntimeConfig} = getConfig();
 const {DASHBOARD_PATH, LOGIN_PATH, ERROR_PAGE, ABOUT_PATH} = publicRuntimeConfig;
 
 const DefaultNavs = [
     {
-        key: 'dashboard',
-        title: 'Dashboard',
+        key: "dashboard",
+        title: "Dashboard",
         path: DASHBOARD_PATH,
         icon: <Icon type="pie-chart" />,
         subMenu: null
     },
     {
-        key: 'about',
-        title: 'About',
+        key: "about",
+        title: "About",
         path: ABOUT_PATH,
         icon: <Icon type="user" />,
         subMenu: null
     },
     {
-        key: 'pages',
-        title: 'Pages',
-        icon: <Icon type="star" />,
-        subMenu: [
-            {
-                key: 'login',
-                title: 'Login',
-                path: LOGIN_PATH,
-                icon: <Icon type="login" />,
-                subMenu: null
-            },
-            {
-                key: '_error',
-                title: 'Error',
-                path: ERROR_PAGE,
-            }
-        ]
+        key: "login",
+        title: "Login",
+        path: LOGIN_PATH,
+        icon: <Icon type="login" />,
+        subMenu: null
     }
 ];
 

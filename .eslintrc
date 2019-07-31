@@ -28,6 +28,9 @@
             "allowBind": false,
             "ignoreRefs": true
         }],
+        "quotes": ["warn", "double"],
+        "jsx-quotes": ["error", "prefer-double"],
+        "semi": "warn",
         "react/no-did-update-set-state": "error",
         "react/no-unknown-property": "error",
         "react/no-unused-prop-types": "error",

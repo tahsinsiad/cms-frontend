@@ -16,7 +16,7 @@ module.exports = function getURLConstants(env) {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
     // ---------------- Application ---------------- //
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-    const ROOT_PATH = '/';
+    const ROOT_PATH = "/";
     const DASHBOARD_PATH = `${ROOT_PATH}dashboard`;
 
     const LOGIN_PATH = `${ROOT_PATH}login`;
@@ -44,5 +44,5 @@ module.exports = function getURLConstants(env) {
         PROJECT_PATH,
         CREATE_PROJECT_PATH,
         ERROR_PAGE
-    }
+    };
 };

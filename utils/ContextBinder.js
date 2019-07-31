@@ -8,8 +8,8 @@ export const ContextBinder = (context, actions) => {
 
     Object.values(actions).forEach((action) => {
         boundContext[action.name] = async (...args) => {
-            action.apply(null, [dispatch, ...args])
-        }
+            action.apply(null, [dispatch, ...args]);
+        };
     });
 
     return boundContext;

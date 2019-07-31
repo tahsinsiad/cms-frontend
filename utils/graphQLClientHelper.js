@@ -3,13 +3,13 @@ export async function executeAllPagesQuery(graphQLClient, projectId) {
         method: "POST",
         headers: {
             ...graphQLClient.headers,
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({
             query: `
                 query projectPages {
                     allPages {
-                        id
+                        slug
                         key
                         title
                         path
@@ -20,5 +20,5 @@ export async function executeAllPagesQuery(graphQLClient, projectId) {
             `,
             projectId: projectId
         })
-    }).then( r => r.json() )
+    }).then( r => r.json() );
 }

@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
-import getConfig from 'next/config'
+import React, { Component } from "react";
+import getConfig from "next/config";
+import * as PropTypes from "prop-types";
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
 
@@ -20,25 +21,25 @@ class DataStoreContextProvider extends Component {
     /* Project Actions */
     setCurrentProject = (project) => {
         console.log("set current project id");
-        this.setState({ currentProject: project })
+        this.setState({ currentProject: project });
     };
 
     setProjectUpdated = (isUpdate) => {
         console.log("set project update");
-        this.setState({ projectUpdated: isUpdate })
+        this.setState({ projectUpdated: isUpdate });
     };
 
     setProjectListUpdated = (isUpdated) => {
         console.log("data store synced", isUpdated);
         this.setState({
             projectListUpdated: isUpdated
-        })
+        });
     };
 
     render() {
         return (
-            <DataStoreContext.Provider
-                value={{
+          <DataStoreContext.Provider
+            value={{
                     projectListUpdated: this.state.projectListUpdated,
                     projectUpdated: this.state.projectUpdated,
                     currentProject: this.state.currentProject,
@@ -48,10 +49,14 @@ class DataStoreContextProvider extends Component {
                     setProjectListUpdated: this.setProjectListUpdated
                 }}
             >
-                {this.props.children}
-            </DataStoreContext.Provider>
-        )
+            {this.props.children}
+          </DataStoreContext.Provider>
+        );
     }
 }
+
+DataStoreContextProvider.propTypes = {
+    children: PropTypes.element.isRequired
+};
 
 export default DataStoreContextProvider;

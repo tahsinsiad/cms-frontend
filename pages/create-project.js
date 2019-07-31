@@ -1,5 +1,5 @@
-import React from 'react';
-import { PageHeader } from 'antd';
+import React from "react";
+import { PageHeader } from "antd";
 
 import PageWrapper from "../components/common/PageWrapper";
 import ProjectCreateForm from "../components/forms/project_forms/ProjectCreateForm";
@@ -11,13 +11,13 @@ const CreateProject = () => {
     const pageHeader = <PageHeader title="Create Project" subTitle="Create a new NextJS project" />;
 
     return (
-        <DefaultLayout>
-            <PageWrapper
-                pageHeader={pageHeader}
+      <DefaultLayout>
+        <PageWrapper
+          pageHeader={pageHeader}
             >
-                <ProjectCreateForm />
-            </PageWrapper>
-        </DefaultLayout>
+          <ProjectCreateForm />
+        </PageWrapper>
+      </DefaultLayout>
     );
 };
 

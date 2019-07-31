@@ -1,12 +1,13 @@
-import React, { useContext, useEffect } from 'react';
-import { Alert, Button, Checkbox, Form, Icon, Input } from 'antd';
+import React, { useContext, useEffect } from "react";
+import { Alert, Button, Checkbox, Form, Icon, Input } from "antd";
 /* SCSS */
-import '../static/scss/login.scss';
-import getConfig from 'next/config'
+import "../static/scss/login.scss";
+import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
 import {AuthContext} from "../contexts/AuthContextProvider";
 import {ClientContext} from "graphql-hooks";
+import * as PropTypes from "prop-types";
 
 const Login = (props) => {
 
@@ -35,60 +36,64 @@ const Login = (props) => {
     // }
 
     return (
-        <div className="login_form_wrapper">
-            <Form onSubmit={handleSubmit} className="login_form">
-                <h4 className="login_title">Login</h4>
-                <Form.Item>
-                    {getFieldDecorator('email', {
+      <div className="login_form_wrapper">
+        <Form onSubmit={handleSubmit} className="login_form">
+          <h4 className="login_title">Login</h4>
+          <Form.Item>
+            {getFieldDecorator("email", {
                         rules: [{
-                            type: 'email',
-                            message: 'The input is not valid E-mail!',
-                        }, { required: true, message: 'Please input your email!' }],
+                            type: "email",
+                            message: "The input is not valid E-mail!",
+                        }, { required: true, message: "Please input your email!" }],
                     })(
-                        <Input
-                            prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            placeholder="E-mail"
+                      <Input
+                        prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+                        placeholder="E-mail"
                         />,
                     )}
-                </Form.Item>
-                <Form.Item>
-                    {getFieldDecorator('password', {
-                        rules: [{ required: true, message: 'Please input your Password!' }],
+          </Form.Item>
+          <Form.Item>
+            {getFieldDecorator("password", {
+                        rules: [{ required: true, message: "Please input your Password!" }],
                     })(
-                        <Input
-                            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            type="password"
-                            placeholder="Password"
+                      <Input
+                        prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+                        type="password"
+                        placeholder="Password"
                         />,
                     )}
-                </Form.Item>
-                {authContext.error && <Form.Item>
-                    <Alert message={authContext.error.message} type="error" />
-                </Form.Item>}
-                <Form.Item>
-                    {getFieldDecorator('remember', {
-                        valuePropName: 'checked',
+          </Form.Item>
+          {authContext.error && <Form.Item>
+            <Alert message={authContext.error.message} type="error" />
+            </Form.Item>}
+          <Form.Item>
+            {getFieldDecorator("remember", {
+                        valuePropName: "checked",
                         initialValue: true,
                     })(<Checkbox>Remember me</Checkbox>)}
-                    <a className="login_form_forgot" href="#/">
+            <a className="login_form_forgot" href="#/">
                         Forgot password
-                    </a>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        loading={authContext.loading}
-                        className="login_form_button"
-                        icon='login'
+            </a>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={authContext.loading}
+              className="login_form_button"
+              icon="login"
                     >
                         Log in
-                    </Button>
+            </Button>
                     Or <a href="#">register now!</a>
-                </Form.Item>
-            </Form>
-        </div>
+          </Form.Item>
+        </Form>
+      </div>
     );
 };
 
-const WrappedLogin = Form.create({ name: 'login' })(Login);
+Login.propTypes = {
+    form: PropTypes.object
+};
+
+const WrappedLogin = Form.create({ name: "login" })(Login);
 
 export default WrappedLogin;

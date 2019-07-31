@@ -5,7 +5,7 @@ import {AuthContext} from "../contexts/AuthContextProvider";
 import {ClientContext} from "graphql-hooks";
 
 const getDisplayName = Component =>
-    Component.displayName || Component.name || 'Component';
+    Component.displayName || Component.name || "Component";
 
 export const withAuthSync = WrappedComponent => {
     const Component = (props)=>{
@@ -17,7 +17,7 @@ export const withAuthSync = WrappedComponent => {
         //     graphQLClient.setHeader("Authorization", `Bearer ${authContext.token}`);
         // }, [authContext.token]);
 
-        return <WrappedComponent {...props} />
+        return <WrappedComponent {...props} />;
     };
     Component.displayName = `AuthSyncHooks(${getDisplayName(WrappedComponent)})`;
     Component.getInitialProps = async (ctx) => {
@@ -34,7 +34,7 @@ export const withAuthSync = WrappedComponent => {
             (await WrappedComponent.getInitialProps(ctx));
 
         console.log(WrappedComponent.displayName, {...componentProps, token: authResp.token, user: authResp.user});
-        return {...componentProps, token: token, user: user}
+        return {...componentProps, token: token, user: user};
     };
 
     return Component;

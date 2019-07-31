@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {Icon, message} from "antd";
 import {executeAllPagesQuery} from "../../../utils/graphQLClientHelper";
 import {injectParamsAndGraphQLClient} from "../../../utils/helpers";
@@ -6,19 +6,19 @@ import {injectParamsAndGraphQLClient} from "../../../utils/helpers";
 export const getProjectNavs = (params, graphQLClient) => {
     const navs = [
         {
-            key: 'project-setting',
-            title: 'Project Setting',
-            icon: <Icon type="setting"/>,
-            path: '/project',
+            key: "project-setting",
+            title: "Project Setting",
+            icon: <Icon type="setting" />,
+            path: "/project",
             subMenu: null
         },
         (() => {
             const nav = {
-                key: 'pages',
-                title: 'Pages',
-                icon: <Icon type="star"/>,
-                path: '/project',
-                pathParam: 'pages',
+                key: "pages",
+                title: "Pages",
+                icon: <Icon type="snippets" />,
+                path: "/project",
+                pathParam: "pages",
                 lazySubmenu: true,
                 subMenu: [],
                 graphQLClient: null
@@ -42,24 +42,24 @@ export const getProjectNavs = (params, graphQLClient) => {
                     .catch((err) => {
                         console.error(err);
                         message.error(err.message);
-                    })
+                    });
             };
             return nav;
         })(),
         {
-            key: 'header',
-            title: 'Header',
-            icon: <Icon type="star"/>,
-            path: '/project',
-            pathParam: 'header',
+            key: "header",
+            title: "Header",
+            icon: <Icon type="star" />,
+            path: "/project",
+            pathParam: "header",
             subMenu: null
         },
         {
-            key: 'footer',
-            title: 'Footer',
-            icon: <Icon type="star"/>,
-            path: '/project',
-            pathParam: 'footer',
+            key: "footer",
+            title: "Footer",
+            icon: <Icon type="star" />,
+            path: "/project",
+            pathParam: "footer",
             subMenu: null
         },
     ];

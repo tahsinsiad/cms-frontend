@@ -1,18 +1,18 @@
-import React, { useContext, useEffect } from 'react';
-import { withRouter } from 'next/router'
+import React, { useContext, useEffect } from "react";
+import { withRouter } from "next/router";
 import EditorNavHeader from "../components/layout/header/EditorNavHeader";
-import PageWrapper from '../components/common/PageWrapper';
-import { getComponentForRoute } from '../constants/ProjectSubRoutes';
+import PageWrapper from "../components/common/PageWrapper";
+import { getComponentForRoute } from "../constants/ProjectSubRoutes";
 import { withAuthSync } from "../utils/withAuthSync";
 import {ClientContext, useQuery} from "graphql-hooks";
 import { DataStoreContext } from "../contexts/DataStoreContextProvider";
 import { message, Row, Sider } from "antd";
-import getConfig from 'next/config'
+import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
 import {getProjectNavs} from "../components/layout/aside/ProjectNavs";
 import CommonLayout from "../components/layout/CommonLayout";
-import { injectParamsAndGraphQLClient } from "../utils/helpers";
+import * as PropTypes from "prop-types";
 
 export const projectDetailsQuery = `
     query projectDetailsQuery($projectId: String!) {
@@ -50,12 +50,12 @@ const Project = (props) => {
     let hideMessage;
     useEffect(() => {
         if (error) {
-            message.error(`Error loading project.`);
+            message.error("Error loading project.");
         }
         console.log("loading:", loading);
         if (loading) {
             hideMessage && hideMessage();
-            hideMessage = message.loading(`Loading project...`, 0);
+            hideMessage = message.loading("Loading project...", 0);
         } else {
             hideMessage && hideMessage();
             hideMessage = null;
@@ -82,12 +82,16 @@ const Project = (props) => {
         query: { id: props.router.query.id },
     }, graphQLClient);
     return (
-        <CommonLayout navs={navs} navHeader={<EditorNavHeader />}>
-            <PageWrapper>
-                <Component project={project} />
-            </PageWrapper>
-        </CommonLayout>
+      <CommonLayout navs={navs} navHeader={<EditorNavHeader />}>
+        <PageWrapper>
+          <Component project={project} router={props.router} />
+        </PageWrapper>
+      </CommonLayout>
     );
+};
+
+Project.propTypes = {
+    router: PropTypes.object
 };
 
 export default withRouter(withAuthSync(Project));

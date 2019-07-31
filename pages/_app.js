@@ -1,7 +1,7 @@
-import App, { Container } from 'next/app'
-import React from 'react'
-import nextCookie from 'next-cookies';
-import { ClientContext } from 'graphql-hooks'
+import App, { Container } from "next/app";
+import React from "react";
+import nextCookie from "next-cookies";
+import { ClientContext } from "graphql-hooks";
 import withGraphQLClient from "../utils/withGraphQLClient";
 import AuthContextProvider from "../contexts/AuthContextProvider";
 import DataStoreContextProvider from "../contexts/DataStoreContextProvider";
@@ -16,7 +16,7 @@ class CMSApp extends App {
 
         // pageProps.token = token;
         // console.log("CMSApp initial props: ", {pageProps, token});
-        return {pageProps, token, user: user ? JSON.parse(user) : null}
+        return {pageProps, token, user: user ? JSON.parse(user) : null};
     }
 
     componentDidCatch(error, _errorInfo) {
@@ -33,16 +33,16 @@ class CMSApp extends App {
         // graphQLClient.setHeader("Authorization", `Bearer ${token}`);
 
         return (
-            <Container>
-                <ClientContext.Provider value={graphQLClient}>
-                    <AuthContextProvider {...{user, token}}>
-                        <DataStoreContextProvider>
-                            <Component {...pageProps} />
-                        </DataStoreContextProvider>
-                    </AuthContextProvider>
-                </ClientContext.Provider>
-            </Container>
-        )
+          <Container>
+            <ClientContext.Provider value={graphQLClient}>
+              <AuthContextProvider {...{user, token}}>
+                <DataStoreContextProvider>
+                  <Component {...pageProps} />
+                </DataStoreContextProvider>
+              </AuthContextProvider>
+            </ClientContext.Provider>
+          </Container>
+        );
     }
 }
 

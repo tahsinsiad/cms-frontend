@@ -6,10 +6,10 @@ import ErrorPage from "../components/error_page/ErrorPage";
 import React from "react";
 
 const ProjectSubRoutes = {
-    'default': ProjectSettings,
-    'pages': ProjectPages,
-    'header': ProjectHeaders,
-    'footer': ProjectFooters,
+    "default": ProjectSettings,
+    "pages": ProjectPages,
+    "header": ProjectHeaders,
+    "footer": ProjectFooters,
 };
 
 export const getComponentForRoute = ({ component }) => {

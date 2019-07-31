@@ -2,9 +2,9 @@ export function concatQueryParamsToPath(path, params) {
     let modifiedPath = path;
     let f = false;
     for (const paramKey in params) {
-        if (params.hasOwnProperty(paramKey) && typeof params[paramKey] != 'undefined') {
-            if (f) modifiedPath += '&';
-            else modifiedPath += '?';
+        if (params.hasOwnProperty(paramKey) && typeof params[paramKey] != "undefined") {
+            if (f) modifiedPath += "&";
+            else modifiedPath += "?";
             modifiedPath += `${paramKey}=${params[paramKey]}`;
             f = true;
         }
@@ -15,7 +15,7 @@ export function concatQueryParamsToPath(path, params) {
 export function concatPathParamsToPath(path, params) {
     let modifiedPath = path;
     for (const param of Object.values(params)) {
-        if (typeof param != 'undefined') {
+        if (typeof param != "undefined") {
             modifiedPath += `/${param}`;
         }
     }
@@ -34,7 +34,7 @@ function injectGraphQLClient(nav, graphQLClient) {
 
 export function injectParamsToPathOfNavs(navs, params) {
     for (const nav of navs) {
-        injectParamsToPathOfNav(nav, params)
+        injectParamsToPathOfNav(nav, params);
     }
 }
 
