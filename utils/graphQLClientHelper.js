@@ -7,15 +7,17 @@ export async function executeAllPagesQuery(graphQLClient, projectId) {
         },
         body: JSON.stringify({
             query: `
-                        query projectPages {
-                            allPages {
-                                id
-                                key
-                                title
-                                slug
-                            }
-                        }
-                    `,
+                query projectPages {
+                    allPages {
+                        id
+                        key
+                        title
+                        path
+                        pathAs
+                        pathParam
+                    }
+                }
+            `,
             projectId: projectId
         })
     }).then( r => r.json() )

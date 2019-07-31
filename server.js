@@ -49,6 +49,7 @@ app.prepare().then(() => {
     setupFavicon(server);
 
     server.get('/posts/:id', (req, res) => {
+        console.log(req.params, req.query);
         return app.render(req, res, '/posts', { id: req.params.id })
     });
 
@@ -57,10 +58,16 @@ app.prepare().then(() => {
     // });
 
     server.get('/project/:component', (req, res) => {
+        console.log(req.params, req.query);
         return app.render(req, res, '/project', { component: req.params.component, id: req.query.id })
+    });
+    server.get('/project/pages/:page', (req, res) => {
+        console.log(req.params, req.query);
+        return app.render(req, res, '/project', { component: 'pages', page: req.params.page, id: req.query.id })
     });
 
     server.get('*', (req, res) => {
+        // console.log(req.params, req.query);
         return handle(req, res)
     });
 

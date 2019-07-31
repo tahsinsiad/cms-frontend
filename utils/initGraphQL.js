@@ -2,6 +2,7 @@ import { GraphQLClient } from 'graphql-hooks';
 import memCache from 'graphql-hooks-memcache';
 import unfetch from 'isomorphic-unfetch';
 import getConfig from 'next/config'
+import {message} from "antd";
 const {publicRuntimeConfig} = getConfig();
 const {GRAPHQL_URL} = publicRuntimeConfig;
 
@@ -20,6 +21,11 @@ function create (initialState, token) {
         url: GRAPHQL_URL, // Server URL (must be absolute)
         fetch: typeof window !== 'undefined' ? fetch.bind() : unfetch, // eslint-disable-line
         cache: memCache({ initialState }),
+        onError: ({ operation, result })=>{
+            console.log("operation", operation);
+            console.log("result", result);
+            message.error(result);
+        }
     })
 }
 

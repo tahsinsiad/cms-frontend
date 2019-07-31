@@ -2,10 +2,15 @@ import React from 'react';
 import ErrorPage from '../components/error_page/ErrorPage';
 
 
-const DefaultErrorPage = () => {
+const DefaultErrorPage = (props) => {
     return (
-        <ErrorPage status={400} subTitle="Sorry, something went wrong. Please try again later." />
+        <ErrorPage status={props.statusCode || 400} subTitle="Sorry, something went wrong." />
     );
+};
+
+DefaultErrorPage.getInitialProps = ({ res, err }) => {
+    const statusCode = res ? res.statusCode : err ? err.statusCode : null;
+    return { err, statusCode };
 };
 
 export default DefaultErrorPage;
