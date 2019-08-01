@@ -3,8 +3,9 @@
 .nav_header {
     @include flexContentRightAlign;
     align-items: center;
-    background: $white;
+    //background: rgb(0, 21, 41);
     padding: 0 16px;
+    box-shadow: 14px 0 10px 3px #999999;
 
     .drop_down {
         cursor: pointer;
@@ -14,7 +15,7 @@
 
 .editor_nav_header {
     display: flex;
-    background: $white;
+    //background: $white;
     padding: 0 16px;
 
     .left {

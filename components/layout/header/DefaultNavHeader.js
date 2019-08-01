@@ -16,7 +16,7 @@ const NavHeader = () => {
     };
 
     const menu = (
-      <Menu style={{ minWidth: "120px", backgroundColor: "#ffffff" }}>
+      <Menu style={{ minWidth: "120px" }} theme="dark">
         <Menu.Item key="0">
           <Link href=""><a>Profile</a></Link>
         </Menu.Item>

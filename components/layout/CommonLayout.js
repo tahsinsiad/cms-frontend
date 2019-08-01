@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Affix, Layout} from "antd";
 import CustomFooter from "./Footer";
-import "../../static/scss/layout.scss";
+import "./layout.scss";
 import AsideLeft from "./aside/AsideLeft";
 import * as PropTypes from "prop-types";
 
@@ -16,13 +16,15 @@ const CommonLayout = ({ navs, navHeader, children }) => {
 
     return (
       <Layout>
-        <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+        <Sider className="left_sider" collapsible collapsed={collapsed} onCollapse={onCollapse}>
           <Affix>
             <AsideLeft collapsed={collapsed} navs={navs} />
           </Affix>
         </Sider>
         <Layout>
-          {navHeader}
+          <Affix>
+            {navHeader}
+          </Affix>
           <Content className="app_page">
             {children}
           </Content>
