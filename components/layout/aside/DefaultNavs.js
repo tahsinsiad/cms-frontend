@@ -18,13 +18,6 @@ const DefaultNavs = [
         path: ABOUT_PATH,
         icon: <Icon type="user" />,
         subMenu: null
-    },
-    {
-        key: "login",
-        title: "Login",
-        path: LOGIN_PATH,
-        icon: <Icon type="login" />,
-        subMenu: null
     }
 ];
 

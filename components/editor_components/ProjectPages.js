@@ -9,7 +9,7 @@ import * as PropTypes from "prop-types";
 export const pageDetailsQuery = `
     query pageDetailsQuery($projectId: String!, $page: String!) {
         page(id: $projectId, page: $page) {
-            parsed
+            title
             components
             hooks
             effects
@@ -21,7 +21,7 @@ const ProjectPages = ({project, router}) => {
     const dataStoreContext = useContext(DataStoreContext);
     console.log("router", router);
     const projectId = router.query.id;
-    const pageName = router.query.page;
+    const pageName = router.query.subComponent;
 
     console.log(projectId, pageName);
 
@@ -45,15 +45,15 @@ const ProjectPages = ({project, router}) => {
     }, [error, loading]);
 
     if (error || !data) return <Row gutter={4} />;
-    const parsedPage = JSON.parse(data.page.parsed);
+    // const parsedPage = JSON.parse(data.page.parsed);
 
-    console.log("parsedPage", parsedPage);
+    console.log("pageDetails: ", data.page);
 
     return (
       <div>
         <Row>
           <Col span={6}>
-            <ListPageComponents />
+            <ListPageComponents pageDetails={data.page} />
           </Col>
           <Col span={18}>
             <PreviewPageComponents />

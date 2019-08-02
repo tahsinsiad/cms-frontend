@@ -29,19 +29,19 @@ export const getProjectNavs = (params, graphQLClient) => {
                     console.error("GraphQLClient is not initialized!");
                 }
                 executeAllPagesQuery(nav.graphQLClient, nav.queryParam.id)
-                    .then(response => {
-                        console.log("projectPages response: ", response);
+                    .then(data => {
+                        console.log("projectPages response: ", data);
                         const newNav = {
                             ...nav,
-                            subMenu: response.data ? response.data.allPages : [],
+                            subMenu: data ? data.allPages : [],
                             lazySubmenu: false
                         };
                         const newNavs = Object.assign([], navs, {[navs.findIndex((item) => nav.key === item.key)]: newNav});
                         setNavs(newNavs);
                     })
-                    .catch((err) => {
-                        console.error(err);
-                        message.error(err.message);
+                    .catch((errors) => {
+                        console.error(errors);
+                        message.error(errors[0].message);
                     });
             };
             return nav;

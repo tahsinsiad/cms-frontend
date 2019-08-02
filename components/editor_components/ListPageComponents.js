@@ -1,11 +1,12 @@
 import React, {useState} from "react";
 import { Menu, Icon } from "antd";
+import * as PropTypes from "prop-types";
 
 const { SubMenu } = Menu;
 // submenu keys of first level
 const rootSubmenuKeys = ["sub1", "sub2", "sub4"];
 
-const ListPageComponents = () => {
+const ListPageComponents = ({pageDetails}) => {
 
     const [openKeys, setOpenKeys] = useState(["sub1"]);
 
@@ -75,6 +76,10 @@ const ListPageComponents = () => {
         </Menu>
       </div>
     );
+};
+
+ListPageComponents.propTypes = {
+    pageDetails: PropTypes.object
 };
 
 export default ListPageComponents;

@@ -61,9 +61,9 @@ app.prepare().then(() => {
         console.log(req.params, req.query);
         return app.render(req, res, "/project", { component: req.params.component, id: req.query.id });
     });
-    server.get("/project/pages/:page", (req, res) => {
+    server.get("/project/:component/:subComponent", (req, res) => {
         console.log(req.params, req.query);
-        return app.render(req, res, "/project", { component: "pages", page: req.params.page, id: req.query.id });
+        return app.render(req, res, "/project", { component: req.params.component, subComponent: req.params.subComponent, id: req.query.id });
     });
 
     server.get("*", (req, res) => {
