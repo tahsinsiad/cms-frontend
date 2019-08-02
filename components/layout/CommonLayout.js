@@ -7,7 +7,7 @@ import * as PropTypes from "prop-types";
 
 const { Content, Sider } = Layout;
 
-const CommonLayout = ({ navs, navHeader, children }) => {
+const CommonLayout = ({ navs, navHeader, children, footer }) => {
     const [collapsed, setCollapsed] = useState(false);
 
     const onCollapse = collapsed => {
@@ -28,7 +28,7 @@ const CommonLayout = ({ navs, navHeader, children }) => {
           <Content className="app_page">
             {children}
           </Content>
-          <CustomFooter />
+            {footer}
         </Layout>
       </Layout>
     );
@@ -38,6 +38,7 @@ CommonLayout.propTypes = {
     children: PropTypes.element.isRequired,
     navs: PropTypes.array,
     navHeader: PropTypes.element,
+    footer: PropTypes.element,
 };
 
 export default CommonLayout;

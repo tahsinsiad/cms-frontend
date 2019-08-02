@@ -1,10 +1,11 @@
-import React, {useContext, useEffect} from "react";
-import {Col, message, Row} from "antd";
+import React, {useContext, useEffect, useState} from "react";
+import {Col, Divider, message, Row} from "antd";
 import ListPageComponents from "./ListPageComponents";
 import PreviewPageComponents from "./PreviewPageComponents";
 import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
 import {useQuery} from "graphql-hooks";
 import * as PropTypes from "prop-types";
+import {SplitPanel} from "../common/SplitPanel";
 
 export const pageDetailsQuery = `
     query pageDetailsQuery($projectId: String!, $page: String!) {
@@ -50,16 +51,10 @@ const ProjectPages = ({project, router}) => {
     console.log("pageDetails: ", data.page);
 
     return (
-      <div>
-        <Row>
-          <Col span={6}>
-            <ListPageComponents pageDetails={data.page} />
-          </Col>
-          <Col span={18}>
-            <PreviewPageComponents />
-          </Col>
-        </Row>
-      </div>
+      <SplitPanel>
+        <ListPageComponents pageDetails={data.page} />
+        <PreviewPageComponents />
+      </SplitPanel>
     );
 };
 

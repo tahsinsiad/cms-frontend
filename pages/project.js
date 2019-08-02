@@ -83,7 +83,12 @@ const Project = (props) => {
     }, graphQLClient);
     return (
       <CommonLayout navs={navs} navHeader={<EditorNavHeader />}>
-        <PageWrapper>
+        <PageWrapper style={{
+            display: "flex",
+            flex: "0 0 100%",
+            minHeight: "calc(100vh - 80px)",
+            padding: 0
+        }}>
           <Component project={project} router={props.router} />
         </PageWrapper>
       </CommonLayout>

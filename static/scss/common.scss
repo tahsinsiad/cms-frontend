@@ -2,20 +2,22 @@
 $white: #ffffff;
 $red: #ff0000;
 $border_color: #dddddd;
+$primary-color: rgba(24, 144, 255, 0.41);
+$secondary-color: #011528;
 
 /* Common */
 $padding: 16px;
 
 /* Mixin */
 @mixin transform($property) {
-    //-webkit-transform: $property;
-    //-ms-transform: $property;
+    -webkit-transform: $property;
+    -ms-transform: $property;
     transform: $property;
 }
 
 @mixin transition($property) {
-    //-webkit-transition: $property;
-    //-ms-transition: $property;
+    -webkit-transition: $property;
+    -ms-transition: $property;
     transition: $property;
 }
 
