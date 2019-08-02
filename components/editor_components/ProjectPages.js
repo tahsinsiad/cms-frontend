@@ -54,6 +54,7 @@ const ProjectPages = ({project, router}) => {
       <SplitPanel>
         <ListPageComponents pageDetails={data.page} />
         <PreviewPageComponents />
+        <PreviewPageComponents />
       </SplitPanel>
     );
 };

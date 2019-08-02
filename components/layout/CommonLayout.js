@@ -28,7 +28,7 @@ const CommonLayout = ({ navs, navHeader, children, footer }) => {
           <Content className="app_page">
             {children}
           </Content>
-            {footer}
+          {footer}
         </Layout>
       </Layout>
     );
