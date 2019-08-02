@@ -6,6 +6,7 @@ import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
 import {useQuery} from "graphql-hooks";
 import * as PropTypes from "prop-types";
 import {SplitPanel} from "../common/SplitPanel";
+import ListComponentProperties from "./ListComponentProperties";
 
 export const pageDetailsQuery = `
     query pageDetailsQuery($projectId: String!, $page: String!) {
@@ -53,8 +54,8 @@ const ProjectPages = ({project, router}) => {
     return (
       <SplitPanel>
         <ListPageComponents pageDetails={data.page} />
-        <PreviewPageComponents />
-        <PreviewPageComponents />
+        <PreviewPageComponents pageDetails={data.page} />
+        <ListComponentProperties pageDetails={data.page} />
       </SplitPanel>
     );
 };

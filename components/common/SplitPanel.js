@@ -23,11 +23,11 @@ export const SplitPanel = ({onChange, children}) => {
         if (dragging===1) {
             e.persist();
             setSplitPosition1(Math.max(16, Math.min(40, splitPosition1 + e.movementX/12)));
-            console.log(splitPosition1 + e.movementX/12);
+            // console.log(splitPosition1 + e.movementX/12);
         } else if (dragging===2) {
             e.persist();
             setSplitPosition2(Math.max(16, Math.min(40, splitPosition2 - e.movementX/12)));
-            console.log(splitPosition2 + e.movementX/12);
+            // console.log(splitPosition2 + e.movementX/12);
         }
     };
 
@@ -56,7 +56,7 @@ export const SplitPanel = ({onChange, children}) => {
               flex: `0 0 ${splitPosition2}%`,
               display: "flex"
           }}>
-          {children[0]}
+          {children[2]}
         </div>
       </Row>
     );
