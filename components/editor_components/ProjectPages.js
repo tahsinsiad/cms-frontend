@@ -11,7 +11,11 @@ import ListComponentProperties from "./ListComponentProperties";
 export const pageDetailsQuery = `
     query pageDetailsQuery($projectId: String!, $page: String!) {
         page(id: $projectId, page: $page) {
-            title
+            title {
+                value
+                start
+                end
+            }
             components
             hooks
             effects

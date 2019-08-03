@@ -31,7 +31,7 @@ const NavHeader = () => {
       <Header className="nav_header">
         <Dropdown className="drop_down" overlay={menu} trigger={["click"]}>
           <div>
-            <span>{authContext.user && authContext.user.name}</span> &nbsp;
+            <span style={{color: "white"}}>{authContext.user && authContext.user.name}</span> &nbsp;
             <Avatar size="large" icon="user" className="ant-dropdown-link" />
           </div>
         </Dropdown>

@@ -125,7 +125,8 @@ const ListPageComponents = ({pageDetails}) => {
       <Tree
         className="draggable-tree"
         defaultExpandedKeys={openKeys}
-        draggable
+// eslint-disable-next-line react/jsx-boolean-value
+        draggable={true}
         blockNode
         onDragEnter={onDragEnter}
         onDrop={onDrop}

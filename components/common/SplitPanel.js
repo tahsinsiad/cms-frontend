@@ -19,12 +19,13 @@ export const SplitPanel = ({onChange, children}) => {
     };
 
     const handleMouseMove = (e)=>{
-        e.preventDefault();
         if (dragging===1) {
+            e.preventDefault();
             e.persist();
             setSplitPosition1(Math.max(16, Math.min(40, splitPosition1 + e.movementX/12)));
             // console.log(splitPosition1 + e.movementX/12);
         } else if (dragging===2) {
+            e.preventDefault();
             e.persist();
             setSplitPosition2(Math.max(16, Math.min(40, splitPosition2 - e.movementX/12)));
             // console.log(splitPosition2 + e.movementX/12);
@@ -44,7 +45,7 @@ export const SplitPanel = ({onChange, children}) => {
           <Divider className="draggable-splitter" type="vertical" onMouseDown={(e)=>handleMouseDown(e, 1)} />
         </div>
         <div style={{
-            flex: "1 0 0",
+            flex: "1 0 auto",
             display: "flex"
         }}>
           {children[1]}
