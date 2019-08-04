@@ -1,45 +1,23 @@
-import React, {useState} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import * as PropTypes from "prop-types";
 
 import { Tree } from "antd";
+import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
 
 const { TreeNode } = Tree;
 
-const x = 3;
-const y = 2;
-const z = 1;
-const GData = [];
-
-const generateData = (_level, _preKey, _tns) => {
-    const preKey = _preKey || "0";
-    const tns = _tns || GData;
-
-    const children = [];
-    for (let i = 0; i < x; i++) {
-        const key = `${preKey}-${i}`;
-        tns.push({ title: key, key });
-        if (i < y) {
-            children.push(key);
-        }
-    }
-    if (_level < 0) {
-        return tns;
-    }
-    const level = _level - 1;
-    children.forEach((key, index) => {
-        tns[index].children = [];
-        return generateData(level, key, tns[index].children);
-    });
-};
-generateData(z);
-
 const ListPageComponents = ({pageDetails}) => {
-    const [openKeys, setOpenKeys] = useState(["0-0", "0-0-0", "0-0-0-0"]);
-    const [gData, setGData] = useState(GData);
+    const dataStoreContext = useContext(DataStoreContext);
+    const [openKeys, setOpenKeys] = useState([]);
+    const [pageChildren, setPageChildren] = useState(pageDetails.children || []);
 
-    const onChange = key => {
-        console.log(key);
-    };
+    const onSelect = (selectedKeys, {selected, selectedNodes, node, event}) => {
+        console.log("selectedKeys", selectedKeys);
+        console.log("selected", selected);
+        console.log("selectedNodes", selectedNodes);
+        console.log("node", node);
+        console.log("event", event);
+    } ;
 
     const onDragEnter = info => {
         console.log(info);
@@ -66,7 +44,7 @@ const ListPageComponents = ({pageDetails}) => {
                 }
             });
         };
-        const data = [...gData];
+        const data = [...pageChildren];
 
         // Find dragObject
         let dragObj;
@@ -106,38 +84,43 @@ const ListPageComponents = ({pageDetails}) => {
             }
         }
 
-        setGData(data);
+        setPageChildren(data);
     };
 
-    const loop = data =>
-        data.map(item => {
+    const loop = (data, preKey) =>
+        data.map((item, i) => {
+            const key = preKey ? `${preKey}-${i}` : `${i}`;
             if (item.children && item.children.length) {
                 return (
-                  <TreeNode key={item.key} title={item.title}>
-                    {loop(item.children)}
+                  <TreeNode key={key} title={item.name}>
+                    {loop(item.children, key)}
                   </TreeNode>
                 );
             }
-            return <TreeNode key={item.key} title={item.title} />;
+            return <TreeNode key={key} title={item.name} />;
         });
 
     return (
       <Tree
         className="draggable-tree"
         defaultExpandedKeys={openKeys}
-// eslint-disable-next-line react/jsx-boolean-value
-        draggable={true}
+        draggable
         blockNode
         onDragEnter={onDragEnter}
         onDrop={onDrop}
+        onSelect={onSelect}
         >
-        {loop(gData)}
+        {loop(pageChildren)}
       </Tree>
     );
 };
 
 ListPageComponents.propTypes = {
     pageDetails: PropTypes.object
+};
+
+ListPageComponents.defaultProps = {
+    pageDetails: {}
 };
 
 export default ListPageComponents;

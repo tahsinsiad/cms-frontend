@@ -11,20 +11,30 @@ import ListComponentProperties from "./ListComponentProperties";
 export const pageDetailsQuery = `
     query pageDetailsQuery($projectId: String!, $page: String!) {
         page(id: $projectId, page: $page) {
-            title {
-                value
-                start
-                end
-            }
-            components
+            children
             hooks
             effects
         }
     }
 `;
 
+
+// const generateData = (_preKey, _tns) => {
+//     const preKey = _preKey;
+//     const tns = _tns || [];
+//
+//     for (let i = 0; i < tns.length; i++) {
+//         const key = _preKey ? `${preKey}-${i}` : `${i}`;
+//         tns[i].key = key;
+//         if (tns.children) {
+//             generateData(key, tns.children);
+//         }
+//     }
+//     return tns;
+// };
+
+
 const ProjectPages = ({project, router}) => {
-    const dataStoreContext = useContext(DataStoreContext);
     console.log("router", router);
     const projectId = router.query.id;
     const pageName = router.query.subComponent;
@@ -49,6 +59,10 @@ const ProjectPages = ({project, router}) => {
         }
         if (hideMessage) return hideMessage;
     }, [error, loading]);
+
+    // useEffect(()=>{
+    //     generateData("", data.page.children);
+    // }, [data]);
 
     if (error || !data) return <Row gutter={4} />;
     // const parsedPage = JSON.parse(data.page.parsed);
