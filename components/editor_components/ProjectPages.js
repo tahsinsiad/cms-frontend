@@ -60,9 +60,9 @@ const ProjectPages = ({project, router}) => {
         if (hideMessage) return hideMessage;
     }, [error, loading]);
 
-    // useEffect(()=>{
-    //     generateData("", data.page.children);
-    // }, [data]);
+    useEffect(()=>{
+
+    }, [data]);
 
     if (error || !data) return <Row gutter={4} />;
     // const parsedPage = JSON.parse(data.page.parsed);

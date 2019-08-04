@@ -11,6 +11,10 @@ const ListPageComponents = ({pageDetails}) => {
     const [openKeys, setOpenKeys] = useState([]);
     const [pageChildren, setPageChildren] = useState(pageDetails.children || []);
 
+    useEffect(()=>{
+        setPageChildren(pageDetails.children);
+    }, [pageDetails]);
+
     const onSelect = (selectedKeys, {selected, selectedNodes, node, event}) => {
         console.log("selectedKeys", selectedKeys);
         console.log("selected", selected);
