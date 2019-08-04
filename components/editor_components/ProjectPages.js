@@ -60,10 +60,6 @@ const ProjectPages = ({project, router}) => {
         if (hideMessage) return hideMessage;
     }, [error, loading]);
 
-    useEffect(()=>{
-
-    }, [data]);
-
     if (error || !data) return <Row gutter={4} />;
     // const parsedPage = JSON.parse(data.page.parsed);
 
@@ -72,7 +68,7 @@ const ProjectPages = ({project, router}) => {
     return (
       <SplitPanel>
         <ListPageComponents pageDetails={data.page} />
-        <PreviewPageComponents pageDetails={data.page} />
+        <PreviewPageComponents pageDetails={data.page} pageName={pageName} />
         <ListComponentProperties pageDetails={data.page} />
       </SplitPanel>
     );
