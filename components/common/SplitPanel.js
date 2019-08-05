@@ -1,6 +1,7 @@
 import {Divider, Row} from "antd";
 import React, {useRef, useState} from "react";
 import * as PropTypes from "prop-types";
+import "./splitter.scss";
 
 export const SplitPanel = ({onChange, children}) => {
     const [splitPosition1, setSplitPosition1] = useState(16.3);
@@ -22,12 +23,12 @@ export const SplitPanel = ({onChange, children}) => {
         if (dragging===1) {
             e.preventDefault();
             e.persist();
-            setSplitPosition1(Math.max(16, Math.min(40, splitPosition1 + e.movementX/12)));
+            setSplitPosition1(Math.max(5, Math.min(40, splitPosition1 + e.movementX/12)));
             // console.log(splitPosition1 + e.movementX/12);
         } else if (dragging===2) {
             e.preventDefault();
             e.persist();
-            setSplitPosition2(Math.max(16, Math.min(40, splitPosition2 - e.movementX/12)));
+            setSplitPosition2(Math.max(5, Math.min(40, splitPosition2 - e.movementX/12)));
             // console.log(splitPosition2 + e.movementX/12);
         }
     };

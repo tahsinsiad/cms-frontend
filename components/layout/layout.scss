@@ -39,28 +39,6 @@ code {
     .left_sider {
         box-shadow: 0 70px 10px 3px #999999;
     }
-
-    .draggable-splitter-wrapper {
-        width: 14px;
-        border-radius: 5px;
-        @include transition(.3s all ease);
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.09);
-            .draggable-splitter {
-                width: 4px;
-                background-color: $primary-color;
-                cursor: col-resize;
-                margin: 0 5px;
-            }
-        }
-        .draggable-splitter {
-            height: 100%;
-            width: 2px;
-            margin: 0 6px;
-            border-radius: 5px;
-            @include transition(.3s all ease);
-        }
-    }
 }
 
 /* Pi CMS Form */

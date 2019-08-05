@@ -10,6 +10,7 @@ module.exports = function getURLConstants(env) {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
     const API_BASE_URL = env.API_BASE_URL || "//localhost:5000";
     const GRAPHQL_URL = `${API_BASE_URL}${env.GRAPHQL_PATH || "/graphql"}`;
+    const API_NEXT_PROJECT_URL = `${API_BASE_URL}${env.NEXT_PROJECT_PATH || "/next-project"}`;
     const RESOLVE_USER_URL = `${API_BASE_URL}/auth/resolve`;
     const API_LOGIN_URL = `${API_BASE_URL}/auth/login`;
 
@@ -33,6 +34,7 @@ module.exports = function getURLConstants(env) {
     return {
         API_BASE_URL,
         GRAPHQL_URL,
+        API_NEXT_PROJECT_URL,
         RESOLVE_USER_URL,
         API_LOGIN_URL,
         ROOT_PATH,

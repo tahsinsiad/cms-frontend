@@ -105,17 +105,19 @@ const ListPageComponents = ({pageDetails}) => {
         });
 
     return (
-      <Tree
-        className="draggable-tree"
-        defaultExpandedKeys={openKeys}
-        draggable
-        blockNode
-        onDragEnter={onDragEnter}
-        onDrop={onDrop}
-        onSelect={onSelect}
+      <div>
+        <Tree
+          className="draggable-tree"
+          defaultExpandedKeys={openKeys}
+          draggable
+          blockNode
+          onDragEnter={onDragEnter}
+          onDrop={onDrop}
+          onSelect={onSelect}
         >
-        {loop(pageChildren)}
-      </Tree>
+          {loop(pageChildren)}
+        </Tree>
+      </div>
     );
 };
 
