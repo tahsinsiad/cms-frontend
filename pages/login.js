@@ -82,7 +82,7 @@ const Login = (props) => {
                     >
                         Log in
                     </Button>
-                    Or <a href="#">register now!</a>
+                    Or <a href="/signup">register now!</a>
                 </Form.Item>
             </Form>
         </div>
