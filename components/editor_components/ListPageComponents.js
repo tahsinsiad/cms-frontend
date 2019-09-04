@@ -15,12 +15,19 @@ const ListPageComponents = ({pageDetails}) => {
         setPageChildren(pageDetails.children);
     }, [pageDetails]);
 
+    // useEffect(() => {
+    //
+    // }, [dataStoreContext.selectedProjectItem]);
+
+    const retrieveItemByKey = (itemList, keys, p) => {
+        if (p === keys.length) return itemList;
+        if (p < keys.length) {
+            return retrieveItemByKey(itemList[Number(keys[p])], keys, p+1);
+        }
+    };
+
     const onSelect = (selectedKeys, {selected, selectedNodes, node, event}) => {
-        console.log("selectedKeys", selectedKeys);
-        console.log("selected", selected);
-        console.log("selectedNodes", selectedNodes);
-        console.log("node", node);
-        console.log("event", event);
+        dataStoreContext.setSelectedProjectItem(retrieveItemByKey(pageDetails.children, node.props.eventKey.split("-"), 0));
     } ;
 
     const onDragEnter = info => {
@@ -105,7 +112,7 @@ const ListPageComponents = ({pageDetails}) => {
         });
 
     return (
-      <div>
+      <div style={{flex: "0 0 100%"}}>
         <Tree
           className="draggable-tree"
           defaultExpandedKeys={openKeys}

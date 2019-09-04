@@ -1,11 +1,13 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Collapse} from "antd";
 import * as PropTypes from "prop-types";
+import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
+import {startCase} from "lodash";
 
 const { Panel } = Collapse;
 
 const ListComponentProperties = ({pageDetails}) => {
-
+    const dataStoreContext = useContext(DataStoreContext);
     const [openKeys, setOpenKeys] = useState([Object.keys(pageDetails)[0]]);
 
     const onChange = key => {
@@ -18,17 +20,21 @@ const ListComponentProperties = ({pageDetails}) => {
       it can be found as a welcome guest in many households across the world.
     `;
 
+    const selectedProjectItem = dataStoreContext.selectedProjectItem;
+
+    const generatePanelItem = (item)=>{
+        return item.attributes.map(attr => {
+            return (
+              <Panel header={startCase(attr.name)} key={attr.name}>
+                <p>{text}</p>
+              </Panel>
+            );
+        });
+    };
+    if (!selectedProjectItem) return <p>Select an item to view the properties</p>;
     return (
-      <Collapse defaultActiveKey={openKeys} onChange={onChange}>
-        <Panel header="This is panel header 1" key="1">
-          <p>{text}</p>
-        </Panel>
-        <Panel header="This is panel header 2" key="2">
-          <p>{text}</p>
-        </Panel>
-        <Panel header="This is panel header 3" key="3" disabled>
-          <p>{text}</p>
-        </Panel>
+      <Collapse defaultActiveKey={openKeys} onChange={onChange} style={{flex: "0 0 100%"}}>
+        {generatePanelItem(selectedProjectItem)}
       </Collapse>
     );
 };

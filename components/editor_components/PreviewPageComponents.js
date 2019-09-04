@@ -11,7 +11,7 @@ const PreviewPageComponents = ({pageDetails, pageName}) => {
         ref.current.src = `${API_NEXT_PROJECT_URL}/${pageName}?projectId=5d36a94f10d48f2cfe05d4be`;
     }, [pageName]);
     return (
-      <iframe ref={ref} id="ifPageComponents" width="100%" height="100%" style={{visibility: "visible"}} />
+      <iframe ref={ref} id="ifPageComponents" width="100%" height="100%" style={{visibility: "visible", background:"url(/static/loader.gif) center center no-repeat"}} />
     );
 };
 

@@ -11,7 +11,8 @@ export const DataStoreContext = React.createContext();
 const initDataStoreState = {
     projectUpdated: false,
     projectListUpdated: false,
-    currentProject: null
+    currentProject: null,
+    selectedProjectItem: null
 };
 
 /* Then create a provider Component */
@@ -36,19 +37,26 @@ class DataStoreContextProvider extends Component {
         });
     };
 
+    setSelectedProjectItem = (item) => {
+        console.log("selected project page item", item);
+        this.setState({
+            selectedProjectItem: item
+        });
+    };
+
     render() {
         return (
           <DataStoreContext.Provider
             value={{
-                    projectListUpdated: this.state.projectListUpdated,
-                    projectUpdated: this.state.projectUpdated,
-                    currentProject: this.state.currentProject,
-                    updateProject: this.updateProject,
-                    setCurrentProject: this.setCurrentProject,
-                    setProjectUpdated: this.setProjectUpdated,
-                    setProjectListUpdated: this.setProjectListUpdated
-                }}
-            >
+                projectListUpdated: this.state.projectListUpdated,
+                projectUpdated: this.state.projectUpdated,
+                currentProject: this.state.currentProject,
+                selectedProjectItem: this.state.selectedProjectItem,
+                setCurrentProject: this.setCurrentProject,
+                setProjectUpdated: this.setProjectUpdated,
+                setProjectListUpdated: this.setProjectListUpdated,
+                setSelectedProjectItem: this.setSelectedProjectItem,
+            }}>
             {this.props.children}
           </DataStoreContext.Provider>
         );
