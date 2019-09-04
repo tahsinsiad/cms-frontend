@@ -13,7 +13,7 @@ import { redirectTo } from "../components/common/Redirect";
 const SIGNUP=`
 mutation signUp($name: String!, $email: String!, $password: String!) {
   signUp(name: $name, email: $email, password: $password) {
-    name
+    name 
     email
     password
   }
@@ -121,7 +121,7 @@ const SignUp =(props) => {
                     <Form.Item>
                         <Button type="primary" htmlType="submit">
                             Register
-                        </Button>
+                        </Button> Or <a href="/login">Already have an account!</a>
                     </Form.Item>
                 </Form>
 
