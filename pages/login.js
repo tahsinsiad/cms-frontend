@@ -4,10 +4,11 @@ import { Alert, Button, Checkbox, Form, Icon, Input } from "antd";
 import "../static/scss/login.scss";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
-const { DASHBOARD_PATH } = publicRuntimeConfig;
+const { SIGNUP_PATH } = publicRuntimeConfig;
 import {AuthContext} from "../contexts/AuthContextProvider";
 import {ClientContext} from "graphql-hooks";
 import * as PropTypes from "prop-types";
+import Link from "next/link";
 
 const Login = (props) => {
 
@@ -71,7 +72,7 @@ const Login = (props) => {
                         valuePropName: "checked",
                         initialValue: true,
                     })(<Checkbox>Remember me</Checkbox>)}
-            <a className="login_form_forgot" href="#/">
+            <a className="login_form_forgot" href="#">
                         Forgot password
             </a>
             <Button
@@ -83,7 +84,7 @@ const Login = (props) => {
                     >
                         Log in
             </Button>
-                    Or <a href="#">register now!</a>
+              Or <Link href={SIGNUP_PATH}><a>register now!</a></Link>
           </Form.Item>
         </Form>
       </div>

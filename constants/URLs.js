@@ -20,6 +20,7 @@ module.exports = function getURLConstants(env) {
     const ROOT_PATH = "/";
     const DASHBOARD_PATH = `${ROOT_PATH}dashboard`;
 
+    const SIGNUP_PATH = `${ROOT_PATH}signup`;
     const LOGIN_PATH = `${ROOT_PATH}login`;
     const LOGOUT_PATH = `${ROOT_PATH}logout`;
     const FORGOT_PASSWORD_PATH = `${ROOT_PATH}forgot-password`;
@@ -39,6 +40,7 @@ module.exports = function getURLConstants(env) {
         API_LOGIN_URL,
         ROOT_PATH,
         DASHBOARD_PATH,
+        SIGNUP_PATH,
         LOGIN_PATH,
         LOGOUT_PATH,
         FORGOT_PASSWORD_PATH,
