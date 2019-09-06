@@ -23,6 +23,7 @@ const ListComponentProperties = ({pageDetails}) => {
     const selectedProjectItem = dataStoreContext.selectedProjectItem;
 
     const generatePanelItem = (item)=>{
+        if (!item.attributes) return null;
         return item.attributes.map(attr => {
             return (
               <Panel header={startCase(attr.name)} key={attr.name}>

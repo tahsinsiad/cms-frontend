@@ -12,7 +12,7 @@ const {ROOT_PATH} = publicRuntimeConfig;
 
 const {SubMenu} = Menu;
 
-const AsideLeft = ({collapsed, navs, router}) => {
+const AsideLeft = ({collapsed, navs, router, style}) => {
 
     const headerLogoClassName = collapsed ? "brand collapsed" : "brand";
 
@@ -37,15 +37,16 @@ const AsideLeft = ({collapsed, navs, router}) => {
         }
         return (
           <Menu.Item
-            onClick={()=>{
-                  console.log("clicked", item);
-                  typeof item.onClick === "function" && item.onClick(navsState);
-                  setSelectedKeys([item.key]);
-              }}
+            onClick={() => {
+                    console.log("clicked", item);
+                    typeof item.onClick === "function" && item.onClick(navsState, item);
+                    setSelectedKeys([item.key]);
+                }}
+            className={item.className}
             key={item.key}>
             {item.icon}
             <span>{item.title}</span>
-            {item.path && <Link href={item.path} as={item.pathAs}><a /></Link>}
+            {item.path && <Link href={item.path} as={item.pathAs}><a/></Link>}
           </Menu.Item>
         );
     };
@@ -53,7 +54,7 @@ const AsideLeft = ({collapsed, navs, router}) => {
     const bindSubMenuItem = (item) => {
         if (router.query.component === item.key) {
             if (item.lazySubmenu) {
-                typeof item.onClick === "function" && item.onClick(navsState);
+                typeof item.onClick === "function" && item.onClick(navsState, item);
                 item.onClick = null;
             }
             // typeof item.onClick === "function" && item.onClick(navsState);
@@ -65,15 +66,15 @@ const AsideLeft = ({collapsed, navs, router}) => {
         if (item.lazySubmenu) {
             return (
               <SubMenu
-                onTitleClick={()=>{
+                onTitleClick={() => {
                         console.log("clicked", item);
-                        typeof item.onClick === "function" && item.onClick(navsState);
+                        typeof item.onClick === "function" && item.onClick(navsState, item);
                         if (!collapsed) {
                             setOpenedKeys(openedKeys[0] === item.key ? [] : [item.key]);
                         }
                     }}
-                onTitleMouseEnter={()=>collapsed && setOpenedKeys([item.key])}
-                onTitleMouseLeave={()=>collapsed && setOpenedKeys([])}
+                onTitleMouseEnter={() => collapsed && setOpenedKeys([item.key])}
+                onTitleMouseLeave={() => collapsed && setOpenedKeys([])}
                 key={item.key}
                 title={
                   <span>
@@ -85,7 +86,7 @@ const AsideLeft = ({collapsed, navs, router}) => {
                 <div key="__skeleton" className="submenu-skeleton">
                   <div className="submenu-skeleton-content">
                     <ul className="submenu-skeleton-paragraph">
-                      <li style={{width: "100%"}} />
+                      <li style={{width: "100%"}}/>
                     </ul>
                   </div>
                 </div>
@@ -94,15 +95,15 @@ const AsideLeft = ({collapsed, navs, router}) => {
         }
         return (
           <SubMenu
-            onTitleClick={()=>{
-              console.log("clicked", item);
-              // typeof item.onClick === "function" && item.onClick(navsState);
-                if (!collapsed) {
-                    setOpenedKeys(openedKeys[0] === item.key ? [] : [item.key]);
-                }
-            }}
-            onTitleMouseEnter={()=>collapsed && setOpenedKeys([item.key])}
-            onTitleMouseLeave={()=>collapsed && setOpenedKeys([])}
+            onTitleClick={() => {
+                    console.log("clicked", item);
+                    // typeof item.onClick === "function" && item.onClick(navsState);
+                    if (!collapsed) {
+                        setOpenedKeys(openedKeys[0] === item.key ? [] : [item.key]);
+                    }
+                }}
+            onTitleMouseEnter={() => collapsed && setOpenedKeys([item.key])}
+            onTitleMouseLeave={() => collapsed && setOpenedKeys([])}
             key={item.key}
             title={
               <span>
@@ -117,7 +118,7 @@ const AsideLeft = ({collapsed, navs, router}) => {
     };
     /* Menu Binding End */
 
-    useEffect(()=>{
+    useEffect(() => {
         if (newSelectedKeys) {
             setSelectedKeys(newSelectedKeys);
         }
@@ -126,7 +127,7 @@ const AsideLeft = ({collapsed, navs, router}) => {
         }
     }, [navsState[0]]);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (collapsed) setOpenedKeys([]);
         else {
             setOpenedKeys([router.query.component]);
@@ -136,10 +137,10 @@ const AsideLeft = ({collapsed, navs, router}) => {
     return (
       <Fragment>
         <Link href={ROOT_PATH}>
-          <a><Brand brandText={"Pi-CMS"} icon={<Icon style={{color: "#ff0000"}} type="dingding" />}
-            className={headerLogoClassName} /></a>
+          <a><Brand brandText={"Pi-CMS"} icon={<Icon style={{color: "#ff0000"}} type="dingding"/>}
+            className={headerLogoClassName}/></a>
         </Link>
-        <Menu theme="dark" selectedKeys={selectedKeys} openKeys={openedKeys} mode="inline">
+        <Menu theme="dark" selectedKeys={selectedKeys} openKeys={openedKeys} mode="inline" style={style}>
           {navsState[0].map(item => getMenuItems(item))}
         </Menu>
       </Fragment>
@@ -149,7 +150,8 @@ const AsideLeft = ({collapsed, navs, router}) => {
 AsideLeft.propTypes = {
     collapsed: PropTypes.bool,
     navs: PropTypes.array,
-    router: PropTypes.object
+    router: PropTypes.object,
+    style: PropTypes.object
 };
 
 AsideLeft.defaultProps = {

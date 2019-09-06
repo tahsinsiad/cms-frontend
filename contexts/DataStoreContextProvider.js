@@ -11,6 +11,7 @@ export const DataStoreContext = React.createContext();
 const initDataStoreState = {
     projectUpdated: false,
     projectListUpdated: false,
+    pageDetailsUpdated: false,
     currentProject: null,
     selectedProjectItem: null
 };
@@ -37,6 +38,13 @@ class DataStoreContextProvider extends Component {
         });
     };
 
+    setPageDetailsUpdated = (isUpdated) => {
+        console.log("data store synced", isUpdated);
+        this.setState({
+            pageDetailsUpdated: isUpdated
+        });
+    };
+
     setSelectedProjectItem = (item) => {
         console.log("selected project page item", item);
         this.setState({
@@ -50,10 +58,12 @@ class DataStoreContextProvider extends Component {
             value={{
                 projectListUpdated: this.state.projectListUpdated,
                 projectUpdated: this.state.projectUpdated,
+                pageDetailsUpdated: this.state.pageDetailsUpdated,
                 currentProject: this.state.currentProject,
                 selectedProjectItem: this.state.selectedProjectItem,
                 setCurrentProject: this.setCurrentProject,
                 setProjectUpdated: this.setProjectUpdated,
+                setPageDetailsUpdated: this.setPageDetailsUpdated,
                 setProjectListUpdated: this.setProjectListUpdated,
                 setSelectedProjectItem: this.setSelectedProjectItem,
             }}>

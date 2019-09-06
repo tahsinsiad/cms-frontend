@@ -1,12 +1,12 @@
-import React, {useContext, useEffect, useState} from "react";
-import {Col, Divider, message, Row} from "antd";
+import React, {useEffect} from "react";
+import {message, Row} from "antd";
 import ListPageComponents from "./ListPageComponents";
 import PreviewPageComponents from "./PreviewPageComponents";
-import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
 import {useQuery} from "graphql-hooks";
 import * as PropTypes from "prop-types";
 import {SplitPanel} from "../common/SplitPanel";
 import ListComponentProperties from "./ListComponentProperties";
+import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
 
 export const pageDetailsQuery = `
     query pageDetailsQuery($projectId: String!, $page: String!) {
@@ -18,31 +18,16 @@ export const pageDetailsQuery = `
     }
 `;
 
-
-// const generateData = (_preKey, _tns) => {
-//     const preKey = _preKey;
-//     const tns = _tns || [];
-//
-//     for (let i = 0; i < tns.length; i++) {
-//         const key = _preKey ? `${preKey}-${i}` : `${i}`;
-//         tns[i].key = key;
-//         if (tns.children) {
-//             generateData(key, tns.children);
-//         }
-//     }
-//     return tns;
-// };
-
-
 const ProjectPages = ({project, router}) => {
-    console.log("router", router);
+    // console.log("router", router);
     const projectId = router.query.id;
     const pageName = router.query.subComponent;
+    const dataStoreContext = React.useContext(DataStoreContext);
 
-    console.log(projectId, pageName);
+    // console.log(projectId, pageName);
 
-    const { loading, error, data, refetch } = useQuery(pageDetailsQuery, {
-        variables: { projectId: projectId, page: pageName }
+    const {loading, error, data, refetch} = useQuery(pageDetailsQuery, {
+        variables: {projectId: projectId, page: pageName}
     });
 
     useEffect(() => {
@@ -60,16 +45,20 @@ const ProjectPages = ({project, router}) => {
         if (hideMessage) return hideMessage;
     }, [error, loading]);
 
-    if (error || !data) return <Row gutter={4} />;
-    // const parsedPage = JSON.parse(data.page.parsed);
+    useEffect(()=>{
+        if (dataStoreContext.pageDetailsUpdated) {
+            dataStoreContext.setPageDetailsUpdated(false);
+            refetch({variables: {projectId: projectId, page: pageName}});
+        }
+    }, [dataStoreContext.pageDetailsUpdated]);
 
-    console.log("pageDetails: ", data.page);
+    if (error || !data) return <Row gutter={4}/>;
 
     return (
       <SplitPanel>
-        <ListPageComponents pageDetails={data.page} />
-        <PreviewPageComponents pageDetails={data.page} pageName={pageName} />
-        <ListComponentProperties pageDetails={data.page} />
+        <ListPageComponents pageDetails={data.page}/>
+        <PreviewPageComponents pageDetails={data.page} pageName={pageName}/>
+        <ListComponentProperties pageDetails={data.page}/>
       </SplitPanel>
     );
 };

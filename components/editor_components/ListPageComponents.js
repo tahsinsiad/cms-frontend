@@ -1,23 +1,32 @@
 import React, {useState, useEffect, useContext} from "react";
 import * as PropTypes from "prop-types";
 
-import { Tree } from "antd";
+import {Button, message, Tree} from "antd";
 import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
+import {useMutation} from "graphql-hooks";
+import {useRouter} from "next/router";
 
 const { TreeNode } = Tree;
+
+const ADD_COMPONENT = `
+mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: String!, $page: String!) {
+  addComponent(componentId: $componentId, parent: $parent, projectId: $projectId, page: $page) {
+    error
+  }
+}`;
 
 const ListPageComponents = ({pageDetails}) => {
     const dataStoreContext = useContext(DataStoreContext);
     const [openKeys, setOpenKeys] = useState([]);
     const [pageChildren, setPageChildren] = useState(pageDetails.children || []);
+    const [addComponent, pageDetailsData] = useMutation(ADD_COMPONENT);
+    const router = useRouter();
+    const projectId = router.query.id;
+    const pageName = router.query.subComponent;
 
     useEffect(()=>{
         setPageChildren(pageDetails.children);
     }, [pageDetails]);
-
-    // useEffect(() => {
-    //
-    // }, [dataStoreContext.selectedProjectItem]);
 
     const retrieveItemByKey = (itemList, keys, p) => {
         if (p === keys.length) return itemList;
@@ -98,6 +107,24 @@ const ListPageComponents = ({pageDetails}) => {
         setPageChildren(data);
     };
 
+    const addComponentClick = async () => {
+        const selectedProjectItem = dataStoreContext.selectedProjectItem;
+        const result = await addComponent({
+            variables: {
+                componentId: "div",
+                parent: selectedProjectItem,
+                projectId: projectId,
+                page: pageName
+            }
+        });
+        if (!result.error) {
+            dataStoreContext.setPageDetailsUpdated(true);
+        } else {
+            message.error((result.httpError && result.httpError.statusText) ||
+                (result.graphQLErrors && result.graphQLErrors[0].message));
+        }
+    };
+
     const loop = (data, preKey) =>
         data.map((item, i) => {
             const key = preKey ? `${preKey}-${i}` : `${i}`;
@@ -124,6 +151,7 @@ const ListPageComponents = ({pageDetails}) => {
         >
           {loop(pageChildren)}
         </Tree>
+        <Button type="primary" onClick={addComponentClick}>Add Component</Button>
       </div>
     );
 };

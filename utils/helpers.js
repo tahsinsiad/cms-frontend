@@ -28,9 +28,9 @@ export function injectParamsToPathOfNav(nav, params) {
     nav.path = concatQueryParamsToPath(nav.path, {...params.query, component: nav.pathParam});
 }
 
-function injectGraphQLClient(nav, graphQLClient) {
-    nav.graphQLClient = graphQLClient;
-}
+// function injectGraphQLClient(nav, graphQLClient) {
+//     nav.graphQLClient = graphQLClient;
+// }
 
 export function injectParamsToPathOfNavs(navs, params) {
     for (const nav of navs) {
@@ -38,9 +38,9 @@ export function injectParamsToPathOfNavs(navs, params) {
     }
 }
 
-export function injectParamsAndGraphQLClient(navs, params, graphQLClient) {
+export function injectParams(navs, params, graphQLClient) {
     for (const nav of navs) {
         injectParamsToPathOfNav(nav, params);
-        injectGraphQLClient(nav, graphQLClient);
+        // injectGraphQLClient(nav, graphQLClient);
     }
 }

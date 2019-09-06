@@ -36,6 +36,7 @@
         "react/no-unused-prop-types": "error",
         "react/prop-types": "error",
         "react/react-in-jsx-scope": "error",
+        "react/jsx-tag-spacing": "off",
         "no-extra-semi": "error"
     }
 }
