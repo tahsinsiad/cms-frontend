@@ -1,16 +1,16 @@
-import React, { Fragment } from "react";
+import React, {Fragment} from "react";
 import * as PropTypes from "prop-types";
 
-const PageWrapper = ({ pageHeader, children, style }) => {
+const PageWrapper = ({pageHeader, children, style}) => {
     return (
-      <Fragment>
-        <div className="page_header">
-          {pageHeader}
-        </div>
-        <div className="page_content" style={style}>
-          {children}
-        </div>
-      </Fragment>
+        <Fragment>
+            <div className="page_header">
+                {pageHeader}
+            </div>
+            <div className="page_content" style={style}>
+                {children}
+            </div>
+        </Fragment>
     );
 };
 

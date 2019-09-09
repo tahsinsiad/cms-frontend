@@ -7,6 +7,7 @@ import * as PropTypes from "prop-types";
 import {SplitPanel} from "../common/SplitPanel";
 import ListComponentProperties from "./ListComponentProperties";
 import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
+import {withRouter} from "next/router";
 
 export const pageDetailsQuery = `
     query pageDetailsQuery($projectId: String!, $page: String!) {
@@ -18,10 +19,10 @@ export const pageDetailsQuery = `
     }
 `;
 
-const ProjectPages = ({project, router}) => {
+const ProjectPages = ({router}) => {
     // console.log("router", router);
     const projectId = router.query.id;
-    const pageName = router.query.subComponent;
+    const pageName = router.query.pageName;
     const dataStoreContext = React.useContext(DataStoreContext);
 
     // console.log(projectId, pageName);
@@ -45,7 +46,7 @@ const ProjectPages = ({project, router}) => {
         if (hideMessage) return hideMessage;
     }, [error, loading]);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (dataStoreContext.pageDetailsUpdated) {
             dataStoreContext.setPageDetailsUpdated(false);
             refetch({variables: {projectId: projectId, page: pageName}});
@@ -55,17 +56,16 @@ const ProjectPages = ({project, router}) => {
     if (error || !data) return <Row gutter={4}/>;
 
     return (
-      <SplitPanel>
-        <ListPageComponents pageDetails={data.page}/>
-        <PreviewPageComponents pageDetails={data.page} pageName={pageName}/>
-        <ListComponentProperties pageDetails={data.page}/>
-      </SplitPanel>
+        <SplitPanel>
+            <ListPageComponents pageDetails={data.page}/>
+            <PreviewPageComponents pageDetails={data.page} pageName={pageName}/>
+            <ListComponentProperties pageDetails={data.page}/>
+        </SplitPanel>
     );
 };
 
 ProjectPages.propTypes = {
-    project: PropTypes.object,
     router: PropTypes.object
 };
 
-export default ProjectPages;
+export default withRouter(ProjectPages);

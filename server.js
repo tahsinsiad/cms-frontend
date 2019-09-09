@@ -48,14 +48,14 @@ app.prepare().then(() => {
     setupSiteMapXML(server);
     setupFavicon(server);
 
-    server.get("/project/:component", (req, res) => {
-        console.log(req.params, req.query);
-        return app.render(req, res, "/project", { component: req.params.component, id: req.query.id });
-    });
-    server.get("/project/:component/:subComponent", (req, res) => {
-        console.log(req.params, req.query);
-        return app.render(req, res, "/project", { component: req.params.component, subComponent: req.params.subComponent, id: req.query.id });
-    });
+    // server.get("/project/:component", (req, res) => {
+    //     console.log(req.params, req.query);
+    //     return app.render(req, res, "/project", { component: req.params.component, ...req.query });
+    // });
+    // server.get("/project/:component/:subComponent", (req, res) => {
+    //     console.log(req.params, req.query);
+    //     return app.render(req, res, "/project", { component: req.params.component, ...req.query });
+    // });
 
     server.get("*", (req, res) => {
         // console.log(req.params, req.query);

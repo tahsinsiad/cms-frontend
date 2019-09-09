@@ -7,8 +7,9 @@ import {useMutation} from "graphql-hooks";
 import {redirectTo} from "../components/common/Redirect";
 import * as PropTypes from "prop-types";
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
-const { LOGIN_PATH } = publicRuntimeConfig;
+
+const {publicRuntimeConfig} = getConfig();
+const {LOGIN_PATH} = publicRuntimeConfig;
 
 const SIGNUP = `
 mutation signUp($name: String!, $email: String!, $password: String!) {
@@ -65,20 +66,20 @@ const SignUp = (props) => {
     const {getFieldDecorator} = props.form;
 
     return (
-      <div className="signup">
-        <h2>Registration Form</h2>
-        <Form onSubmit={handleSubmit}>
+        <div className="signup">
+            <h2>Registration Form</h2>
+            <Form onSubmit={handleSubmit}>
 
-          <Form.Item label="Name">
-            {getFieldDecorator("name", {
+                <Form.Item label="Name">
+                    {getFieldDecorator("name", {
                         rules: [
                             {required: true, message: "Please input your nickname!", whitespace: true}
                         ],
-                    })(<Input />)}
-          </Form.Item>
+                    })(<Input/>)}
+                </Form.Item>
 
-          <Form.Item label="E-mail">
-            {getFieldDecorator("email", {
+                <Form.Item label="E-mail">
+                    {getFieldDecorator("email", {
                         rules: [
                             {
                                 type: "email",
@@ -89,10 +90,10 @@ const SignUp = (props) => {
                                 message: "Please input your E-mail!",
                             },
                         ],
-                    })(<Input />)}
-          </Form.Item>
-          <Form.Item label="Password" hasFeedback>
-            {getFieldDecorator("password", {
+                    })(<Input/>)}
+                </Form.Item>
+                <Form.Item label="Password" hasFeedback>
+                    {getFieldDecorator("password", {
                         rules: [
                             {
                                 required: true,
@@ -102,10 +103,10 @@ const SignUp = (props) => {
                                 validator: validateToNextPassword,
                             },
                         ],
-                    })(<Input.Password />)}
-          </Form.Item>
-          <Form.Item label="Confirm Password" hasFeedback>
-            {getFieldDecorator("confirm", {
+                    })(<Input.Password/>)}
+                </Form.Item>
+                <Form.Item label="Confirm Password" hasFeedback>
+                    {getFieldDecorator("confirm", {
                         rules: [
                             {
                                 required: true,
@@ -115,18 +116,24 @@ const SignUp = (props) => {
                                 validator: compareToFirstPassword,
                             },
                         ],
-                    })(<Input.Password onBlur={handleConfirmBlur} />)}
-          </Form.Item>
+                    })(<Input.Password onBlur={handleConfirmBlur}/>)}
+                </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
+                <Form.Item>
+                    <Button type="primary" htmlType="submit">
                         Register
-            </Button> Or <a href={LOGIN_PATH}>Already have an account!</a>
-          </Form.Item>
-        </Form>
+                    </Button> Or <a href={LOGIN_PATH}>Already have an account!</a>
+                </Form.Item>
+            </Form>
 
-      </div>
+        </div>
     );
+};
+
+SignUp.routeInfo = {
+    slug: "signup",
+    path: "/signup",
+    pathAs: "/signup"
 };
 
 SignUp.propTypes = {
@@ -134,5 +141,7 @@ SignUp.propTypes = {
 };
 
 const WrappedRegistrationForm = Form.create({name: "signup"})(SignUp);
+
+WrappedRegistrationForm.isSimpleLayout = true;
 
 export default WrappedRegistrationForm;

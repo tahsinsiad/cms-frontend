@@ -42,5 +42,6 @@ module.exports = withCss(withSass({
     webpack: webpackConfig,
     publicRuntimeConfig: {
         ...getURLConstants(process.env)
-    }
+    },
+    pageExtensions: ["js"],
 }));

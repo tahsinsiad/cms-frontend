@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import * as PropTypes from "prop-types";
 
 import {Button, message, Tree} from "antd";
@@ -6,7 +6,7 @@ import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
 import {useMutation} from "graphql-hooks";
 import {useRouter} from "next/router";
 
-const { TreeNode } = Tree;
+const {TreeNode} = Tree;
 
 const ADD_COMPONENT = `
 mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: String!, $page: String!) {
@@ -24,20 +24,20 @@ const ListPageComponents = ({pageDetails}) => {
     const projectId = router.query.id;
     const pageName = router.query.subComponent;
 
-    useEffect(()=>{
+    useEffect(() => {
         setPageChildren(pageDetails.children);
     }, [pageDetails]);
 
     const retrieveItemByKey = (itemList, keys, p) => {
         if (p === keys.length) return itemList;
         if (p < keys.length) {
-            return retrieveItemByKey(itemList[Number(keys[p])], keys, p+1);
+            return retrieveItemByKey(itemList.children[Number(keys[p])], keys, p + 1);
         }
     };
 
     const onSelect = (selectedKeys, {selected, selectedNodes, node, event}) => {
-        dataStoreContext.setSelectedProjectItem(retrieveItemByKey(pageDetails.children, node.props.eventKey.split("-"), 0));
-    } ;
+        dataStoreContext.setSelectedProjectItem(retrieveItemByKey(pageDetails, node.props.eventKey.split("-"), 0));
+    };
 
     const onDragEnter = info => {
         console.log(info);
@@ -130,29 +130,29 @@ const ListPageComponents = ({pageDetails}) => {
             const key = preKey ? `${preKey}-${i}` : `${i}`;
             if (item.children && item.children.length) {
                 return (
-                  <TreeNode key={key} title={item.name}>
-                    {loop(item.children, key)}
-                  </TreeNode>
+                    <TreeNode key={key} title={item.name}>
+                        {loop(item.children, key)}
+                    </TreeNode>
                 );
             }
-            return <TreeNode key={key} title={item.name} />;
+            return <TreeNode key={key} title={item.name}/>;
         });
 
     return (
-      <div style={{flex: "0 0 100%"}}>
-        <Tree
-          className="draggable-tree"
-          defaultExpandedKeys={openKeys}
-          draggable
-          blockNode
-          onDragEnter={onDragEnter}
-          onDrop={onDrop}
-          onSelect={onSelect}
-        >
-          {loop(pageChildren)}
-        </Tree>
-        <Button type="primary" onClick={addComponentClick}>Add Component</Button>
-      </div>
+        <div style={{flex: "0 0 100%"}}>
+            <Tree
+                className="draggable-tree"
+                defaultExpandedKeys={openKeys}
+                draggable
+                blockNode
+                onDragEnter={onDragEnter}
+                onDrop={onDrop}
+                onSelect={onSelect}
+            >
+                {loop(pageChildren)}
+            </Tree>
+            <Button type="primary" onClick={addComponentClick}>Add Component</Button>
+        </div>
     );
 };
 

@@ -1,19 +1,21 @@
-import React, { Fragment } from "react";
-import { Typography, Card, Col, PageHeader, Row, Button, Icon, Table, Divider } from "antd";
+import React, {Fragment} from "react";
+import {Button, Card, Divider, PageHeader, Table, Typography} from "antd";
 import Link from "next/link";
 import "../static/scss/dashboard.scss";
 
 import PageWrapper from "../components/common/PageWrapper";
-import DefaultLayout from "../components/layout/default_layout/DefaultLayout";
 import getConfig from "next/config";
-const {publicRuntimeConfig} = getConfig();
-const {CREATE_PROJECT_PATH} = publicRuntimeConfig;
 import RecentProjects from "../components/projects/RecentProjects";
 import {withAuthSync} from "../utils/withAuthSync";
+import {MenuContext} from "../contexts/MenuContextProvider";
+import DefaultMenuItems from "../components/layout/aside/DefaultMenuItems";
 
-const { Meta } = Card;
+const {publicRuntimeConfig} = getConfig();
+const {CREATE_PROJECT_PATH} = publicRuntimeConfig;
 
-const { Title } = Typography;
+const {Meta} = Card;
+
+const {Title} = Typography;
 
 
 const Dashboard = () => {
@@ -59,30 +61,37 @@ const Dashboard = () => {
         },
     ];
 
+    const menuContext = React.useContext(MenuContext);
+
+    React.useEffect(() => {
+        menuContext.setMenuItems(DefaultMenuItems);
+        menuContext.setSelectedKeys([Dashboard.routeInfo.slug]);
+    }, []);
 
     const pageHeader = <PageHeader title="Dashboard" subTitle="This is a subtitle"
-      extra={<Link href={CREATE_PROJECT_PATH}><Button type="primary">New Project</Button></Link>}
+                                   extra={<Link href={CREATE_PROJECT_PATH}><Button type="primary">New
+                                       Project</Button></Link>}
     />;
 
     return (
-      <DefaultLayout>
-        <PageWrapper
-          pageHeader={pageHeader}
-            >
-          <Fragment>
-            <Title level={3}>Recent Project</Title>
-            <RecentProjects />
+        <PageWrapper pageHeader={pageHeader}>
+            <Fragment>
+                <Title level={3}>Recent Project</Title>
+                <RecentProjects/>
 
-            <Divider />
+                <Divider/>
 
-            <Title level={3}>All Project</Title>
-            <Table dataSource={dataSource} columns={columns} rowKey="id" />
-          </Fragment>
+                <Title level={3}>All Project</Title>
+                <Table dataSource={dataSource} columns={columns} rowKey="id"/>
+            </Fragment>
 
         </PageWrapper>
-      </DefaultLayout>
     );
 };
 
-
+Dashboard.routeInfo = {
+    slug: "dashboard",
+    path: "/dashboard",
+    pathAs: "/dashboard"
+};
 export default withAuthSync(Dashboard);

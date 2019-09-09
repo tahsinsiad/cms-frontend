@@ -13,9 +13,9 @@ const LoadingSuspense = ({height, width}) => {
     };
 
     return (
-      <div style={style}>
-        <Spin size="large" />
-      </div>
+        <div style={style}>
+            <Spin size="large"/>
+        </div>
     );
 };
 

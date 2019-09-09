@@ -28,19 +28,14 @@ export function injectParamsToPathOfNav(nav, params) {
     nav.path = concatQueryParamsToPath(nav.path, {...params.query, component: nav.pathParam});
 }
 
-// function injectGraphQLClient(nav, graphQLClient) {
-//     nav.graphQLClient = graphQLClient;
-// }
-
 export function injectParamsToPathOfNavs(navs, params) {
     for (const nav of navs) {
         injectParamsToPathOfNav(nav, params);
     }
 }
 
-export function injectParams(navs, params, graphQLClient) {
-    for (const nav of navs) {
+export function injectParams(navs, params) {
+    for (const nav of Object.values(navs)) {
         injectParamsToPathOfNav(nav, params);
-        // injectGraphQLClient(nav, graphQLClient);
     }
 }

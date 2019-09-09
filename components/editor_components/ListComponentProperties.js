@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import {Collapse} from "antd";
 import * as PropTypes from "prop-types";
 import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
 import {startCase} from "lodash";
 
-const { Panel } = Collapse;
+const {Panel} = Collapse;
 
 const ListComponentProperties = ({pageDetails}) => {
     const dataStoreContext = useContext(DataStoreContext);
@@ -22,21 +22,21 @@ const ListComponentProperties = ({pageDetails}) => {
 
     const selectedProjectItem = dataStoreContext.selectedProjectItem;
 
-    const generatePanelItem = (item)=>{
+    const generatePanelItem = (item) => {
         if (!item.attributes) return null;
         return item.attributes.map(attr => {
             return (
-              <Panel header={startCase(attr.name)} key={attr.name}>
-                <p>{text}</p>
-              </Panel>
+                <Panel header={startCase(attr.name)} key={attr.name}>
+                    <p>{text}</p>
+                </Panel>
             );
         });
     };
     if (!selectedProjectItem) return <p>Select an item to view the properties</p>;
     return (
-      <Collapse defaultActiveKey={openKeys} onChange={onChange} style={{flex: "0 0 100%"}}>
-        {generatePanelItem(selectedProjectItem)}
-      </Collapse>
+        <Collapse defaultActiveKey={openKeys} onChange={onChange} style={{flex: "0 0 100%"}}>
+            {generatePanelItem(selectedProjectItem)}
+        </Collapse>
     );
 };
 

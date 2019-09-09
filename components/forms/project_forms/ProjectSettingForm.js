@@ -1,21 +1,15 @@
-import {
-    Form,
-    Input,
-    Button,
-    AutoComplete, message, Row, Col,
-} from "antd";
-import { useContext, useEffect, useState } from "react";
-import React from "react";
-
+import {AutoComplete, Button, Col, Form, Input, message, Row,} from "antd";
+import React, {useContext, useEffect, useState} from "react";
 // SCSS
 import "./ProjectForm.scss";
 
-import { useMutation } from "graphql-hooks";
+import {useMutation} from "graphql-hooks";
 import getConfig from "next/config";
-import { DataStoreContext } from "../../../contexts/DataStoreContextProvider";
+import {DataStoreContext} from "../../../contexts/DataStoreContextProvider";
 import * as PropTypes from "prop-types";
-const { publicRuntimeConfig } = getConfig();
-const { } = publicRuntimeConfig;
+
+const {publicRuntimeConfig} = getConfig();
+const {} = publicRuntimeConfig;
 
 const AutoCompleteOption = AutoComplete.Option;
 const FormItem = Form.Item;
@@ -77,13 +71,13 @@ const ProjectSettingForm = (props) => {
         setAutoCompleteResult(autoCompleteResult);
     };
 
-    const { getFieldDecorator, setFieldsValue } = props.form;
+    const {getFieldDecorator, setFieldsValue} = props.form;
 
     const websiteUrlOptions = autoCompleteResult.map(websiteUrl => (
-      <AutoCompleteOption key={websiteUrl}>{websiteUrl}</AutoCompleteOption>
+        <AutoCompleteOption key={websiteUrl}>{websiteUrl}</AutoCompleteOption>
     ));
 
-    const { currentProject } = dataStoreContext;
+    const {currentProject} = dataStoreContext;
     useEffect(() => {
         if (currentProject) {
             setFieldsValue({
@@ -98,81 +92,81 @@ const ProjectSettingForm = (props) => {
     }, [currentProject]);
 
     return (
-      <Form className="pi_cms_form project_form" onSubmit={handleSubmit}>
-        <FormItem label="Title">
-          {getFieldDecorator("title", {
+        <Form className="pi_cms_form project_form" onSubmit={handleSubmit}>
+            <FormItem label="Title">
+                {getFieldDecorator("title", {
                     rules: [
                         {
                             required: true,
                             message: "Please input your Project title!",
                         },
                     ],
-                })(<Input placeholder="title" />)}
-        </FormItem>
-        <FormItem label="Description">
-          {getFieldDecorator("description", {
+                })(<Input placeholder="title"/>)}
+            </FormItem>
+            <FormItem label="Description">
+                {getFieldDecorator("description", {
                     rules: [
                         {
                             required: false,
                         }
                     ],
-                })(<Input.TextArea placeholder="description" />)}
-        </FormItem>
-        <FormItem label="Website URL" extra="Used to create canonical URL.">
-          {getFieldDecorator("websiteUrl", {
-                    rules: [{ required: true, message: "Please input website!" }],
+                })(<Input.TextArea placeholder="description"/>)}
+            </FormItem>
+            <FormItem label="Website URL" extra="Used to create canonical URL.">
+                {getFieldDecorator("websiteUrl", {
+                    rules: [{required: true, message: "Please input website!"}],
                 })(
-                  <AutoComplete
-                    dataSource={websiteUrlOptions}
-                    onChange={handleWebsiteUrlChange}
-                    placeholder="website URL"
+                    <AutoComplete
+                        dataSource={websiteUrlOptions}
+                        onChange={handleWebsiteUrlChange}
+                        placeholder="website URL"
                     >
-                    <Input />
-                  </AutoComplete>,
+                        <Input/>
+                    </AutoComplete>,
                 )}
-        </FormItem>
+            </FormItem>
 
-        <Row type="flex" justify="space-between">
-          <Col span={11}>
-            <FormItem label="Icon">
+            <Row type="flex" justify="space-between">
+                <Col span={11}>
+                    <FormItem label="Icon">
 
-              {getFieldDecorator("icon", {
+                        {getFieldDecorator("icon", {
                             rules: [
                                 {
                                     required: false,
                                 }
                             ],
-                        })(<Input placeholder="icon" />)}
-            </FormItem>
+                        })(<Input placeholder="icon"/>)}
+                    </FormItem>
 
-          </Col>
-          <Col span={12}>
-            <FormItem label="Site Title">
-              {getFieldDecorator("siteTitle", {
+                </Col>
+                <Col span={12}>
+                    <FormItem label="Site Title">
+                        {getFieldDecorator("siteTitle", {
                             rules: [
                                 {
                                     required: false,
                                 }
                             ],
-                        })(<Input placeholder="site title" />)}
-            </FormItem>
-          </Col>
-        </Row>
+                        })(<Input placeholder="site title"/>)}
+                    </FormItem>
+                </Col>
+            </Row>
 
-        <FormItem label="Site Meta">
-          {getFieldDecorator("siteMeta", {
+            <FormItem label="Site Meta">
+                {getFieldDecorator("siteMeta", {
                     rules: [
                         {
                             required: false,
                         }
                     ],
-                })(<Input placeholder="sitemeta" />)}
-        </FormItem>
+                })(<Input placeholder="sitemeta"/>)}
+            </FormItem>
 
-        <FormItem>
-          <Button type="primary" htmlType="submit">Save</Button>
-        </FormItem>
-      </Form>
+            <FormItem>
+                <Button type="primary" htmlType="submit">Save</Button>
+            </FormItem>
+        </Form>
     );
 };
 
@@ -180,6 +174,6 @@ ProjectSettingForm.propTypes = {
     form: PropTypes.object
 };
 
-const WrappedProjectSettingForm = Form.create({ name: "project_setting_form" })(ProjectSettingForm);
+const WrappedProjectSettingForm = Form.create({name: "project_setting_form"})(ProjectSettingForm);
 
 export default WrappedProjectSettingForm;

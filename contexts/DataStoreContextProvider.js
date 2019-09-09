@@ -1,6 +1,8 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import getConfig from "next/config";
 import * as PropTypes from "prop-types";
+import cookie from "js-cookie";
+
 const { publicRuntimeConfig } = getConfig();
 const { DASHBOARD_PATH } = publicRuntimeConfig;
 
@@ -12,7 +14,10 @@ const initDataStoreState = {
     projectUpdated: false,
     projectListUpdated: false,
     pageDetailsUpdated: false,
-    currentProject: null,
+    currentPage: null,
+    currentProject: {
+        brand: {}
+    },
     selectedProjectItem: null
 };
 
@@ -23,7 +28,12 @@ class DataStoreContextProvider extends Component {
     /* Project Actions */
     setCurrentProject = (project) => {
         console.log("set current project id");
+        cookie.set("projectId", project.id);
         this.setState({ currentProject: project });
+    };
+
+    setCurrentPage = (page) => {
+        this.setState({currentPage: page});
     };
 
     setProjectUpdated = (isUpdate) => {
@@ -60,8 +70,10 @@ class DataStoreContextProvider extends Component {
                 projectUpdated: this.state.projectUpdated,
                 pageDetailsUpdated: this.state.pageDetailsUpdated,
                 currentProject: this.state.currentProject,
+                currentPage: this.state.currentPage,
                 selectedProjectItem: this.state.selectedProjectItem,
                 setCurrentProject: this.setCurrentProject,
+                setCurrentPage: this.setCurrentPage,
                 setProjectUpdated: this.setProjectUpdated,
                 setPageDetailsUpdated: this.setPageDetailsUpdated,
                 setProjectListUpdated: this.setProjectListUpdated,

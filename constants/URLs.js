@@ -29,6 +29,7 @@ module.exports = function getURLConstants(env) {
 
     const PROJECT_PATH = `${ROOT_PATH}project`;
     const CREATE_PROJECT_PATH = `${ROOT_PATH}create-project`;
+    const PROJECT_SETTINGS_PATH = `${ROOT_PATH}project/settings`;
 
     const ERROR_PAGE = `${ROOT_PATH}_error`;
 
@@ -46,6 +47,7 @@ module.exports = function getURLConstants(env) {
         FORGOT_PASSWORD_PATH,
         ABOUT_PATH,
         PROJECT_PATH,
+        PROJECT_SETTINGS_PATH,
         CREATE_PROJECT_PATH,
         ERROR_PAGE
     };

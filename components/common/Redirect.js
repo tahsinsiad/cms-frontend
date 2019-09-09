@@ -10,6 +10,7 @@ export const redirectTo = async (destination, {res, status} = {}) => {
     } else {
         return await Router.push(destination);
     }
+    return {};
 };
 
 const redirect = destination => {
@@ -26,19 +27,32 @@ const redirect = destination => {
         render() {
             if (this.props.metaRedirect) {
                 return (
-                  <NextHead>
-                    <meta httpEquiv="refresh" content={`0; url=${destination}`} />
-                  </NextHead>
+                    <NextHead>
+                        <meta httpEquiv="refresh" content={`0; url=${destination}`}/>
+                    </NextHead>
                 );
             }
 
             return null;
         }
     }
+
     RedirectRoute.propTypes = {
         metaRedirect: PropTypes.bool
     };
     return RedirectRoute;
+};
+
+export const MetaRedirect = ({to}) => {
+    return (
+        <NextHead>
+            <meta httpEquiv="refresh" content={`0; url=${to}`}/>
+        </NextHead>
+    );
+};
+
+MetaRedirect.propTypes = {
+    to: PropTypes.string
 };
 
 export default redirect;
