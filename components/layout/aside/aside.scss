@@ -32,4 +32,19 @@
 
 .create-new-page {
     // TODO
+    text-align: center;
+    padding-left: 25px !important;
+    border-radius: 3px;
+    border-style: dotted !important;
+    width: 140px !important;
+    margin: auto !important;
+    box-sizing: border-box !important;
+    padding-bottom: 35px !important;
+    border: 3.5px dotted rgba(255, 255, 255, 0.65) !important;
+    
+    
+}
+.create-new-page:hover{
+    border-color:green !important;
+    color: green !important;
 }
