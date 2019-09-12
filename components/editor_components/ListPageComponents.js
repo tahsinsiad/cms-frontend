@@ -23,32 +23,38 @@ const ListPageComponents = ({pageDetails}) => {
     const router = useRouter();
     const projectId = router.query.id;
     const pageName = router.query.subComponent;
-
+    
     useEffect(() => {
+        console.log("useEffect called")
         setPageChildren(pageDetails.children);
     }, [pageDetails]);
 
     const retrieveItemByKey = (itemList, keys, p) => {
-        if (p === keys.length) return itemList;
+        if (p === keys.length) {return itemList;     
+        }
+        
         if (p < keys.length) {
             return retrieveItemByKey(itemList.children[Number(keys[p])], keys, p + 1);
         }
     };
 
     const onSelect = (selectedKeys, {selected, selectedNodes, node, event}) => {
+        console.log("Onselect called")
         dataStoreContext.setSelectedProjectItem(retrieveItemByKey(pageDetails, node.props.eventKey.split("-"), 0));
     };
 
+    
+
     const onDragEnter = info => {
         console.log(info);
-        // expandedKeys 需要受控时设置
+        // expandedKeys
         // this.setState({
         //   expandedKeys: info.expandedKeys,
         // });
     };
 
     const onDrop = info => {
-        console.log(info);
+
         const dropKey = info.node.props.eventKey;
         const dragKey = info.dragNode.props.eventKey;
         const dropPos = info.node.props.pos.split("-");
@@ -77,7 +83,7 @@ const ListPageComponents = ({pageDetails}) => {
             // Drop on the content
             loop(data, dropKey, item => {
                 item.children = item.children || [];
-                // where to insert 示例添加到尾部，可以是随意位置
+                // where to insert
                 item.children.push(dragObj);
             });
         } else if (
@@ -87,7 +93,7 @@ const ListPageComponents = ({pageDetails}) => {
         ) {
             loop(data, dropKey, item => {
                 item.children = item.children || [];
-                // where to insert 示例添加到尾部，可以是随意位置
+                // where to insert
                 item.children.unshift(dragObj);
             });
         } else {
@@ -128,6 +134,7 @@ const ListPageComponents = ({pageDetails}) => {
     const loop = (data, preKey) =>
         data.map((item, i) => {
             const key = preKey ? `${preKey}-${i}` : `${i}`;
+            item.key = key;
             if (item.children && item.children.length) {
                 return (
                     <TreeNode key={key} title={item.name}>
