@@ -1,34 +1,33 @@
-import React from 'react';
-import {Modal,Button} from 'antd'
-import {useState} from 'react'
+import React, {useState} from "react";
+import {Button} from "antd";
 
 const ComponentList = () => {
-    const [visible, setVisible] = useState(false)
+    const [visible, setVisible] = useState(false);
 
-    const showModal = () =>{
-        setVisible(true)
-    }
+    const showModal = () => {
+        setVisible(true);
+    };
 
     const handleOk = e => {
         console.log(e);
-        setVisible(false)
-      };
-    
+        setVisible(false);
+    };
+
     const handleCancel = e => {
         console.log(e);
-        setVisible(false)
-        
-      };
+        setVisible(false);
 
-      return (
+    };
+
+    return (
         <div>
-          <Button type="primary" onClick={showModal}>
-            Open Modal
-          </Button>
-         
+            <Button type="primary" onClick={showModal}>
+                Open Modal
+            </Button>
+
         </div>
-      );
+    );
 
-}
+};
 
-export default ComponentList
+export default ComponentList;

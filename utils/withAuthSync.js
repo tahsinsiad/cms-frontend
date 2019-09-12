@@ -1,14 +1,12 @@
 // Gets the display name of a JSX component for dev tools
-import React, {Component, useContext, useEffect} from "react";
+import React from "react";
 import {auth} from "./auth";
-import {AuthContext} from "../contexts/AuthContextProvider";
-import {ClientContext} from "graphql-hooks";
 
 const getDisplayName = Component =>
     Component.displayName || Component.name || "Component";
 
 export const withAuthSync = WrappedComponent => {
-    const Component = (props)=>{
+    const Component = (props) => {
         // const authContext = useContext(AuthContext);
         // const graphQLClient = useContext(ClientContext);
 

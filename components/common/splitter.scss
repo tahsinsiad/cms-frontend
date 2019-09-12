@@ -1,10 +1,13 @@
 @import '../../static/scss/common';
+
 .draggable-splitter-wrapper {
     width: 14px;
     border-radius: 5px;
     @include transition(.3s all ease);
+
     &:hover {
         background-color: rgba(0, 0, 0, 0.09);
+
         .draggable-splitter {
             width: 4px;
             background-color: $primary-color;
@@ -12,6 +15,7 @@
             margin: 0 5px;
         }
     }
+
     .draggable-splitter {
         height: 100%;
         width: 2px;

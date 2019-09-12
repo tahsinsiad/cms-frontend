@@ -1,14 +1,15 @@
 import React from "react";
 import initGraphQL from "./initGraphQL";
 import Head from "next/head";
-import { getInitialState } from "graphql-hooks-ssr";
+import {getInitialState} from "graphql-hooks-ssr";
 import * as PropTypes from "prop-types";
 
 export default App => {
     class GraphQLHooks extends React.Component {
         static displayName = "GraphQLHooks(App)";
-        static async getInitialProps (ctx) {
-            const { Component, router } = ctx;
+
+        static async getInitialProps(ctx) {
+            const {Component, router} = ctx;
 
             let appProps = {};
             if (App.getInitialProps) {
@@ -24,11 +25,11 @@ export default App => {
                     // Run all GraphQL queries
                     graphQLState = await getInitialState({
                         App: (
-                          <App
-                            {...appProps}
-                            Component={Component}
-                            router={router}
-                            graphQLClient={graphQLClient}
+                            <App
+                                {...appProps}
+                                Component={Component}
+                                router={router}
+                                graphQLClient={graphQLClient}
                             />
                         ),
                         client: graphQLClient
@@ -53,13 +54,13 @@ export default App => {
             };
         }
 
-        constructor (props) {
+        constructor(props) {
             super(props);
             this.graphQLClient = initGraphQL(props.graphQLState, props.token);
         }
 
-        render () {
-            return <App {...this.props} graphQLClient={this.graphQLClient} />;
+        render() {
+            return <App {...this.props} graphQLClient={this.graphQLClient}/>;
         }
     }
 

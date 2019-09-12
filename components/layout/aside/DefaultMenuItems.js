@@ -10,14 +10,14 @@ const DefaultMenuItems = {
         key: "dashboard",
         title: "Dashboard",
         path: DASHBOARD_PATH,
-        icon: <Icon type="pie-chart" />,
+        icon: <Icon type="pie-chart"/>,
         subMenu: null
     },
     about: {
         key: "about",
         title: "About",
         path: ABOUT_PATH,
-        icon: <Icon type="user" />,
+        icon: <Icon type="user"/>,
         subMenu: null
     }
 };

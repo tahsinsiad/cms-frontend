@@ -10,8 +10,8 @@ export async function mockFetch(url, req) {
 
                 // let init = {"status": 200, "statusText": "OK!"};
                 let myResponse = {
-                    json: ()=>{
-                        return new Promise((resolve, reject)=>{
+                    json: () => {
+                        return new Promise((resolve, reject) => {
                             resolve({result: "success"});
                         });
                     }

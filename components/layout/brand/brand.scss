@@ -2,20 +2,22 @@
 
 .brand {
     @include flexContentCenter;
-	width: 100%;
-	height: 64px;
-	font-size: 26px;
+    width: 100%;
+    height: 64px;
+    font-size: 26px;
     color: $white;
-	.text {
+
+    .text {
         margin-left: 5px;
         @include transition(all .3s ease-in-out);
-	}
+    }
 }
+
 .brand.collapsed {
-	.text {
-		width: 0;
-		visibility: hidden;
-		opacity: 0;
-	}
+    .text {
+        width: 0;
+        visibility: hidden;
+        opacity: 0;
+    }
 }
 

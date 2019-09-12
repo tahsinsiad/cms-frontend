@@ -1,15 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import * as PropTypes from "prop-types";
 
-import { Button, message, Tree, Modal, Checkbox, Row, Col } from "antd";
-import { DataStoreContext } from "../../contexts/DataStoreContextProvider";
-import { useMutation } from "graphql-hooks";
-import { useRouter } from "next/router";
+import {Button, Checkbox, Col, message, Modal, Row, Tree} from "antd";
+import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
+import {useMutation} from "graphql-hooks";
+import {useRouter} from "next/router";
 
 
-
-const { TreeNode } = Tree;
-
+const {TreeNode} = Tree;
 
 
 const ADD_COMPONENT = `
@@ -17,7 +15,7 @@ mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: St
   addComponent(componentId: $componentId, parent: $parent, projectId: $projectId, page: $page)
 }`;
 
-const ListPageComponents = ({ pageDetails }) => {
+const ListPageComponents = ({pageDetails}) => {
     const dataStoreContext = useContext(DataStoreContext);
     const [openKeys, setOpenKeys] = useState([]);
     const [pageChildren, setPageChildren] = useState(pageDetails.children || []);
@@ -27,7 +25,7 @@ const ListPageComponents = ({ pageDetails }) => {
     const pageName = router.query.pageName;
 
     useEffect(() => {
-        console.log("useEffect called")
+        console.log("useEffect called");
         setPageChildren(pageDetails.children);
     }, [pageDetails]);
 
@@ -41,11 +39,10 @@ const ListPageComponents = ({ pageDetails }) => {
         }
     };
 
-    const onSelect = (selectedKeys, { selected, selectedNodes, node, event }) => {
-        console.log("Onselect called")
+    const onSelect = (selectedKeys, {selected, selectedNodes, node, event}) => {
+        console.log("Onselect called");
         dataStoreContext.setSelectedProjectItem(retrieveItemByKey(pageDetails, node.props.eventKey.split("-"), 0));
     };
-
 
 
     const onDragEnter = info => {
@@ -145,32 +142,32 @@ const ListPageComponents = ({ pageDetails }) => {
                     </TreeNode>
                 );
             }
-            return <TreeNode key={key} title={item.name} />;
+            return <TreeNode key={key} title={item.name}/>;
         });
 
-    const [visible, setVisible] = useState(false)
+    const [visible, setVisible] = useState(false);
 
     const showModal = () => {
-        setVisible(true)
-    }
+        setVisible(true);
+    };
 
     const handleOk = e => {
         console.log(e);
-        setVisible(false)
+        setVisible(false);
     };
 
     const handleCancel = e => {
         console.log(e);
-        setVisible(false)
+        setVisible(false);
 
     };
 
     const onChange = (checkedValues) => {
-        console.log('checked = ', checkedValues);
-      }
+        console.log("checked = ", checkedValues);
+    };
 
     return (
-        <div style={{ flex: "0 0 100%" }}>
+        <div style={{flex: "0 0 100%"}}>
             <Tree
                 className="draggable-tree"
                 defaultExpandedKeys={openKeys}
@@ -188,7 +185,7 @@ const ListPageComponents = ({ pageDetails }) => {
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
-                <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
+                <Checkbox.Group style={{width: "100%"}} onChange={onChange}>
                     <Row>
                         <Col span={8}>
                             <Checkbox value="A">Div</Checkbox>
@@ -211,10 +208,10 @@ const ListPageComponents = ({ pageDetails }) => {
                         </Col>
                     </Row>
                 </Checkbox.Group>
-          </Modal>
+            </Modal>
             <Button type="primary" onClick={addComponentClick}>Add Component</Button>
-            <br />
-            <br />
+            <br/>
+            <br/>
             <Button type="primary" onClick={showModal}>Component Lists</Button>
         </div>
     );

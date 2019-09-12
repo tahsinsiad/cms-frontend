@@ -26,7 +26,7 @@ const UserList = () => {
     ];
 
     return (
-      <Table columns={userColumns} dataSource={userContext.users} rowKey="id" />
+        <Table columns={userColumns} dataSource={userContext.users} rowKey="id"/>
     );
 };
 
