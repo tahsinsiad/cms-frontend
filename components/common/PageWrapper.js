@@ -1,22 +1,23 @@
-import React, {Fragment} from 'react';
-import PropTypes from 'prop-types';
+import React, {Fragment} from "react";
+import * as PropTypes from "prop-types";
 
-const PageWrapper = ({pageHeader, children}) => {
+const PageWrapper = ({pageHeader, children, style}) => {
     return (
         <Fragment>
             <div className="page_header">
                 {pageHeader}
             </div>
-            <div className="page_content">
+            <div className="page_content" style={style}>
                 {children}
             </div>
         </Fragment>
     );
 };
 
-
 PageWrapper.propTypes = {
-    children: PropTypes.element.isRequired
+    pageHeader: PropTypes.element,
+    children: PropTypes.element,
+    style: PropTypes.object
 };
 
 export default PageWrapper;

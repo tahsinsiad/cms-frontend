@@ -1,30 +1,27 @@
-import Router from 'next/router'
+import Router from "next/router";
 import NextHead from "next/head";
 import React from "react";
+import * as PropTypes from "prop-types";
 
-export const redirectTo = (destination, {res, status} = {}) => {
+export const redirectTo = async (destination, {res, status} = {}) => {
     if (res) {
-        res.writeHead(status || 302, {Location: destination})
-        res.end()
+        res.writeHead(status || 302, {Location: destination});
+        res.end();
     } else {
-        if (destination[0] === '/' && destination[1] !== '/') {
-            Router.push(destination)
-        } else {
-            window.location = destination
-        }
+        return await Router.push(destination);
     }
+    return {};
 };
 
-const redirect = destination =>
+const redirect = destination => {
     class RedirectRoute extends React.Component {
         static getInitialProps({res}) {
-            if (typeof window === 'undefined' && !res.writeHead) {
+            if (typeof window === "undefined" && !res.writeHead) {
                 // This is the SSR mode
-                return {metaRedirect: true}
+                return {metaRedirect: true};
             }
 
-            redirectTo(destination, {res, status: 301})
-            return {}
+            return redirectTo(destination, {res, status: 301});
         }
 
         render() {
@@ -33,11 +30,29 @@ const redirect = destination =>
                     <NextHead>
                         <meta httpEquiv="refresh" content={`0; url=${destination}`}/>
                     </NextHead>
-                )
+                );
             }
 
-            return null
+            return null;
         }
     }
 
-export default redirect
+    RedirectRoute.propTypes = {
+        metaRedirect: PropTypes.bool
+    };
+    return RedirectRoute;
+};
+
+export const MetaRedirect = ({to}) => {
+    return (
+        <NextHead>
+            <meta httpEquiv="refresh" content={`0; url=${to}`}/>
+        </NextHead>
+    );
+};
+
+MetaRedirect.propTypes = {
+    to: PropTypes.string
+};
+
+export default redirect;

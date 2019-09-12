@@ -1,19 +1,21 @@
-import Link from "next/link";
-import { DASHBOARD_PATH } from "../routes/Slugs";
-import { Button } from "antd";
-import ErrorLayout from "../components/layout/error_layout/ErrorLayout";
+import getConfig from "next/config";
 import React from "react";
+import {withAuthSync} from "../utils/withAuthSync";
+import {MetaRedirect} from "../components/common/Redirect";
 
-const Home = () => {
-    return (
-        <ErrorLayout status={500} subTitle="You should never see this.">
-            <Link href={DASHBOARD_PATH}>
-                <Button>
-                    Go To Dashboard
-                </Button>
-            </Link>
-        </ErrorLayout>
-    )
+const {publicRuntimeConfig} = getConfig();
+const {DASHBOARD_PATH} = publicRuntimeConfig;
+
+const Home = () => <MetaRedirect to={DASHBOARD_PATH}/>;
+
+// Home.getInitialProps = async (ctx) => {
+//     return redirectTo(DASHBOARD_PATH, ctx);
+// };
+
+Home.routeInfo = {
+    slug: "home",
+    path: "/",
+    pathAs: "/"
 };
 
-export default Home;
+export default withAuthSync(Home);

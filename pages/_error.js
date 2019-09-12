@@ -1,19 +1,25 @@
-import React from 'react';
-import {Button} from 'antd';
-import Link from 'next/link';
-import {DASHBOARD_PATH, ROOT_PATH} from "../routes/Slugs";
-import ErrorLayout from "../components/layout/error_layout/ErrorLayout";
+import React from "react";
+import ErrorPage from "../components/error_page/ErrorPage";
+import * as PropTypes from "prop-types";
 
-const ErrorPage = () => {
+const DefaultErrorPage = (props) => {
     return (
-        <ErrorLayout status={400} subTitle="Sorry, something went wrong. Please try again later.">
-            <Link href={DASHBOARD_PATH}>
-                <Button>
-                    Go To Dashboard
-                </Button>
-            </Link>
-        </ErrorLayout>
+        <ErrorPage status={props.statusCode || 400} subTitle={props.subTitle || "Sorry, something went wrong."}/>
     );
 };
 
-export default ErrorPage;
+DefaultErrorPage.getInitialProps = ({res, err, statusCode}) => {
+    // console.log(res.statusCode, err.statusCode, statusCode);
+    statusCode = res ? res.statusCode : err ? err.statusCode : statusCode;
+    const message = res ? res.data : err ? err.message : null;
+    return {err, statusCode, subTitle: message || "Sorry! something went wrong."};
+};
+
+DefaultErrorPage.propTypes = {
+    statusCode: PropTypes.number,
+    subTitle: PropTypes.string
+};
+
+DefaultErrorPage.isSimpleLayout = true;
+
+export default DefaultErrorPage;

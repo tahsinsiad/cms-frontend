@@ -1,0 +1,35 @@
+@-webkit-keyframes submenu-skeleton-loading {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+@keyframes submenu-skeleton-loading {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+.submenu-skeleton {
+    display: table;
+    width: 100%;
+    .submenu-skeleton-content .submenu-skeleton-paragraph > li {
+        width: 100%;
+        height: 16px;
+        list-style: none;
+        background: -webkit-gradient(linear, left top, right top, color-stop(25%, #1f4161), color-stop(37%, #002140), color-stop(63%, #1f4161));
+        background: linear-gradient(90deg, #1f4161 25%, #002140 37%, #1f4161 63%);
+        background-size: 400% 100%;
+        -webkit-animation: submenu-skeleton-loading 1.4s ease infinite;
+        animation: submenu-skeleton-loading 1.4s ease infinite;
+    }
+}
+
+.create-new-page {
+    // TODO
+}

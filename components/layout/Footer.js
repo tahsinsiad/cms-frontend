@@ -1,14 +1,14 @@
-import React from 'react';
-import {Layout} from 'antd';
+import React from "react";
+import {Layout} from "antd";
 
 const {Footer} = Layout;
 
 const CustomFooter = () => {
     const style = {
-        textAlign: 'center'
+        textAlign: "center"
     };
     return (
-        <Footer style={style}>E-Courier ©2019 Created by Vivasoft.</Footer>
+      <Footer style={style}>Pi-CMS ©2019 Created by Vivasoft.</Footer>
     );
 };
 

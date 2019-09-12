@@ -1,12 +1,13 @@
-import React, {useContext, useEffect} from 'react';
-import {Button, Form, Input} from 'antd';
-import {GlobalContext} from "../../contexts/WithContext";
+import React, {useContext, useEffect} from "react";
+import {Button, Form, Input} from "antd";
+import {UserContext} from "../../contexts/UserContextProvider";
+import * as PropTypes from "prop-types";
 
 const {Item} = Form;
 
 const UserForm = (props) => {
 
-    const {userContext} = useContext(GlobalContext);
+    const userContext = useContext(UserContext);
 
 
     const {getFieldDecorator, setFieldsValue} = props.form;
@@ -14,9 +15,9 @@ const UserForm = (props) => {
     useEffect(() => {
         // console.log(userContext)
         setFieldsValue({
-            firstName: 'Md',
-            lastName: 'Shamim'
-        })
+            firstName: "Md",
+            lastName: "Shamim"
+        });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -25,7 +26,7 @@ const UserForm = (props) => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                console.log("Received values of form: ", values);
                 const data = {
                     id: parseInt(((Math.random() + 1) * 1000000)),
                     ...values
@@ -36,26 +37,30 @@ const UserForm = (props) => {
     };
 
     return (
-        <Form onSubmit={userFormSubmit}>
-            <Item>
-                {
-                    getFieldDecorator('firstName', {
-                        rules: [{required: true, message: 'Please input your first name!'}],
-                    })(<Input placeholder="First Name"/>)
+      <Form onSubmit={userFormSubmit}>
+        <Item>
+          {
+                    getFieldDecorator("firstName", {
+                        rules: [{required: true, message: "Please input your first name!"}],
+                    })(<Input placeholder="First Name" />)
                 }
-            </Item>
-            <Item>
-                {
-                    getFieldDecorator('lastName', {
-                        rules: [{required: true, message: 'Please input your last name!'}],
-                    })(< Input placeholder="Last Name"/>)
+        </Item>
+        <Item>
+          {
+                    getFieldDecorator("lastName", {
+                        rules: [{required: true, message: "Please input your last name!"}],
+                    })(<Input placeholder="Last Name" />)
                 }
-            </Item>
-            <Button htmlType="submit">Submit</Button>
-        </Form>
+        </Item>
+        <Button htmlType="submit">Submit</Button>
+      </Form>
     );
 };
 
-const WrappedUserForm = Form.create({name: 'user_form'})(UserForm);
+UserForm.propTypes = {
+    form: PropTypes.object
+};
+
+const WrappedUserForm = Form.create({name: "user_form"})(UserForm);
 
 export default WrappedUserForm;
