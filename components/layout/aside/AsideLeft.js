@@ -19,11 +19,14 @@ const AsideLeft = ({collapsed, router, style}) => {
 
     /* Menu Binding Start */
     const getMenuItems = (item) => {
+        console.log("GetMenuItems called!", item.subMenu)
         return item.subMenu ? bindSubMenuItem(item) : bindSingleMenuItem(item);
     };
 
     const bindSingleMenuItem = (item) => {
+        console.log("BindSingleMenuItem called!")
         return (
+            
             <Menu.Item
                 onClick={() => {
                     console.log("clicked", item);
@@ -36,10 +39,12 @@ const AsideLeft = ({collapsed, router, style}) => {
                 <span>{item.title}</span>
                 {item.path && <Link href={item.path} as={item.pathAs}><a/></Link>}
             </Menu.Item>
+            
         );
     };
 
     const bindSubMenuItem = (item) => {
+        console.log("Bind SubMenuItems")
         if (router.query.component === item.key) {
             if (item.lazySubmenu) {
                 typeof item.onClick === "function" && item.onClick(menuContext, item);
@@ -112,6 +117,7 @@ const AsideLeft = ({collapsed, router, style}) => {
     // }, [navsState[0]]);
 
     useEffect(() => {
+        console.log("UseEffect called!")
         if (collapsed) menuContext.setOpenedKeys([]);
         else {
             menuContext.setOpenedKeys([router.query.component]);
@@ -124,7 +130,7 @@ const AsideLeft = ({collapsed, router, style}) => {
                 <a><Brand brandText={"Pi-CMS"} icon={<Icon style={{color: "#ff0000"}} type="dingding"/>}
                           className={headerLogoClassName}/></a>
             </Link>
-            <Menu theme="dark" selectedKeys={menuContext.selectedKeys} openKeys={menuContext.openedKeys} mode="inline"
+            <Menu theme="dark"  mode="inline"
                   style={style}>
                 {Object.values(menuContext.menuItems).map(item => getMenuItems(item))}
             </Menu>
