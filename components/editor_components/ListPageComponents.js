@@ -10,9 +10,7 @@ const {TreeNode} = Tree;
 
 const ADD_COMPONENT = `
 mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: String!, $page: String!) {
-  addComponent(componentId: $componentId, parent: $parent, projectId: $projectId, page: $page) {
-    error
-  }
+  addComponent(componentId: $componentId, parent: $parent, projectId: $projectId, page: $page)
 }`;
 
 const ListPageComponents = ({pageDetails}) => {
@@ -22,7 +20,7 @@ const ListPageComponents = ({pageDetails}) => {
     const [addComponent, pageDetailsData] = useMutation(ADD_COMPONENT);
     const router = useRouter();
     const projectId = router.query.id;
-    const pageName = router.query.subComponent;
+    const pageName = router.query.pageName;
 
     useEffect(() => {
         setPageChildren(pageDetails.children);
@@ -67,7 +65,7 @@ const ListPageComponents = ({pageDetails}) => {
         const data = [...pageChildren];
 
         // Find dragObject
-        let dragObj;
+        let dragObj = {};
         loop(data, dragKey, (item, index, arr) => {
             arr.splice(index, 1);
             dragObj = item;
@@ -91,7 +89,7 @@ const ListPageComponents = ({pageDetails}) => {
                 item.children.unshift(dragObj);
             });
         } else {
-            let ar;
+            let ar = [];
             let i;
             loop(data, dropKey, (item, index, arr) => {
                 ar = arr;
