@@ -1,12 +1,16 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import * as PropTypes from "prop-types";
 
-import {Button, message, Tree} from "antd";
-import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
-import {useMutation} from "graphql-hooks";
-import {useRouter} from "next/router";
+import { Button, message, Tree, Modal, Checkbox, Row, Col } from "antd";
+import { DataStoreContext } from "../../contexts/DataStoreContextProvider";
+import { useMutation } from "graphql-hooks";
+import { useRouter } from "next/router";
 
-const {TreeNode} = Tree;
+
+
+const { TreeNode } = Tree;
+
+
 
 const ADD_COMPONENT = `
 mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: String!, $page: String!) {
@@ -15,7 +19,7 @@ mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: St
   }
 }`;
 
-const ListPageComponents = ({pageDetails}) => {
+const ListPageComponents = ({ pageDetails }) => {
     const dataStoreContext = useContext(DataStoreContext);
     const [openKeys, setOpenKeys] = useState([]);
     const [pageChildren, setPageChildren] = useState(pageDetails.children || []);
@@ -23,27 +27,28 @@ const ListPageComponents = ({pageDetails}) => {
     const router = useRouter();
     const projectId = router.query.id;
     const pageName = router.query.subComponent;
-    
+
     useEffect(() => {
         console.log("useEffect called")
         setPageChildren(pageDetails.children);
     }, [pageDetails]);
 
     const retrieveItemByKey = (itemList, keys, p) => {
-        if (p === keys.length) {return itemList;     
+        if (p === keys.length) {
+            return itemList;
         }
-        
+
         if (p < keys.length) {
             return retrieveItemByKey(itemList.children[Number(keys[p])], keys, p + 1);
         }
     };
 
-    const onSelect = (selectedKeys, {selected, selectedNodes, node, event}) => {
+    const onSelect = (selectedKeys, { selected, selectedNodes, node, event }) => {
         console.log("Onselect called")
         dataStoreContext.setSelectedProjectItem(retrieveItemByKey(pageDetails, node.props.eventKey.split("-"), 0));
     };
 
-    
+
 
     const onDragEnter = info => {
         console.log(info);
@@ -142,11 +147,32 @@ const ListPageComponents = ({pageDetails}) => {
                     </TreeNode>
                 );
             }
-            return <TreeNode key={key} title={item.name}/>;
+            return <TreeNode key={key} title={item.name} />;
         });
 
+    const [visible, setVisible] = useState(false)
+
+    const showModal = () => {
+        setVisible(true)
+    }
+
+    const handleOk = e => {
+        console.log(e);
+        setVisible(false)
+    };
+
+    const handleCancel = e => {
+        console.log(e);
+        setVisible(false)
+
+    };
+
+    const onChange = (checkedValues) => {
+        console.log('checked = ', checkedValues);
+      }
+
     return (
-        <div style={{flex: "0 0 100%"}}>
+        <div style={{ flex: "0 0 100%" }}>
             <Tree
                 className="draggable-tree"
                 defaultExpandedKeys={openKeys}
@@ -158,7 +184,40 @@ const ListPageComponents = ({pageDetails}) => {
             >
                 {loop(pageChildren)}
             </Tree>
+            <Modal
+                title="Component Lists"
+                visible={visible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
+                    <Row>
+                        <Col span={8}>
+                            <Checkbox value="A">Div</Checkbox>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={8}>
+                            <Checkbox value="B">Span</Checkbox>
+                        </Col>
+                        <Row>
+                            <Col span={8}>
+                                <Checkbox value="C">Button</Checkbox>
+                            </Col>
+                        </Row>
+                        <Col span={8}>
+                            <Checkbox value="D">Image</Checkbox>
+                        </Col>
+                        <Col span={8}>
+                            <Checkbox value="E">Menu</Checkbox>
+                        </Col>
+                    </Row>
+                </Checkbox.Group>
+          </Modal>
             <Button type="primary" onClick={addComponentClick}>Add Component</Button>
+            <br />
+            <br />
+            <Button type="primary" onClick={showModal}>Component Lists</Button>
         </div>
     );
 };
