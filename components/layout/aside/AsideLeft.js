@@ -19,12 +19,10 @@ const AsideLeft = ({collapsed, router, style}) => {
 
     /* Menu Binding Start */
     const getMenuItems = (item) => {
-        console.log("GetMenuItems called!", item.subMenu);
         return item.subMenu ? bindSubMenuItem(item) : bindSingleMenuItem(item);
     };
 
     const bindSingleMenuItem = (item) => {
-        console.log("BindSingleMenuItem called!");
         return (
 
             <Menu.Item
@@ -44,7 +42,6 @@ const AsideLeft = ({collapsed, router, style}) => {
     };
 
     const bindSubMenuItem = (item) => {
-        console.log("Bind SubMenuItems");
         if (router.query.component === item.key) {
             if (item.lazySubmenu) {
                 typeof item.onClick === "function" && item.onClick(menuContext, item);
@@ -107,22 +104,16 @@ const AsideLeft = ({collapsed, router, style}) => {
     };
     /* Menu Binding End */
 
-    // useEffect(() => {
-    //     if (newSelectedKeys) {
-    //         setSelectedKeys(newSelectedKeys);
-    //     }
-    //     if (newOpenedKeys) {
-    //         setOpenedKeys(newOpenedKeys);
-    //     }
-    // }, [navsState[0]]);
-
     useEffect(() => {
-        console.log("UseEffect called!");
         if (collapsed) menuContext.setOpenedKeys([]);
         else {
-            menuContext.setOpenedKeys([router.query.component]);
+            // menuContext.setOpenedKeys([router.pathname.split("/").pop()]);
+            const menu = menuContext.menuItems[router.pathname.split("/").pop()];
+            if (menu && menu.onClick) {
+                menu.onClick(menuContext, menu);
+            }
         }
-    }, [collapsed]);
+    }, [collapsed, router.query.pageName]);
 
     return (
         <Fragment>
@@ -130,7 +121,7 @@ const AsideLeft = ({collapsed, router, style}) => {
                 <a><Brand brandText={"Pi-CMS"} icon={<Icon style={{color: "#ff0000"}} type="dingding"/>}
                           className={headerLogoClassName}/></a>
             </Link>
-            <Menu theme="dark" mode="inline"
+            <Menu theme="dark" mode="inline" selectedKeys={menuContext.selectedKeys} openKeys={menuContext.openedKeys}
                   style={style}>
                 {Object.values(menuContext.menuItems).map(item => getMenuItems(item))}
             </Menu>
