@@ -37,23 +37,23 @@ const UserForm = (props) => {
     };
 
     return (
-      <Form onSubmit={userFormSubmit}>
-        <Item>
-          {
+        <Form onSubmit={userFormSubmit}>
+            <Item>
+                {
                     getFieldDecorator("firstName", {
                         rules: [{required: true, message: "Please input your first name!"}],
-                    })(<Input placeholder="First Name" />)
+                    })(<Input placeholder="First Name"/>)
                 }
-        </Item>
-        <Item>
-          {
+            </Item>
+            <Item>
+                {
                     getFieldDecorator("lastName", {
                         rules: [{required: true, message: "Please input your last name!"}],
-                    })(<Input placeholder="Last Name" />)
+                    })(<Input placeholder="Last Name"/>)
                 }
-        </Item>
-        <Button htmlType="submit">Submit</Button>
-      </Form>
+            </Item>
+            <Button htmlType="submit">Submit</Button>
+        </Form>
     );
 };
 

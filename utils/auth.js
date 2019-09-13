@@ -3,18 +3,19 @@ import nextCookie from "next-cookies";
 import fetch from "isomorphic-unfetch";
 import cookie from "js-cookie";
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
-const { LOGIN_PATH, RESOLVE_USER_URL } = publicRuntimeConfig;
+
+const {publicRuntimeConfig} = getConfig();
+const {LOGIN_PATH, RESOLVE_USER_URL} = publicRuntimeConfig;
 
 export const auth = async ctx => {
-    const { token, user } = nextCookie(ctx);
+    const {token, user} = nextCookie(ctx);
 
     if (!token) {
-        return redirectTo(LOGIN_PATH, { res: ctx.res, status: 301 });
+        return redirectTo(LOGIN_PATH, {res: ctx.res, status: 301});
     }
 
     const response = await fetch(RESOLVE_USER_URL, {
-        method: "GET", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        method: "GET", headers: {"Content-Type": "application/json", Authorization: `Bearer ${token}`},
         // body: JSON.stringify({ token: c.token })
     })
         .then(r => r.json())
@@ -24,7 +25,7 @@ export const auth = async ctx => {
             if (resp.status !== "success") {
                 //setting the cookie to expire way back when removes it
                 cookie.remove("token");
-                return redirectTo(LOGIN_PATH, { res: ctx.res, status: 301 });
+                return redirectTo(LOGIN_PATH, {res: ctx.res, status: 301});
             }
             return resp;
         })

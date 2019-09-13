@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import * as PropTypes from "prop-types";
 
 import { Button, message, Tree, Modal, Checkbox, Row, Col } from "antd";
@@ -11,12 +11,10 @@ const { TreeNode } = Tree;
 
 const ADD_COMPONENT = `
 mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: String!, $page: String!) {
-  addComponent(componentId: $componentId, parent: $parent, projectId: $projectId, page: $page) {
-    error
-  }
+  addComponent(componentId: $componentId, parent: $parent, projectId: $projectId, page: $page)
 }`;
 
-const ListPageComponents = ({ pageDetails }) => {
+const ListPageComponents = ({pageDetails}) => {
     const dataStoreContext = useContext(DataStoreContext);
     const [openKeys, setOpenKeys] = useState([]);
     const [pageChildren, setPageChildren] = useState(
@@ -25,7 +23,7 @@ const ListPageComponents = ({ pageDetails }) => {
     const [addComponent, pageDetailsData] = useMutation(ADD_COMPONENT);
     const router = useRouter();
     const projectId = router.query.id;
-    const pageName = router.query.subComponent;
+    const pageName = router.query.pageName;
 
     useEffect(() => {
         console.log("useEffect called");
@@ -84,7 +82,7 @@ const ListPageComponents = ({ pageDetails }) => {
         const data = [...pageChildren];
 
         // Find dragObject
-        let dragObj;
+        let dragObj = {};
         loop(data, dragKey, (item, index, arr) => {
             arr.splice(index, 1);
             dragObj = item;
@@ -108,7 +106,7 @@ const ListPageComponents = ({ pageDetails }) => {
                 item.children.unshift(dragObj);
             });
         } else {
-            let ar;
+            let ar = [];
             let i;
             loop(data, dropKey, (item, index, arr) => {
                 ar = arr;
@@ -155,7 +153,7 @@ const ListPageComponents = ({ pageDetails }) => {
                     </TreeNode>
                 );
             }
-            return <TreeNode key={key} title={item.name} />;
+            return <TreeNode key={key} title={item.name}/>;
         });
 
     const [visible, setVisible] = useState(false);
@@ -175,7 +173,7 @@ const ListPageComponents = ({ pageDetails }) => {
     };
 
     return (
-        <div style={{ flex: "0 0 100%" }}>
+        <div style={{flex: "0 0 100%"}}>
             <Tree
                 className="draggable-tree"
                 defaultExpandedKeys={openKeys}

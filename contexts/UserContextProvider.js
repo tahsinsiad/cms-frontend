@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import getConfig from "next/config";
 import * as PropTypes from "prop-types";
-const { publicRuntimeConfig } = getConfig();
-const { API_LOGIN_URL, LOGIN_PATH, DASHBOARD_PATH } = publicRuntimeConfig;
+
+const {publicRuntimeConfig} = getConfig();
+const {API_LOGIN_URL, LOGIN_PATH, DASHBOARD_PATH} = publicRuntimeConfig;
 
 /* First we will make a new context */
 export const UserContext = React.createContext();
@@ -26,17 +27,17 @@ class UserContextProvider extends Component {
         });
     };
 
-    render () {
+    render() {
         return (
-          <UserContext.Provider
-            value={{
+            <UserContext.Provider
+                value={{
                     loading: this.state.loading,
                     users: this.state.users,
                     addUser: this.addUser,
                 }}
             >
-            {this.props.children}
-          </UserContext.Provider>
+                {this.props.children}
+            </UserContext.Provider>
         );
     }
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 import "./nav_header.scss";
 import {AuthContext} from "../../../contexts/AuthContextProvider";
 
-const { Header } = Layout;
+const {Header} = Layout;
 
 const NavHeader = () => {
 

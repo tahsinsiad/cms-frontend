@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import fetch from "isomorphic-unfetch";
 import getConfig from "next/config";
 import cookie from "js-cookie";
 import {redirectTo} from "../components/common/Redirect";
 import * as PropTypes from "prop-types";
-const { publicRuntimeConfig } = getConfig();
-const { API_LOGIN_URL, LOGIN_PATH, DASHBOARD_PATH } = publicRuntimeConfig;
+
+const {publicRuntimeConfig} = getConfig();
+const {API_LOGIN_URL, LOGIN_PATH, DASHBOARD_PATH} = publicRuntimeConfig;
 
 /* First we will make a new context */
 export const AuthContext = React.createContext();
@@ -36,7 +37,7 @@ class AuthContextProvider extends Component {
             error: null
         });
         fetch(API_LOGIN_URL, {
-            method: "POST", headers: { "Content-Type": "application/json" },
+            method: "POST", headers: {"Content-Type": "application/json"},
             body: JSON.stringify(user)
         })
             .then(r => r.json())
@@ -64,7 +65,7 @@ class AuthContextProvider extends Component {
             user: user,
             token: token,
         });
-        return await redirectTo(DASHBOARD_PATH, { status: 301 });
+        return await redirectTo(DASHBOARD_PATH, {status: 301});
     };
 
     loginFailed = async (err) => {
@@ -93,10 +94,10 @@ class AuthContextProvider extends Component {
         return await redirectTo(LOGIN_PATH);
     };
 
-    render () {
+    render() {
         return (
-          <AuthContext.Provider
-            value={{
+            <AuthContext.Provider
+                value={{
                     isLoggedIn: this.state.isLoggedIn,
                     loading: this.state.loading,
                     error: this.state.error,
@@ -107,8 +108,8 @@ class AuthContextProvider extends Component {
                     loginSuccess: this.loginSuccess,
                 }}
             >
-            {this.props.children}
-          </AuthContext.Provider>
+                {this.props.children}
+            </AuthContext.Provider>
         );
     }
 }

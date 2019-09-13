@@ -8,7 +8,7 @@ const CustomFooter = () => {
         textAlign: "center"
     };
     return (
-      <Footer style={style}>Pi-CMS ©2019 Created by Vivasoft.</Footer>
+        <Footer style={style}>Pi-CMS ©2019 Created by Vivasoft.</Footer>
     );
 };
 

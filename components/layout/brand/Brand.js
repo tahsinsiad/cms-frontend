@@ -5,10 +5,10 @@ import "./brand.scss";
 
 const Brand = ({icon, brandText, className}) => {
     return (
-      <div className={className}>
-        <span className="icon">{icon}</span>
-        <span className="text">{brandText}</span>
-      </div>
+        <div className={className}>
+            <span className="icon">{icon}</span>
+            <span className="text">{brandText}</span>
+        </div>
     );
 };
 

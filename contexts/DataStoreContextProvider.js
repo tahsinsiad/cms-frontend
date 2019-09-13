@@ -3,8 +3,8 @@ import getConfig from "next/config";
 import * as PropTypes from "prop-types";
 import cookie from "js-cookie";
 
-const { publicRuntimeConfig } = getConfig();
-const { DASHBOARD_PATH } = publicRuntimeConfig;
+const {publicRuntimeConfig} = getConfig();
+const {DASHBOARD_PATH} = publicRuntimeConfig;
 
 /* First we will make a new context */
 export const DataStoreContext = React.createContext();
@@ -29,7 +29,7 @@ class DataStoreContextProvider extends Component {
     setCurrentProject = (project) => {
         console.log("set current project id");
         cookie.set("projectId", project.id);
-        this.setState({ currentProject: project });
+        this.setState({currentProject: project});
     };
 
     setCurrentPage = (page) => {
@@ -38,7 +38,7 @@ class DataStoreContextProvider extends Component {
 
     setProjectUpdated = (isUpdate) => {
         console.log("set project update");
-        this.setState({ projectUpdated: isUpdate });
+        this.setState({projectUpdated: isUpdate});
     };
 
     setProjectListUpdated = (isUpdated) => {
@@ -64,23 +64,23 @@ class DataStoreContextProvider extends Component {
 
     render() {
         return (
-          <DataStoreContext.Provider
-            value={{
-                projectListUpdated: this.state.projectListUpdated,
-                projectUpdated: this.state.projectUpdated,
-                pageDetailsUpdated: this.state.pageDetailsUpdated,
-                currentProject: this.state.currentProject,
-                currentPage: this.state.currentPage,
-                selectedProjectItem: this.state.selectedProjectItem,
-                setCurrentProject: this.setCurrentProject,
-                setCurrentPage: this.setCurrentPage,
-                setProjectUpdated: this.setProjectUpdated,
-                setPageDetailsUpdated: this.setPageDetailsUpdated,
-                setProjectListUpdated: this.setProjectListUpdated,
-                setSelectedProjectItem: this.setSelectedProjectItem,
-            }}>
-            {this.props.children}
-          </DataStoreContext.Provider>
+            <DataStoreContext.Provider
+                value={{
+                    projectListUpdated: this.state.projectListUpdated,
+                    projectUpdated: this.state.projectUpdated,
+                    pageDetailsUpdated: this.state.pageDetailsUpdated,
+                    currentProject: this.state.currentProject,
+                    currentPage: this.state.currentPage,
+                    selectedProjectItem: this.state.selectedProjectItem,
+                    setCurrentProject: this.setCurrentProject,
+                    setCurrentPage: this.setCurrentPage,
+                    setProjectUpdated: this.setProjectUpdated,
+                    setPageDetailsUpdated: this.setPageDetailsUpdated,
+                    setProjectListUpdated: this.setProjectListUpdated,
+                    setSelectedProjectItem: this.setSelectedProjectItem,
+                }}>
+                {this.props.children}
+            </DataStoreContext.Provider>
         );
     }
 }
