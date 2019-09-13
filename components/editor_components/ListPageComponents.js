@@ -5,6 +5,7 @@ import { Button, message, Tree, Modal, Checkbox, Row, Col } from "antd";
 import { DataStoreContext } from "../../contexts/DataStoreContextProvider";
 import { useMutation } from "graphql-hooks";
 import { useRouter } from "next/router";
+import ComponentList from "./ComponentList";
 
 
 
@@ -167,9 +168,7 @@ const ListPageComponents = ({ pageDetails }) => {
 
     };
 
-    const onChange = (checkedValues) => {
-        console.log('checked = ', checkedValues);
-      }
+    
 
     return (
         <div style={{ flex: "0 0 100%" }}>
@@ -184,36 +183,7 @@ const ListPageComponents = ({ pageDetails }) => {
             >
                 {loop(pageChildren)}
             </Tree>
-            <Modal
-                title="Component Lists"
-                visible={visible}
-                onOk={handleOk}
-                onCancel={handleCancel}
-            >
-                <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-                    <Row>
-                        <Col span={8}>
-                            <Checkbox value="A">Div</Checkbox>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={8}>
-                            <Checkbox value="B">Span</Checkbox>
-                        </Col>
-                        <Row>
-                            <Col span={8}>
-                                <Checkbox value="C">Button</Checkbox>
-                            </Col>
-                        </Row>
-                        <Col span={8}>
-                            <Checkbox value="D">Image</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="E">Menu</Checkbox>
-                        </Col>
-                    </Row>
-                </Checkbox.Group>
-          </Modal>
+            <ComponentList visible = {visible} handleOk = {handleOk} handleCancel = {handleCancel} />
             <Button type="primary" onClick={addComponentClick}>Add Component</Button>
             <br />
             <br />
