@@ -7,11 +7,7 @@ import { useMutation } from "graphql-hooks";
 import { useRouter } from "next/router";
 import ComponentList from "./ComponentList";
 
-
-
 const { TreeNode } = Tree;
-
-
 
 const ADD_COMPONENT = `
 mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: String!, $page: String!) {
@@ -23,14 +19,16 @@ mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: St
 const ListPageComponents = ({ pageDetails }) => {
     const dataStoreContext = useContext(DataStoreContext);
     const [openKeys, setOpenKeys] = useState([]);
-    const [pageChildren, setPageChildren] = useState(pageDetails.children || []);
+    const [pageChildren, setPageChildren] = useState(
+        pageDetails.children || []
+    );
     const [addComponent, pageDetailsData] = useMutation(ADD_COMPONENT);
     const router = useRouter();
     const projectId = router.query.id;
     const pageName = router.query.subComponent;
 
     useEffect(() => {
-        console.log("useEffect called")
+        console.log("useEffect called");
         setPageChildren(pageDetails.children);
     }, [pageDetails]);
 
@@ -40,16 +38,23 @@ const ListPageComponents = ({ pageDetails }) => {
         }
 
         if (p < keys.length) {
-            return retrieveItemByKey(itemList.children[Number(keys[p])], keys, p + 1);
+            return retrieveItemByKey(
+                itemList.children[Number(keys[p])],
+                keys,
+                p + 1
+            );
         }
     };
 
-    const onSelect = (selectedKeys, { selected, selectedNodes, node, event }) => {
-        console.log("Onselect called")
-        dataStoreContext.setSelectedProjectItem(retrieveItemByKey(pageDetails, node.props.eventKey.split("-"), 0));
+    const onSelect = (
+        selectedKeys,
+        { selected, selectedNodes, node, event }
+    ) => {
+        console.log("Onselect called");
+        dataStoreContext.setSelectedProjectItem(
+            retrieveItemByKey(pageDetails, node.props.eventKey.split("-"), 0)
+        );
     };
-
-
 
     const onDragEnter = info => {
         console.log(info);
@@ -60,11 +65,11 @@ const ListPageComponents = ({ pageDetails }) => {
     };
 
     const onDrop = info => {
-
         const dropKey = info.node.props.eventKey;
         const dragKey = info.dragNode.props.eventKey;
         const dropPos = info.node.props.pos.split("-");
-        const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]);
+        const dropPosition =
+            info.dropPosition - Number(dropPos[dropPos.length - 1]);
 
         const loop = (data, key, callback) => {
             data.forEach((item, index, arr) => {
@@ -132,8 +137,10 @@ const ListPageComponents = ({ pageDetails }) => {
         if (!result.error) {
             dataStoreContext.setPageDetailsUpdated(true);
         } else {
-            message.error((result.httpError && result.httpError.statusText) ||
-                (result.graphQLErrors && result.graphQLErrors[0].message));
+            message.error(
+                (result.httpError && result.httpError.statusText) ||
+                    (result.graphQLErrors && result.graphQLErrors[0].message)
+            );
         }
     };
 
@@ -151,24 +158,21 @@ const ListPageComponents = ({ pageDetails }) => {
             return <TreeNode key={key} title={item.name} />;
         });
 
-    const [visible, setVisible] = useState(false)
+    const [visible, setVisible] = useState(false);
 
     const showModal = () => {
-        setVisible(true)
-    }
+        setVisible(true);
+    };
 
     const handleOk = e => {
         console.log(e);
-        setVisible(false)
+        setVisible(false);
     };
 
     const handleCancel = e => {
         console.log(e);
-        setVisible(false)
-
+        setVisible(false);
     };
-
-    
 
     return (
         <div style={{ flex: "0 0 100%" }}>
@@ -183,11 +187,19 @@ const ListPageComponents = ({ pageDetails }) => {
             >
                 {loop(pageChildren)}
             </Tree>
-            <ComponentList visible = {visible} handleOk = {handleOk} handleCancel = {handleCancel} />
-            <Button type="primary" onClick={addComponentClick}>Add Component</Button>
+            <ComponentList
+                visible={visible}
+                handleOk={handleOk}
+                handleCancel={handleCancel}
+            />
+            <Button type="primary" onClick={addComponentClick}>
+                Add Component
+            </Button>
             <br />
             <br />
-            <Button type="primary" onClick={showModal}>Component Lists</Button>
+            <Button type="primary" onClick={showModal}>
+                Component Lists
+            </Button>
         </div>
     );
 };
