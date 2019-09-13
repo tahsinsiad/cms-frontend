@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-import {Button, Form, Input} from "antd";
+import {Button, Form, Input } from "antd";
 
 import "../static/scss/signup.scss";
 import {useMutation} from "graphql-hooks";
@@ -36,6 +36,7 @@ const SignUp = (props) => {
                 });
                 if (!result.error) {
                     return await redirectTo("/login", {status: 200});
+
                 }
             }
         });
