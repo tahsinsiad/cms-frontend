@@ -14,6 +14,7 @@ const Settings = (props) => {
 
     React.useEffect(() => {
         menuContext.setSelectedKeys([WrappedSettings.routeInfo.slug]);
+        menuContext.setOpenedKeys([]);
     }, []);
 
     return (

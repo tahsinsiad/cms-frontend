@@ -14,6 +14,7 @@ const Headers = (props) => {
 
     React.useEffect(() => {
         menuContext.setSelectedKeys([WrappedHeaders.routeInfo.slug]);
+        menuContext.setOpenedKeys([]);
     }, []);
 
     return (
