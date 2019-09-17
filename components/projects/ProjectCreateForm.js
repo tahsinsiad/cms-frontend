@@ -5,9 +5,9 @@ import "./ProjectForm.scss";
 
 import Link from "next/link";
 import {useMutation} from "graphql-hooks";
-import {redirectTo} from "../../common/Redirect";
+import {redirectTo} from "../common/Redirect";
 import getConfig from "next/config";
-import {DataStoreContext} from "../../../contexts/DataStoreContextProvider";
+import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
 import * as PropTypes from "prop-types";
 
 const {publicRuntimeConfig} = getConfig();

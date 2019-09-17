@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import * as PropTypes from "prop-types";
 
-import { Button, message, Tree, Modal, Checkbox, Row, Col } from "antd";
-import { DataStoreContext } from "../../contexts/DataStoreContextProvider";
-import { useMutation } from "graphql-hooks";
-import { useRouter } from "next/router";
-import ComponentList from "./ComponentList";
+import {Button, message, Tree} from "antd";
+import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
+import {useMutation} from "graphql-hooks";
+import {useRouter} from "next/router";
+import AddComponentModal from "./AddComponentModal";
 
 const { TreeNode } = Tree;
 
 const ADD_COMPONENT = `
-mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: String!, $page: String!) {
-  addComponent(componentId: $componentId, parent: $parent, projectId: $projectId, page: $page)
+mutation addComponent($componentIds: [String!], $parent: JSONObject, $projectId: String!, $page: String!) {
+  addComponent(componentIds: $componentIds, parent: $parent, projectId: $projectId, page: $page)
 }`;
 
 const ListPageComponents = ({ pageDetails }) => {
@@ -122,11 +122,11 @@ const ListPageComponents = ({ pageDetails }) => {
         setPageChildren(data);
     };
 
-    const addComponentClick = async () => {
+    const addComponentRequest = async (selectedComponents) => {
         const selectedProjectItem = dataStoreContext.selectedProjectItem;
         const result = await addComponent({
             variables: {
-                componentId: "div",
+                componentIds: selectedComponents.map(sc => sc.id),
                 parent: selectedProjectItem,
                 projectId: projectId,
                 page: pageName
@@ -165,6 +165,7 @@ const ListPageComponents = ({ pageDetails }) => {
     const handleOk = e => {
         console.log(e);
         setVisible(false);
+        return addComponentRequest(e);
     };
 
     const handleCancel = e => {
@@ -183,22 +184,15 @@ const ListPageComponents = ({ pageDetails }) => {
                 onDrop={onDrop}
                 onSelect={onSelect}
             >
-                <TreeNode title="Page 1" key="page 1">
+                <TreeNode title={pageDetails.title} key={pageDetails.slug}>
                     {loop(pageChildren)}
                 </TreeNode>
             </Tree>
-            <ComponentList
+            <AddComponentModal
                 visible={visible}
                 handleOk={handleOk}
                 handleCancel={handleCancel}
             />
-            <br />
-
-            <Button type="primary" onClick={addComponentClick}>
-                Add Component
-            </Button>
-            <br />
-            <br />
             <Button type="primary" onClick={showModal}>
                 Component Lists
             </Button>
