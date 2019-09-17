@@ -2,6 +2,7 @@
 import React from "react";
 import {auth} from "./auth";
 
+
 const getDisplayName = Component =>
     Component.displayName || Component.name || "Component";
 
@@ -31,7 +32,7 @@ export const withAuthSync = WrappedComponent => {
             WrappedComponent.getInitialProps &&
             (await WrappedComponent.getInitialProps(ctx));
 
-        console.log(WrappedComponent.displayName, {...componentProps, token: authResp.token, user: authResp.user});
+        //console.log(WrappedComponent.displayName, {...componentProps, token: authResp.token, user: authResp.user});
         return {...componentProps, token: token, user: user};
     };
 

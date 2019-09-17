@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import * as PropTypes from "prop-types";
 
 import { Button, message, Tree, Modal, Checkbox, Row, Col } from "antd";
@@ -14,7 +14,7 @@ mutation addComponent($componentId: String!, $parent: JSONObject, $projectId: St
   addComponent(componentId: $componentId, parent: $parent, projectId: $projectId, page: $page)
 }`;
 
-const ListPageComponents = ({pageDetails}) => {
+const ListPageComponents = ({ pageDetails }) => {
     const dataStoreContext = useContext(DataStoreContext);
     const [openKeys, setOpenKeys] = useState([]);
     const [pageChildren, setPageChildren] = useState(
@@ -153,7 +153,7 @@ const ListPageComponents = ({pageDetails}) => {
                     </TreeNode>
                 );
             }
-            return <TreeNode key={key} title={item.name}/>;
+            return <TreeNode key={key} title={item.name} />;
         });
 
     const [visible, setVisible] = useState(false);
@@ -173,7 +173,7 @@ const ListPageComponents = ({pageDetails}) => {
     };
 
     return (
-        <div style={{flex: "0 0 100%"}}>
+        <div style={{ flex: "0 0 100%" }}>
             <Tree
                 className="draggable-tree"
                 defaultExpandedKeys={openKeys}
@@ -183,13 +183,17 @@ const ListPageComponents = ({pageDetails}) => {
                 onDrop={onDrop}
                 onSelect={onSelect}
             >
-                {loop(pageChildren)}
+                <TreeNode title="Page 1" key="page 1">
+                    {loop(pageChildren)}
+                </TreeNode>
             </Tree>
             <ComponentList
                 visible={visible}
                 handleOk={handleOk}
                 handleCancel={handleCancel}
             />
+            <br />
+
             <Button type="primary" onClick={addComponentClick}>
                 Add Component
             </Button>
