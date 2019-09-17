@@ -4,10 +4,12 @@ import React from "react";
 import * as PropTypes from "prop-types";
 
 export const redirectTo = async (destination, {res, status} = {}) => {
+    //serverside response
     if (res) {
         res.writeHead(status || 302, {Location: destination});
         res.end();
     } else {
+        //clientside response
         return await Router.push(destination);
     }
     return {};
