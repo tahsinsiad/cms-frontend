@@ -1,14 +1,16 @@
 import React, {Fragment} from "react";
-import {Button, Card, Divider, PageHeader, Table, Typography} from "antd";
+import {Button, Card, Divider, PageHeader, Table, Typography, message} from "antd";
 import Link from "next/link";
 import "../static/scss/dashboard.scss";
-
+import {useState, useContext, useEffect} from 'react'
 import PageWrapper from "../components/common/PageWrapper";
 import getConfig from "next/config";
 import RecentProjects from "../components/projects/RecentProjects";
 import {withAuthSync} from "../utils/withAuthSync";
 import {MenuContext} from "../contexts/MenuContextProvider";
 import DefaultMenuItems from "../components/layout/aside/DefaultMenuItems";
+import {useQuery} from "graphql-hooks";
+import {DataStoreContext} from "/home/vivasoft/Downloads/cms-frontend/contexts/DataStoreContextProvider";
 
 const {publicRuntimeConfig} = getConfig();
 const {CREATE_PROJECT_PATH} = publicRuntimeConfig;
@@ -17,31 +19,80 @@ const {Meta} = Card;
 
 const {Title} = Typography;
 
+export const projectsQuery = `
+  query projectsQuery($limit: Int!, $skip: Int!) {
+      projects(limit: $limit, skip: $skip) {
+          id
+          title
+          description
+          websiteUrl
+          modifiedAt
+        }
+        _projectsMeta {
+      count
+    }
+}
+`;
 
 const Dashboard = () => {
+    
+    
+    const [skip, setSkip] = useState(0);
+    const dataStoreContext = useContext(DataStoreContext);
+    const [current, setCurrent] = useState(1);
+    // const menuContext = React.useContext(MenuContext);
 
-    const dataSource = [
-        {
-            id: "1",
-            title: "Project Title",
-            description: "This is the description",
-        },
-        {
-            id: "2",
-            title: "Project Title",
-            description: "This is the description",
-        },
-        {
-            id: "3",
-            title: "Project Title",
-            description: "This is the description",
-        },
-        {
-            id: "4",
-            title: "Project Title",
-            description: "This is the description",
+    const {loading, error, data, refetch} = useQuery(projectsQuery, {
+        variables: {skip, limit: 4},
+        updateData: (prevResult, result) => ({
+            ...result,
+            projects: [...prevResult.projects, ...result.projects]
+        })
+    });
+    
+    const onChange = page => {
+        console.log("Page no is: ",page);
+        setSkip((page-1)*4);
+        if(page){
+            refetch({variables: {skip, limit: 4}}); 
         }
-    ];
+    };
+
+    useEffect(() => {
+        // menuContext.setMenuItems(DefaultMenuItems);
+        // menuContext.setSelectedKeys([Dashboard.routeInfo.slug]);
+    }, []);
+
+    useEffect(() => {
+        console.log("Effect 1 called");
+        if (dataStoreContext.projectListUpdated) {
+            dataStoreContext.setProjectListUpdated(false);
+            refetch({variables: {skip, limit: 4}});
+        }
+    }, [dataStoreContext.projectListUpdated]);
+
+    useEffect(() => {
+        console.log("Effect 2 called");
+        if (error) {
+            message.error("Error loading recent projects.");
+        }
+        console.log("loading:", loading);
+        let hideMessage; 
+        if (loading) {
+            hideMessage && hideMessage();
+            hideMessage = message.loading("Loading recent projects...", 0);
+        } else {
+            hideMessage && hideMessage();
+            hideMessage = null;
+        }
+        if (hideMessage) return hideMessage;
+
+    }, [error, loading]);
+
+    if (error || !data) return null;
+     const {projects, _projectsMeta} = data;
+
+    console.log("New Project data is: ", projects);
 
     const columns = [
         {
@@ -59,19 +110,26 @@ const Dashboard = () => {
             dataIndex: "description",
             key: "description",
         },
+        {
+            title: "WebsiteUrl",
+            dataIndex: "websiteUrl",
+            key: "websiteUrl",
+        },
+        {
+            title: "ModifiedAt",
+            dataIndex: "modifiedAt",
+            key: "modifiedAt",
+        },
     ];
 
-    const menuContext = React.useContext(MenuContext);
 
-    React.useEffect(() => {
-        menuContext.setMenuItems(DefaultMenuItems);
-        menuContext.setSelectedKeys([Dashboard.routeInfo.slug]);
-    }, []);
-
-    const pageHeader = <PageHeader title="Dashboard" subTitle="This is a subtitle"
-                                   extra={<Link href={CREATE_PROJECT_PATH}><Button type="primary">New
-                                       Project</Button></Link>}
+    const pageHeader = <PageHeader 
+        title="Dashboard" 
+        subTitle="This is a subtitle"
+        extra={<Link href={CREATE_PROJECT_PATH}><Button type="primary">New
+        Project</Button></Link>}
     />;
+    
 
     return (
         <PageWrapper pageHeader={pageHeader}>
@@ -82,7 +140,7 @@ const Dashboard = () => {
                 <Divider/>
 
                 <Title level={3}>All Project</Title>
-                <Table dataSource={dataSource} columns={columns} rowKey="id"/>
+                <Table dataSource={projects} columns={columns} pagination={{pageSize: 4, total: 5, defaultCurrent: 1, onChange}} rowKey="id"/>
             </Fragment>
 
         </PageWrapper>

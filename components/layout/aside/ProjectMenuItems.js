@@ -52,6 +52,7 @@ export const getProjectMenuItems = (params, graphQLClient) => {
             }],
             graphQLClient: null,
             onClick: ({menuItems, setMenuItems}, targetMenuItem) => {
+                targetMenuItem.onClick = null;
                 if (!graphQLClient) {
                     message.error("Unexpected Error!");
                     console.error("GraphQLClient is not initialized!");
@@ -74,14 +75,14 @@ export const getProjectMenuItems = (params, graphQLClient) => {
             }
         },
         header: {
-            key: "header",
+            key: "headers",
             title: "Header",
             icon: <Icon type="star"/>,
             path: WrappedHeaders.routeInfo.path,
             subMenu: null
         },
         footer: {
-            key: "footer",
+            key: "footers",
             title: "Footer",
             icon: <Icon type="star"/>,
             path: WrappedFooters.routeInfo.path,

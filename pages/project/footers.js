@@ -14,6 +14,7 @@ const Footers = (props) => {
 
     React.useEffect(() => {
         menuContext.setSelectedKeys([WrappedFooters.routeInfo.slug]);
+        menuContext.setOpenedKeys([]);
     }, []);
 
     return (

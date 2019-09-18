@@ -27,7 +27,9 @@
         "prop-types": "^15.7.2",
         "react": "^16.9.0",
         "react-dom": "^16.9.0",
-        "react-json-editor-ajrm": "^2.5.9"
+        "react-id-swiper": "^2.3.2",
+        "react-json-editor-ajrm": "^2.5.9",
+        "swiper": "^5.0.1"
     },
     "devDependencies": {
         "@zeit/next-css": "^1.0.1",

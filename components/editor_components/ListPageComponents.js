@@ -183,7 +183,7 @@ const ListPageComponents = ({ pageDetails }) => {
                 onDrop={onDrop}
                 onSelect={onSelect}
             >
-                <TreeNode title="Page 1" key="page 1">
+                <TreeNode title={pageName} key={pageName}>
                     {loop(pageChildren)}
                 </TreeNode>
             </Tree>

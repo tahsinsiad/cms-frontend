@@ -26,8 +26,11 @@ export const recentProjectsQuery = `
 `;
 
 const RecentProjects = () => {
+
     const [skip, setSkip] = useState(0);
     const dataStoreContext = useContext(DataStoreContext);
+
+    
 
     const {loading, error, data, refetch} = useQuery(recentProjectsQuery, {
         variables: {skip, limit: 4},
@@ -63,6 +66,8 @@ const RecentProjects = () => {
     if (error || !data) return <Row gutter={4}/>;
     const {projects, _projectsMeta} = data;
 
+   // console.log("Project data is: ", projects);
+
     // const areMoreProjects = projects.length < _projectsMeta.count;
     return (
         <Row gutter={4}>
@@ -73,6 +78,7 @@ const RecentProjects = () => {
                                     src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"/>}
                         actions={[<Link href={`${PROJECT_PATH}?id=${project.id}`}><a><Icon
                             type="edit"/></a></Link>, <Icon type="delete"/>]}
+                            hoverable
                     >
                         <Meta title={project.title} description={project.description}/>
                     </Card>
