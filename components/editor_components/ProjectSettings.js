@@ -1,5 +1,5 @@
 import React from "react";
-import ProjectSettingForm from "../forms/project_forms/ProjectSettingForm";
+import ProjectSettingForm from "../projects/ProjectSettingForm";
 
 const ProjectSettings = (props) => {
     return (

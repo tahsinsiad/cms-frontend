@@ -1,7 +1,8 @@
 import React from "react";
-import { Modal, Input, Collapse, Icon, Select } from "antd";
+import {Collapse, Icon, Modal, Select} from "antd";
 import JSONInput from "react-json-editor-ajrm";
 import locale from "react-json-editor-ajrm/locale/en";
+import * as PropTypes from "prop-types";
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -39,6 +40,12 @@ const JsonComponentList = ({ visible, handleOk, handleCancel }) => {
             </Modal>
         </div>
     );
+};
+
+JsonComponentList.propTypes = {
+    visible: PropTypes.bool,
+    handleOk: PropTypes.func,
+    handleCancel: PropTypes.func
 };
 
 export default JsonComponentList;
