@@ -2,7 +2,7 @@ import React, {Fragment} from "react";
 import {Button, Card, Divider, PageHeader, Table, Typography, message} from "antd";
 import Link from "next/link";
 import "../static/scss/dashboard.scss";
-import {useState, useContext, useEffect} from 'react'
+import {useState, useContext, useEffect} from "react";
 import PageWrapper from "../components/common/PageWrapper";
 import getConfig from "next/config";
 import RecentProjects from "../components/projects/RecentProjects";
@@ -55,6 +55,7 @@ const Dashboard = () => {
         setSkip((page-1)*4);
         if(page){
             refetch({variables: {skip, limit: 4}}); 
+            console.log("refetch called!");
         }
     };
 
@@ -70,24 +71,26 @@ const Dashboard = () => {
             refetch({variables: {skip, limit: 4}});
         }
     }, [dataStoreContext.projectListUpdated]);
+    
 
-    useEffect(() => {
-        console.log("Effect 2 called");
-        if (error) {
-            message.error("Error loading recent projects.");
-        }
-        console.log("loading:", loading);
-        let hideMessage; 
-        if (loading) {
-            hideMessage && hideMessage();
-            hideMessage = message.loading("Loading recent projects...", 0);
-        } else {
-            hideMessage && hideMessage();
-            hideMessage = null;
-        }
-        if (hideMessage) return hideMessage;
 
-    }, [error, loading]);
+    // useEffect(() => {
+    //     console.log("Effect 2 called");
+    //     if (error) {
+    //         message.error("Error loading recent projects.");
+    //     }
+    //     console.log("loading:", loading);
+    //     let hideMessage; 
+    //     if (loading) {
+    //         hideMessage && hideMessage();
+    //         hideMessage = message.loading("Loading recent projects...", 0);
+    //     } else {
+    //         hideMessage && hideMessage();
+    //         hideMessage = null;
+    //     }
+    //     if (hideMessage) return hideMessage;
+
+    // }, [error, loading]);
 
     if (error || !data) return null;
      const {projects, _projectsMeta} = data;
