@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Checkbox, Col, message, Row } from "antd";
+import React, {useEffect, useState} from "react";
+import {Checkbox, Col, message, Row} from "antd";
 import * as PropTypes from "prop-types";
-import { useQuery } from "graphql-hooks";
-import { useRouter } from "next/router";
-import { DataStoreContext } from "../../contexts/DataStoreContextProvider";
+import {useQuery} from "graphql-hooks";
+import {useRouter} from "next/router";
 
 export const availableComponentQuery = `
   query availableComponentQuery($projectId: String!, $limit: Int!, $skip: Int!) {
@@ -68,8 +67,8 @@ const AvailableComponentList = ({ onSelect }) => {
 
     const getComponents = item => {
         return item.map(item => {
-            return (<Col span={8}>
-                <Checkbox value={item.name}>{item.name}</Checkbox>
+            return (<Col span={8} key={item.id}>
+                <Checkbox value={item.id}>{item.name}</Checkbox>
             </Col>);
         });
     };
