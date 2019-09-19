@@ -7,16 +7,11 @@ import PageWrapper from "../components/common/PageWrapper";
 import getConfig from "next/config";
 import RecentProjects from "../components/projects/RecentProjects";
 import {withAuthSync} from "../utils/withAuthSync";
-import {MenuContext} from "../contexts/MenuContextProvider";
-import DefaultMenuItems from "../components/layout/aside/DefaultMenuItems";
 import {useQuery} from "graphql-hooks";
 import {DataStoreContext} from "/home/vivasoft/Downloads/cms-frontend/contexts/DataStoreContextProvider";
 
 const {publicRuntimeConfig} = getConfig();
 const {CREATE_PROJECT_PATH} = publicRuntimeConfig;
-
-const {Meta} = Card;
-
 const {Title} = Typography;
 
 export const projectsQuery = `
@@ -35,8 +30,7 @@ export const projectsQuery = `
 `;
 
 const Dashboard = () => {
-    
-    
+
     const [skip, setSkip] = useState(0);
     const dataStoreContext = useContext(DataStoreContext);
     const [current, setCurrent] = useState(1);
@@ -44,19 +38,12 @@ const Dashboard = () => {
 
     const {loading, error, data, refetch} = useQuery(projectsQuery, {
         variables: {skip, limit: 4},
-        updateData: (prevResult, result) => ({
-            ...result,
-            projects: [...prevResult.projects, ...result.projects]
-        })
     });
     
     const onChange = page => {
         console.log("Page no is: ",page);
         setSkip((page-1)*4);
-        if(page){
-            refetch({variables: {skip, limit: 4}}); 
-            console.log("refetch called!");
-        }
+        setCurrent(page);
     };
 
     useEffect(() => {
@@ -71,30 +58,27 @@ const Dashboard = () => {
             refetch({variables: {skip, limit: 4}});
         }
     }, [dataStoreContext.projectListUpdated]);
-    
 
+    useEffect(() => {
+        console.log("Effect 2 called");
+        if (error) {
+            message.error("Error loading recent projects.");
+        }
+        console.log("loading:", loading);
+        let hideMessage; 
+        if (loading && !data) { 
+            hideMessage && hideMessage();
+            hideMessage = message.loading("Loading recent projects...", 0);
+        } else {
+            hideMessage && hideMessage();
+            hideMessage = null;
+        }
+        if (hideMessage) return hideMessage;
 
-    // useEffect(() => {
-    //     console.log("Effect 2 called");
-    //     if (error) {
-    //         message.error("Error loading recent projects.");
-    //     }
-    //     console.log("loading:", loading);
-    //     let hideMessage; 
-    //     if (loading) {
-    //         hideMessage && hideMessage();
-    //         hideMessage = message.loading("Loading recent projects...", 0);
-    //     } else {
-    //         hideMessage && hideMessage();
-    //         hideMessage = null;
-    //     }
-    //     if (hideMessage) return hideMessage;
-
-    // }, [error, loading]);
+    }, [error, loading, current]);
 
     if (error || !data) return null;
-     const {projects, _projectsMeta} = data;
-
+    const {projects, _projectsMeta} = data;
     console.log("New Project data is: ", projects);
 
     const columns = [
@@ -125,7 +109,6 @@ const Dashboard = () => {
         },
     ];
 
-
     const pageHeader = <PageHeader 
         title="Dashboard" 
         subTitle="This is a subtitle"
@@ -133,7 +116,6 @@ const Dashboard = () => {
         Project</Button></Link>}
     />;
     
-
     return (
         <PageWrapper pageHeader={pageHeader}>
             <Fragment>
@@ -143,7 +125,7 @@ const Dashboard = () => {
                 <Divider/>
 
                 <Title level={3}>All Project</Title>
-                <Table dataSource={projects} columns={columns} pagination={{pageSize: 4, total: 5, defaultCurrent: 1, onChange}} rowKey="id"/>
+                <Table dataSource={projects} columns={columns} pagination={{pageSize: 4, total: 5, current, onChange}} rowKey="id"/>
             </Fragment>
 
         </PageWrapper>
