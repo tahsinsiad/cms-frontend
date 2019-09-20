@@ -4,7 +4,6 @@ import { useQuery, useMutation } from "graphql-hooks";
 import { DataStoreContext } from "../../contexts/DataStoreContextProvider";
 import getConfig from "next/config";
 import Link from "next/link";
-import DeleteWarningModal from "./DeleteWarningModal";
 
 const { publicRuntimeConfig } = getConfig();
 const { PROJECT_PATH } = publicRuntimeConfig;
@@ -97,25 +96,6 @@ const RecentProjects = () => {
         });
     };
 
-    // const showModal = () => {
-    //     setVisible(true);
-    // };
-
-    // const handleOk = async (err, values) => {
-    //     if(!err){
-    //         const result = await deleteProject({
-    //             variables: values
-    //         });
-    //         setVisible(false);
-    //     }
-
-    // };
-
-    // const handleCancel = e => {
-    //     console.log(e);
-    //     setVisible(false);
-    // };
-
     return (
         <Fragment>
             <Row gutter={4}>
@@ -153,11 +133,6 @@ const RecentProjects = () => {
                     </Col>
                 ))}
             </Row>
-            {/* <DeleteWarningModal
-                visible={visible}
-                handleOk={handleOk}
-                handleCancel={handleCancel}
-            /> */}
         </Fragment>
     );
 };
