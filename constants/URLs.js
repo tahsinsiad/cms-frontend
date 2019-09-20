@@ -33,6 +33,8 @@ module.exports = function getURLConstants(env) {
 
     const ERROR_PAGE = `${ROOT_PATH}_error`;
 
+    const PROFILE_PATH = `${ROOT_PATH}profile`;
+
     return {
         API_BASE_URL,
         GRAPHQL_URL,
@@ -49,6 +51,7 @@ module.exports = function getURLConstants(env) {
         PROJECT_PATH,
         PROJECT_SETTINGS_PATH,
         CREATE_PROJECT_PATH,
-        ERROR_PAGE
+        ERROR_PAGE,
+        PROFILE_PATH
     };
 };
