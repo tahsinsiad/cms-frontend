@@ -27,10 +27,8 @@ export const recentProjectsQuery = `
 `;
 
 const DELETEPROJECT = `
-  mutation deleteProject($id: ID!){
-      deleteProject(id: $id){
-          id
-      }
+  mutation DeleteProject($id: ID!){
+    deleteProject(id: $id)
   }
 `;
 
@@ -82,13 +80,15 @@ const RecentProjects = () => {
     const showDeleteConfirm = (id ) => {
         confirm({
             title: "Are you sure delete this task?",
-            content: "Some descriptions",
+            content: "",
             okText: "Yes",
             okType: "danger",
             cancelText: "No",
             onOk() {
                 console.log("Id from onOk:",id);
                 deleteProject({ variables: { id } });
+                dataStoreContext.setProjectListUpdated(true);
+                refetch({ variables: { skip, limit: 4 } });
             },
             onCancel() {
                 console.log("Cancel");

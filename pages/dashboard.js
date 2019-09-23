@@ -75,7 +75,7 @@ const Dashboard = () => {
         }
         if (hideMessage) return hideMessage;
 
-    }, [error, loading, current]);
+    }, [error, loading]);
 
     if (error || !data) return null;
     const {projects, _projectsMeta} = data;
@@ -125,7 +125,7 @@ const Dashboard = () => {
                 <Divider/>
 
                 <Title level={3}>All Project</Title>
-                <Table dataSource={projects} columns={columns} pagination={{pageSize: 4, total: 5, current, onChange}} rowKey="id"/>
+                <Table dataSource={projects} columns={columns} pagination={{pageSize: 4, total: _projectsMeta.count, current, onChange}} rowKey="id"/>
             </Fragment>
 
         </PageWrapper>

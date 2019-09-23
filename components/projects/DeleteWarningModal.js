@@ -2,6 +2,7 @@ import React from "react";
 import {Modal} from "antd";
 
 
+// eslint-disable-next-line react/prop-types
 const DeleteWarningModal = ({visible, handleOk, handleCancel}) => {
     return (
         <Modal
