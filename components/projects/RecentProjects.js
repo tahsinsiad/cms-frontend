@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState, Fragment } from "react";
-import { Card, Col, Icon, message, Row, Button, Modal } from "antd";
-import { useQuery, useMutation } from "graphql-hooks";
-import { DataStoreContext } from "../../contexts/DataStoreContextProvider";
+import React, {Fragment, useContext, useEffect, useState} from "react";
+import {Button, Card, Col, Icon, message, Modal, Row} from "antd";
+import {useQuery} from "graphql-hooks";
+import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
 import getConfig from "next/config";
 import Link from "next/link";
 import DeleteWarningModal from "./DeleteWarningModal";
@@ -97,7 +97,7 @@ const RecentProjects = () => {
         setVisible(true);
         setProject(project_handle);
     };
-    const success = () => {
+    const onDeleteProjectSuccess = () => {
         setVisible(false);
     };
 
@@ -139,12 +139,11 @@ const RecentProjects = () => {
                 ))}
             </Row>
             <DeleteWarningModal
-                    visible={visible}
-                    project={project}
-                    handleCancel={onCancel}
-                    success={success}
-
-                />
+                visible={visible}
+                project={project}
+                handleCancel={onCancel}
+                onSuccess={onDeleteProjectSuccess}
+            />
         </Fragment>
     );
 };

@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 export const availableComponentQuery = `
   query availableComponentQuery($projectId: String!, $limit: Int!, $skip: Int!) {
     allAvailableComponents(projectId: $projectId, limit: $limit, skip: $skip) {
-      id
+      importSignature
       name
       props
     }
@@ -16,6 +16,7 @@ export const availableComponentQuery = `
 
 const AvailableComponentList = ({ onSelect }) => {
     const [skip, setSkip] = useState(0);
+    const [limit, setLimit] = useState(10);
     //const dataStoreContext = useContext(DataStoreContext);
     const router = useRouter();
     const projectId = router.query.id;
@@ -23,23 +24,16 @@ const AvailableComponentList = ({ onSelect }) => {
     const { loading, error, data, refetch } = useQuery(
         availableComponentQuery,
         {
-            variables: { projectId, skip, limit: 4 },
-            updateData: (prevResult, result) => ({
-                ...result,
-                allAvailableComponents: [
-                    ...prevResult.allAvailableComponents,
-                    ...result.allAvailableComponents
-                ]
-            })
+            variables: {projectId, skip, limit: limit},
+            // updateData: (prevResult, result) => ({
+            //     ...result,
+            //     allAvailableComponents: [
+            //         ...prevResult.allAvailableComponents,
+            //         ...result.allAvailableComponents
+            //     ]
+            // })
         }
     );
-
-    // useEffect(() => {
-    //     if (dataStoreContext.projectListUpdated) {
-    //         dataStoreContext.setProjectListUpdated(false);
-    //         refetch({variables: {skip, limit: 4}});
-    //     }
-    // }, [dataStoreContext.projectListUpdated]);
 
     useEffect(() => {
         if (error) {
@@ -60,10 +54,7 @@ const AvailableComponentList = ({ onSelect }) => {
     if (error || !data) return <Row gutter={4} />;
     const { allAvailableComponents } = data;
 
-    console.log(
-        "allAvailableComponents",
-        JSON.stringify(allAvailableComponents)
-    );
+    console.log("allAvailableComponents", allAvailableComponents);
 
     const getComponents = item => {
         return item.map(item => {

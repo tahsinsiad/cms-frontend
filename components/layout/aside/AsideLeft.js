@@ -59,16 +59,20 @@ const AsideLeft = ({collapsed, router, style}) => {
                             menuContext.setOpenedKeys(menuContext.openedKeys[0] === item.key ? [] : [item.key]);
                         }
                     }}
-                    onTitleMouseEnter={() => collapsed && menuContext.setOpenedKeys([item.key])}
+                    onTitleMouseEnter={() => {
+                        if (collapsed) {
+                            menuContext.setOpenedKeys([item.key]);
+                            typeof item.onClick === "function" && item.onClick(menuContext, item);
+                        }
+                    }}
                     onTitleMouseLeave={() => collapsed && menuContext.setOpenedKeys([])}
                     key={item.key}
                     title={
                         <span>
-                    {item.icon}
+                            {item.icon}
                             <span>{item.title}</span>
-                  </span>
-                    }
-                >
+                        </span>
+                    }>
                     <div key="__skeleton" className="submenu-skeleton">
                         <div className="submenu-skeleton-content">
                             <ul className="submenu-skeleton-paragraph">
@@ -88,16 +92,20 @@ const AsideLeft = ({collapsed, router, style}) => {
                         menuContext.setOpenedKeys(menuContext.openedKeys[0] === item.key ? [] : [item.key]);
                     }
                 }}
-                onTitleMouseEnter={() => collapsed && menuContext.setOpenedKeys([item.key])}
+                onTitleMouseEnter={() => {
+                    if (collapsed) {
+                        menuContext.setOpenedKeys([item.key]);
+                        typeof item.onClick === "function" && item.onClick(menuContext, item);
+                    }
+                }}
                 onTitleMouseLeave={() => collapsed && menuContext.setOpenedKeys([])}
                 key={item.key}
                 title={
                     <span>
-                {item.icon}
+                        {item.icon}
                         <span>{item.title}</span>
-              </span>
-                }
-            >
+                    </span>
+                }>
                 {item.subMenu.map(item => getMenuItems(item))}
             </SubMenu>
         );
@@ -121,7 +129,8 @@ const AsideLeft = ({collapsed, router, style}) => {
                 <a><Brand brandText={"Pi-CMS"} icon={<Icon style={{color: "#ff0000"}} type="dingding"/>}
                           className={headerLogoClassName}/></a>
             </Link>
-            <Menu theme="dark" mode="inline" selectedKeys={menuContext.selectedKeys} openKeys={menuContext.openedKeys}
+            <Menu theme="dark" mode="inline" selectedKeys={menuContext.selectedKeys}
+                  defaultOpenKeys={menuContext.openedKeys}
                   style={style}>
                 {Object.values(menuContext.menuItems).map(item => getMenuItems(item))}
             </Menu>

@@ -1,23 +1,13 @@
-import React, { Fragment } from "react";
-import {
-    Button,
-    Icon,
-    Divider,
-    PageHeader,
-    Table,
-    Typography,
-    message,
-    Popconfirm
-} from "antd";
+import React, {Fragment, useContext, useEffect, useState} from "react";
+import {Button, Divider, Icon, message, PageHeader, Table, Typography} from "antd";
 import Link from "next/link";
 import "../static/scss/dashboard.scss";
-import { useState, useContext, useEffect } from "react";
 import PageWrapper from "../components/common/PageWrapper";
 import getConfig from "next/config";
 import RecentProjects from "../components/projects/RecentProjects";
-import { withAuthSync } from "../utils/withAuthSync";
-import { useQuery, useMutation } from "graphql-hooks";
-import { DataStoreContext } from "../contexts/DataStoreContextProvider";
+import {withAuthSync} from "../utils/withAuthSync";
+import {useQuery} from "graphql-hooks";
+import {DataStoreContext} from "../contexts/DataStoreContextProvider";
 import DeleteWarningModal from "../components/projects/DeleteWarningModal";
 
 const { publicRuntimeConfig } = getConfig();
@@ -42,31 +32,27 @@ export const projectsQuery = `
 
 const Dashboard = () => {
     const [skip, setSkip] = useState(0);
+    const [pageSize, setPageSize] = useState(5);
     const dataStoreContext = useContext(DataStoreContext);
     const [current, setCurrent] = useState(1);
     const [visible, setVisible] = useState(false);
     const [project, setProject] = useState({});
 
     const { loading, error, data, refetch } = useQuery(projectsQuery, {
-        variables: { skip, limit: 4 }
+        variables: {skip, limit: pageSize}
     });
 
     const onChange = page => {
         console.log("Page no is: ", page);
-        setSkip((page - 1) * 4);
+        setSkip((page - 1) * pageSize);
         setCurrent(page);
     };
-
-    useEffect(() => {
-        // menuContext.setMenuItems(DefaultMenuItems);
-        // menuContext.setSelectedKeys([Dashboard.routeInfo.slug]);
-    }, []);
 
     useEffect(() => {
         console.log("Effect 1 called");
         if (dataStoreContext.projectListUpdated) {
             dataStoreContext.setProjectListUpdated(false);
-            refetch({ variables: { skip, limit: 4 } });
+            refetch({variables: {skip, limit: pageSize}});
         }
     }, [dataStoreContext.projectListUpdated]);
 
@@ -98,16 +84,16 @@ const Dashboard = () => {
         setVisible(true);
         setProject(project_handle);
     };
-    const success = () => {
+    const onDeleteProjectSuccess = () => {
         setVisible(false);
     };
 
     const columns = [
-        {
-            title: "Id",
-            dataIndex: "id",
-            key: "id"
-        },
+        // {
+        //     title: "Id",
+        //     dataIndex: "id",
+        //     key: "id"
+        // },
         {
             title: "Title",
             dataIndex: "title",
@@ -176,7 +162,7 @@ const Dashboard = () => {
                     dataSource={projects}
                     columns={columns}
                     pagination={{
-                        pageSize: 4,
+                        pageSize: pageSize,
                         total: _projectsMeta.count,
                         current,
                         onChange
@@ -187,7 +173,7 @@ const Dashboard = () => {
                     visible={visible}
                     project={project}
                     handleCancel={onCancel}
-                    success={success}
+                    onSuccess={onDeleteProjectSuccess}
 
                 />
             </Fragment>
