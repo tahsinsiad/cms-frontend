@@ -88,7 +88,7 @@ const RecentProjects = () => {
                 console.log("Id from onOk:",id);
                 deleteProject({ variables: { id } });
                 dataStoreContext.setProjectListUpdated(true);
-                refetch({ variables: { skip, limit: 4 } });
+                //refetch({ variables: { skip, limit: 4 } });
             },
             onCancel() {
                 console.log("Cancel");

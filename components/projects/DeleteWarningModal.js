@@ -1,8 +1,7 @@
 import React from "react";
 import {Modal} from "antd";
+import * as PropTypes from "prop-types";
 
-
-// eslint-disable-next-line react/prop-types
 const DeleteWarningModal = ({visible, handleOk, handleCancel}) => {
     return (
         <Modal
@@ -17,6 +16,12 @@ const DeleteWarningModal = ({visible, handleOk, handleCancel}) => {
             <p>Do you want to delete the project?</p>
         </Modal>
     );
+};
+
+DeleteWarningModal.propTypes = {
+    visible: PropTypes.bool,
+    handleOk: PropTypes.func,
+    handleCancel: PropTypes.func
 };
 
 export default DeleteWarningModal;

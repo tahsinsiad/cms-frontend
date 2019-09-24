@@ -21,7 +21,7 @@ const NavHeader = () => {
     const menu = (
         <Menu style={{minWidth: "120px"}} theme="dark">
             <Menu.Item key="0">
-                <Link href="/profile"><a>Profile</a></Link>
+                <Link href={PROFILE_PATH}><a>Profile</a></Link>
             </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key="1" onClick={logout}>
