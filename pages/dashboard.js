@@ -21,7 +21,7 @@ import { DataStoreContext } from "../contexts/DataStoreContextProvider";
 import DeleteWarningModal from "../components/projects/DeleteWarningModal";
 
 const { publicRuntimeConfig } = getConfig();
-const { CREATE_PROJECT_PATH } = publicRuntimeConfig;
+const { CREATE_PROJECT_PATH, PROJECT_PATH } = publicRuntimeConfig;
 const { Title } = Typography;
 
 export const projectsQuery = `
@@ -39,21 +39,13 @@ export const projectsQuery = `
 }
 `;
 
-// const DELETEPROJECT = `
-//   mutation DeleteProject($id: ID!){
-//     deleteProject(id: $id)
-//   }
-// `;
 
 const Dashboard = () => {
     const [skip, setSkip] = useState(0);
     const dataStoreContext = useContext(DataStoreContext);
     const [current, setCurrent] = useState(1);
-    let [dataSource, setDataSource] = useState([]);
-    //const [deleteProject] = useMutation(DELETEPROJECT);
     const [visible, setVisible] = useState(false);
-    const [project,setProject]=useState({});
-    // const menuContext = React.useContext(MenuContext);
+    const [project, setProject] = useState({});
 
     const { loading, error, data, refetch } = useQuery(projectsQuery, {
         variables: { skip, limit: 4 }
@@ -97,8 +89,6 @@ const Dashboard = () => {
 
     if (error || !data) return null;
     const { projects, _projectsMeta } = data;
-    dataSource = [...projects];
-    console.log("New Project data is: ", dataSource);
 
     const onCancel = () => {
         setVisible(false);
@@ -108,7 +98,7 @@ const Dashboard = () => {
         setVisible(true);
         setProject(project_handle);
     };
-    const success = () =>{
+    const success = () => {
         setVisible(false);
     };
 
@@ -142,17 +132,19 @@ const Dashboard = () => {
         {
             title: "Action",
             key: "action",
-            render: (text,record) => (
+            render: (text, record) => (
                 <span>
-                    <a>
-                        <Icon style={{ color: "blue" }} type="edit" />
-                    </a>
+                    <Link href={`${PROJECT_PATH}?id=${record.id}`}>
+                        <a>
+                            <Icon style={{ color: "blue" }} type="edit" />
+                        </a>
+                    </Link>
                     <Divider type="vertical" />
                     <Fragment>
-                        <a onClick={()=> handleClick(record)}>
+                        <a onClick={() => handleClick(record)}>
                             <Icon style={{ color: "red" }} type="delete" />
                         </a>
-                        
+
                     </Fragment>
                 </span>
             )
@@ -192,12 +184,12 @@ const Dashboard = () => {
                     rowKey="id"
                 />
                 <DeleteWarningModal
-                            visible={visible}
-                            project={project}
-                            handleCancel={onCancel}
-                            success={success}
+                    visible={visible}
+                    project={project}
+                    handleCancel={onCancel}
+                    success={success}
 
-                        />
+                />
             </Fragment>
         </PageWrapper>
     );

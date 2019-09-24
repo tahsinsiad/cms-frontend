@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "graphql-hooks";
 import { DataStoreContext } from "../../contexts/DataStoreContextProvider";
 import getConfig from "next/config";
 import Link from "next/link";
+import DeleteWarningModal from "./DeleteWarningModal";
 
 const { publicRuntimeConfig } = getConfig();
 const { PROJECT_PATH } = publicRuntimeConfig;
@@ -26,18 +27,12 @@ export const recentProjectsQuery = `
   }
 `;
 
-const DELETEPROJECT = `
-  mutation DeleteProject($id: ID!){
-    deleteProject(id: $id)
-  }
-`;
 
 const RecentProjects = () => {
     const [skip, setSkip] = useState(0);
     const [visible, setVisible] = useState(false);
     const dataStoreContext = useContext(DataStoreContext);
-
-    const [deleteProject] = useMutation(DELETEPROJECT);
+    const [project, setProject] = useState({});
 
     const { loading, error, data, refetch } = useQuery(recentProjectsQuery, {
         variables: { skip, limit: 4 },
@@ -73,27 +68,37 @@ const RecentProjects = () => {
     if (error || !data) return <Row gutter={4} />;
     const { projects, _projectsMeta } = data;
 
-    // console.log("Project data is: ", projects);
+    //-------------- Keeping it for future task --------------
 
-    // const areMoreProjects = projects.length < _projectsMeta.count;
+    // const showDeleteConfirm = (id ) => {
+    //     confirm({
+    //         title: "Are you sure delete this task?",
+    //         content: "",
+    //         okText: "Yes",
+    //         okType: "danger",
+    //         cancelText: "No",
+    //         onOk() {
+    //             console.log("Id from onOk:",id);
+    //             deleteProject({ variables: { id } });
+    //             dataStoreContext.setProjectListUpdated(true);
+    //             //refetch({ variables: { skip, limit: 4 } });
+    //         },
+    //         onCancel() {
+    //             console.log("Cancel");
+    //         }
+    //     });
+    // };
 
-    const showDeleteConfirm = (id ) => {
-        confirm({
-            title: "Are you sure delete this task?",
-            content: "",
-            okText: "Yes",
-            okType: "danger",
-            cancelText: "No",
-            onOk() {
-                console.log("Id from onOk:",id);
-                deleteProject({ variables: { id } });
-                dataStoreContext.setProjectListUpdated(true);
-                //refetch({ variables: { skip, limit: 4 } });
-            },
-            onCancel() {
-                console.log("Cancel");
-            }
-        });
+    const onCancel = () => {
+        setVisible(false);
+    };
+
+    const handleClick = (project_handle) => {
+        setVisible(true);
+        setProject(project_handle);
+    };
+    const success = () => {
+        setVisible(false);
     };
 
     return (
@@ -116,8 +121,8 @@ const RecentProjects = () => {
                                 </Link>,
                                 <Button style={{border: 0, padding: 0}}
                                     onClick={() => {
-                                        console.log("Id is: ", project.id);
-                                        showDeleteConfirm(project.id);
+                                        console.log("Id is: ", project);
+                                        handleClick(project);
                                     }}
                                 >
                                     <Icon type="delete" />
@@ -133,6 +138,13 @@ const RecentProjects = () => {
                     </Col>
                 ))}
             </Row>
+            <DeleteWarningModal
+                    visible={visible}
+                    project={project}
+                    handleCancel={onCancel}
+                    success={success}
+
+                />
         </Fragment>
     );
 };
