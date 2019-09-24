@@ -2,7 +2,7 @@ import React from "react";
 import {PageHeader} from "antd";
 
 import PageWrapper from "../components/common/PageWrapper";
-import ProjectCreateForm from "../components/forms/project_forms/ProjectCreateForm";
+import ProjectCreateForm from "../components/projects/ProjectCreateForm";
 import {withAuthSync} from "../utils/withAuthSync";
 import {MenuContext} from "../contexts/MenuContextProvider";
 import DefaultMenuItems from "../components/layout/aside/DefaultMenuItems";

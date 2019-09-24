@@ -1,18 +1,28 @@
-import React, {Fragment} from "react";
-import {Button, Card, Divider, PageHeader, Table, Typography, message} from "antd";
+import React, { Fragment } from "react";
+import {
+    Button,
+    Icon,
+    Divider,
+    PageHeader,
+    Table,
+    Typography,
+    message,
+    Popconfirm
+} from "antd";
 import Link from "next/link";
 import "../static/scss/dashboard.scss";
-import {useState, useContext, useEffect} from "react";
+import { useState, useContext, useEffect } from "react";
 import PageWrapper from "../components/common/PageWrapper";
 import getConfig from "next/config";
 import RecentProjects from "../components/projects/RecentProjects";
-import {withAuthSync} from "../utils/withAuthSync";
-import {useQuery} from "graphql-hooks";
-import {DataStoreContext} from "/home/vivasoft/Downloads/cms-frontend/contexts/DataStoreContextProvider";
+import { withAuthSync } from "../utils/withAuthSync";
+import { useQuery, useMutation } from "graphql-hooks";
+import { DataStoreContext } from "../contexts/DataStoreContextProvider";
+import DeleteWarningModal from "../components/projects/DeleteWarningModal";
 
-const {publicRuntimeConfig} = getConfig();
-const {CREATE_PROJECT_PATH} = publicRuntimeConfig;
-const {Title} = Typography;
+const { publicRuntimeConfig } = getConfig();
+const { CREATE_PROJECT_PATH, PROJECT_PATH } = publicRuntimeConfig;
+const { Title } = Typography;
 
 export const projectsQuery = `
   query projectsQuery($limit: Int!, $skip: Int!) {
@@ -29,20 +39,21 @@ export const projectsQuery = `
 }
 `;
 
-const Dashboard = () => {
 
+const Dashboard = () => {
     const [skip, setSkip] = useState(0);
     const dataStoreContext = useContext(DataStoreContext);
     const [current, setCurrent] = useState(1);
-    // const menuContext = React.useContext(MenuContext);
+    const [visible, setVisible] = useState(false);
+    const [project, setProject] = useState({});
 
-    const {loading, error, data, refetch} = useQuery(projectsQuery, {
-        variables: {skip, limit: 4},
+    const { loading, error, data, refetch } = useQuery(projectsQuery, {
+        variables: { skip, limit: 4 }
     });
-    
+
     const onChange = page => {
-        console.log("Page no is: ",page);
-        setSkip((page-1)*4);
+        console.log("Page no is: ", page);
+        setSkip((page - 1) * 4);
         setCurrent(page);
     };
 
@@ -55,7 +66,7 @@ const Dashboard = () => {
         console.log("Effect 1 called");
         if (dataStoreContext.projectListUpdated) {
             dataStoreContext.setProjectListUpdated(false);
-            refetch({variables: {skip, limit: 4}});
+            refetch({ variables: { skip, limit: 4 } });
         }
     }, [dataStoreContext.projectListUpdated]);
 
@@ -65,8 +76,8 @@ const Dashboard = () => {
             message.error("Error loading recent projects.");
         }
         console.log("loading:", loading);
-        let hideMessage; 
-        if (loading && !data) { 
+        let hideMessage;
+        if (loading && !data) {
             hideMessage && hideMessage();
             hideMessage = message.loading("Loading recent projects...", 0);
         } else {
@@ -74,60 +85,112 @@ const Dashboard = () => {
             hideMessage = null;
         }
         if (hideMessage) return hideMessage;
-
-    }, [error, loading, current]);
+    }, [error, loading]);
 
     if (error || !data) return null;
-    const {projects, _projectsMeta} = data;
-    console.log("New Project data is: ", projects);
+    const { projects, _projectsMeta } = data;
+
+    const onCancel = () => {
+        setVisible(false);
+    };
+
+    const handleClick = (project_handle) => {
+        setVisible(true);
+        setProject(project_handle);
+    };
+    const success = () => {
+        setVisible(false);
+    };
 
     const columns = [
         {
             title: "Id",
             dataIndex: "id",
-            key: "id",
+            key: "id"
         },
         {
             title: "Title",
             dataIndex: "title",
             key: "title",
+            editable: true
         },
         {
             title: "Description",
             dataIndex: "description",
-            key: "description",
+            key: "description"
         },
         {
             title: "WebsiteUrl",
             dataIndex: "websiteUrl",
-            key: "websiteUrl",
+            key: "websiteUrl"
         },
         {
             title: "ModifiedAt",
             dataIndex: "modifiedAt",
-            key: "modifiedAt",
+            key: "modifiedAt"
         },
+        {
+            title: "Action",
+            key: "action",
+            render: (text, record) => (
+                <span>
+                    <Link href={`${PROJECT_PATH}?id=${record.id}`}>
+                        <a>
+                            <Icon style={{ color: "blue" }} type="edit" />
+                        </a>
+                    </Link>
+                    <Divider type="vertical" />
+                    <Fragment>
+                        <a onClick={() => handleClick(record)}>
+                            <Icon style={{ color: "red" }} type="delete" />
+                        </a>
+
+                    </Fragment>
+                </span>
+            )
+        }
     ];
 
-    const pageHeader = <PageHeader 
-        title="Dashboard" 
-        subTitle="This is a subtitle"
-        extra={<Link href={CREATE_PROJECT_PATH}><Button type="primary">New
-        Project</Button></Link>}
-    />;
-    
+    const pageHeader = (
+        <PageHeader
+            title="Dashboard"
+            subTitle="This is a subtitle"
+            extra={
+                <Link href={CREATE_PROJECT_PATH}>
+                    <Button type="primary">New Project</Button>
+                </Link>
+            }
+        />
+    );
+
     return (
         <PageWrapper pageHeader={pageHeader}>
             <Fragment>
                 <Title level={3}>Recent Project</Title>
-                <RecentProjects/>
+                <RecentProjects />
 
-                <Divider/>
+                <Divider />
 
                 <Title level={3}>All Project</Title>
-                <Table dataSource={projects} columns={columns} pagination={{pageSize: 4, total: 5, current, onChange}} rowKey="id"/>
-            </Fragment>
+                <Table
+                    dataSource={projects}
+                    columns={columns}
+                    pagination={{
+                        pageSize: 4,
+                        total: _projectsMeta.count,
+                        current,
+                        onChange
+                    }}
+                    rowKey="id"
+                />
+                <DeleteWarningModal
+                    visible={visible}
+                    project={project}
+                    handleCancel={onCancel}
+                    success={success}
 
+                />
+            </Fragment>
         </PageWrapper>
     );
 };

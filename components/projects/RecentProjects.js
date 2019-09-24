@@ -1,14 +1,16 @@
-import React, {useContext, useEffect, useState} from "react";
-import {Card, Col, Icon, message, Row} from "antd";
-import {useQuery} from "graphql-hooks";
-import {DataStoreContext} from "../../contexts/DataStoreContextProvider";
+import React, { useContext, useEffect, useState, Fragment } from "react";
+import { Card, Col, Icon, message, Row, Button, Modal } from "antd";
+import { useQuery, useMutation } from "graphql-hooks";
+import { DataStoreContext } from "../../contexts/DataStoreContextProvider";
 import getConfig from "next/config";
 import Link from "next/link";
+import DeleteWarningModal from "./DeleteWarningModal";
 
-const {publicRuntimeConfig} = getConfig();
-const {PROJECT_PATH} = publicRuntimeConfig;
+const { publicRuntimeConfig } = getConfig();
+const { PROJECT_PATH } = publicRuntimeConfig;
 
-const {Meta} = Card;
+const { Meta } = Card;
+const { confirm } = Modal;
 
 export const recentProjectsQuery = `
   query recentProjectsQuery($limit: Int!, $skip: Int!) {
@@ -25,15 +27,15 @@ export const recentProjectsQuery = `
   }
 `;
 
+
 const RecentProjects = () => {
-
     const [skip, setSkip] = useState(0);
+    const [visible, setVisible] = useState(false);
     const dataStoreContext = useContext(DataStoreContext);
+    const [project, setProject] = useState({});
 
-    
-
-    const {loading, error, data, refetch} = useQuery(recentProjectsQuery, {
-        variables: {skip, limit: 4},
+    const { loading, error, data, refetch } = useQuery(recentProjectsQuery, {
+        variables: { skip, limit: 4 },
         updateData: (prevResult, result) => ({
             ...result,
             projects: [...prevResult.projects, ...result.projects]
@@ -43,7 +45,7 @@ const RecentProjects = () => {
     useEffect(() => {
         if (dataStoreContext.projectListUpdated) {
             dataStoreContext.setProjectListUpdated(false);
-            refetch({variables: {skip, limit: 4}});
+            refetch({ variables: { skip, limit: 4 } });
         }
     }, [dataStoreContext.projectListUpdated]);
 
@@ -63,30 +65,89 @@ const RecentProjects = () => {
         if (hideMessage) return hideMessage;
     }, [error, loading]);
 
-    if (error || !data) return <Row gutter={4}/>;
-    const {projects, _projectsMeta} = data;
+    if (error || !data) return <Row gutter={4} />;
+    const { projects, _projectsMeta } = data;
 
-   // console.log("Project data is: ", projects);
+    //-------------- Keeping it for future task --------------
 
-    // const areMoreProjects = projects.length < _projectsMeta.count;
+    // const showDeleteConfirm = (id ) => {
+    //     confirm({
+    //         title: "Are you sure delete this task?",
+    //         content: "",
+    //         okText: "Yes",
+    //         okType: "danger",
+    //         cancelText: "No",
+    //         onOk() {
+    //             console.log("Id from onOk:",id);
+    //             deleteProject({ variables: { id } });
+    //             dataStoreContext.setProjectListUpdated(true);
+    //             //refetch({ variables: { skip, limit: 4 } });
+    //         },
+    //         onCancel() {
+    //             console.log("Cancel");
+    //         }
+    //     });
+    // };
+
+    const onCancel = () => {
+        setVisible(false);
+    };
+
+    const handleClick = (project_handle) => {
+        setVisible(true);
+        setProject(project_handle);
+    };
+    const success = () => {
+        setVisible(false);
+    };
+
     return (
-        <Row gutter={4}>
-            {projects.map((project) => (
-                <Col key={project.id} xs={24} sm={6}>
-                    <Card
-                        cover={<img alt="Default Project Cover"
-                                    src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"/>}
-                        actions={[<Link href={`${PROJECT_PATH}?id=${project.id}`}><a><Icon
-                            type="edit"/></a></Link>, <Icon type="delete"/>]}
+        <Fragment>
+            <Row gutter={4}>
+                {projects.map(project => (
+                    <Col key={project.id} xs={24} sm={6}>
+                        <Card
+                            cover={
+                                <img
+                                    alt="Default Project Cover"
+                                    src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                />
+                            }
+                            actions={[
+                                <Link href={`${PROJECT_PATH}?id=${project.id}`}>
+                                    <a>
+                                        <Icon type="edit" />
+                                    </a>
+                                </Link>,
+                                <Button style={{border: 0, padding: 0}}
+                                    onClick={() => {
+                                        console.log("Id is: ", project);
+                                        handleClick(project);
+                                    }}
+                                >
+                                    <Icon type="delete" />
+                                </Button>
+                            ]}
                             hoverable
-                    >
-                        <Meta title={project.title} description={project.description}/>
-                    </Card>
-                </Col>))}
-        </Row>
+                        >
+                            <Meta
+                                title={project.title}
+                                description={project.description}
+                            />
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+            <DeleteWarningModal
+                    visible={visible}
+                    project={project}
+                    handleCancel={onCancel}
+                    success={success}
+
+                />
+        </Fragment>
     );
 };
-
 
 RecentProjects.propTypes = {};
 
