@@ -114,7 +114,7 @@ const RecentProjects = () => {
                                         <Icon type="edit" />
                                     </a>
                                 </Link>,
-                                <Button
+                                <Button style={{border: 0, padding: 0}}
                                     onClick={() => {
                                         console.log("Id is: ", project.id);
                                         showDeleteConfirm(project.id);
