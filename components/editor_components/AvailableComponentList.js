@@ -7,6 +7,7 @@ import {useRouter} from "next/router";
 export const availableComponentQuery = `
   query availableComponentQuery($projectId: String!, $limit: Int!, $skip: Int!) {
     allAvailableComponents(projectId: $projectId, limit: $limit, skip: $skip) {
+      id
       importSignature
       name
       props
@@ -14,7 +15,7 @@ export const availableComponentQuery = `
   }
 `;
 
-const AvailableComponentList = ({ onSelect }) => {
+const AvailableComponentList = ({onSelect, selectedComponents}) => {
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(10);
     //const dataStoreContext = useContext(DataStoreContext);
@@ -69,14 +70,15 @@ const AvailableComponentList = ({ onSelect }) => {
         onSelect(checkedValues);
     };
     return (
-        <Checkbox.Group style={{ width: "100%" }} onChange={onChange}>
+        <Checkbox.Group style={{width: "100%"}} onChange={onChange} value={selectedComponents}>
             <Row>{getComponents(allAvailableComponents)}</Row>
         </Checkbox.Group>
     );
 };
 
 AvailableComponentList.propTypes = {
-    onSelect: PropTypes.func
+    onSelect: PropTypes.func,
+    selectedComponents: PropTypes.array
 };
 
 export default AvailableComponentList;
