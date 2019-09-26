@@ -13,7 +13,6 @@ const DELETE_PROJECT = `
 const DeleteWarningModal = ({visible, project, handleCancel, onSuccess}) => {
     const dataStoreContext = useContext(DataStoreContext);
     const [deleteProject] = useMutation(DELETE_PROJECT);
-    console.log("Delete", project);
 
     const deleteHandler = async (project) => {
         console.log("Id from onOk:", project.id);

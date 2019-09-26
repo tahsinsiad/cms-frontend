@@ -8,4 +8,10 @@ const ProfileDetails = () => {
     );
 };
 
+ProfileDetails.routeInfo = {
+    slug: "profile-setting",
+    path: "/profile-setting",
+    pathAs: "/profile-setting"
+};
+
 export default ProfileDetails;

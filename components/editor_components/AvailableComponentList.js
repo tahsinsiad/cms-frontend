@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
-import {Checkbox, Col, message, Row} from "antd";
+import React, { useEffect, useState } from "react";
+import { Checkbox, Col, message, Row, List, Spin } from "antd";
 import * as PropTypes from "prop-types";
-import {useQuery} from "graphql-hooks";
-import {useRouter} from "next/router";
+import { useQuery } from "graphql-hooks";
+import { useRouter } from "next/router";
+// import InfiniteScroll from "react-infinite-scroller";
 
 export const availableComponentQuery = `
   query availableComponentQuery($projectId: String!, $limit: Int!, $skip: Int!) {
@@ -17,6 +18,8 @@ export const availableComponentQuery = `
 const AvailableComponentList = ({ onSelect }) => {
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(10);
+    const [load, setLoad] = useState(false);
+    const [hasMore, setHasmore] = useState(true);
     //const dataStoreContext = useContext(DataStoreContext);
     const router = useRouter();
     const projectId = router.query.id;
@@ -24,7 +27,7 @@ const AvailableComponentList = ({ onSelect }) => {
     const { loading, error, data, refetch } = useQuery(
         availableComponentQuery,
         {
-            variables: {projectId, skip, limit: limit},
+            variables: { projectId, skip, limit: limit },
             // updateData: (prevResult, result) => ({
             //     ...result,
             //     allAvailableComponents: [
@@ -58,11 +61,33 @@ const AvailableComponentList = ({ onSelect }) => {
 
     const getComponents = item => {
         return item.map(item => {
-            return (<Col span={8} key={item.id}>
-                <Checkbox value={item.id}>{item.name}</Checkbox>
+            return (<Col span={8} key={item.importSignature}>
+                <Checkbox value={item.importSignature}>{item.name}</Checkbox>
             </Col>);
         });
     };
+
+    // const getComponents = item => {
+    //     return item.map(item => {
+    //         return (
+    //             <List.Item key={item.importSignature}>
+    //                 <Checkbox value={item.importSignature}>{item.name}</Checkbox>
+    //             </List.Item>
+    //         );
+    //     });
+    // };
+
+    // const handleInfiniteLoad = () => {
+    //     setLoad(true);
+    //     if (allAvailableComponents.length >= data.length) {
+    //         setHasmore(false);
+    //         setLoad(false);
+
+    //         return;
+    //     }
+    //     refetch({ variables: { skip, limit: limit } });
+    //     setLoad(false);
+    // };
 
     const onChange = checkedValues => {
         console.log("checked = ", checkedValues);
@@ -72,8 +97,29 @@ const AvailableComponentList = ({ onSelect }) => {
         <Checkbox.Group style={{ width: "100%" }} onChange={onChange}>
             <Row>{getComponents(allAvailableComponents)}</Row>
         </Checkbox.Group>
+        // <div className="demo-infinite-container">
+        //     <InfiniteScroll
+        //         initialLoad={false}
+        //         pageStart={0}
+        //         loadMore={handleInfiniteLoad}
+        //         hasMore={!load && hasMore}
+        //         useWindow={false}
+        //     >
+        //         <List
+        //             dataSource={this.state.data}
+        //             renderItem={getComponents(allAvailableComponents)}
+        //         >
+        //             {this.state.loading && this.state.hasMore && (
+        //                 <div className="demo-loading-container">
+        //                     <Spin />
+        //                 </div>
+        //             )}
+        //         </List>
+        //     </InfiniteScroll>
+        // </div>
     );
 };
+
 
 AvailableComponentList.propTypes = {
     onSelect: PropTypes.func

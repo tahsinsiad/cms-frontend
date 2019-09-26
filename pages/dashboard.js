@@ -1,14 +1,25 @@
-import React, {Fragment, useContext, useEffect, useState} from "react";
-import {Button, Divider, Icon, message, PageHeader, Table, Typography} from "antd";
+import React, { Fragment, useContext, useEffect, useState } from "react";
+import {
+    Button,
+    Divider,
+    Icon,
+    message,
+    PageHeader,
+    Table,
+    Typography,
+    Input
+} from "antd";
 import Link from "next/link";
 import "../static/scss/dashboard.scss";
 import PageWrapper from "../components/common/PageWrapper";
 import getConfig from "next/config";
 import RecentProjects from "../components/projects/RecentProjects";
-import {withAuthSync} from "../utils/withAuthSync";
-import {useQuery} from "graphql-hooks";
-import {DataStoreContext} from "../contexts/DataStoreContextProvider";
+import { withAuthSync } from "../utils/withAuthSync";
+import { useQuery } from "graphql-hooks";
+import { DataStoreContext } from "../contexts/DataStoreContextProvider";
 import DeleteWarningModal from "../components/projects/DeleteWarningModal";
+import Highlighter from "react-highlight-words";
+import * as PropTypes from "prop-types";
 
 const { publicRuntimeConfig } = getConfig();
 const { CREATE_PROJECT_PATH, PROJECT_PATH } = publicRuntimeConfig;
@@ -16,34 +27,33 @@ const { Title } = Typography;
 
 export const projectsQuery = `
   query projectsQuery($limit: Int!, $skip: Int!) {
-      projects(limit: $limit, skip: $skip) {
-          id
-          title
-          description
-          websiteUrl
-          modifiedAt
-        }
-        _projectsMeta {
+    projects(limit: $limit, skip: $skip) {
+        id
+        title
+        description
+        websiteUrl
+        modifiedAt
+    }
+    _projectsMeta {
       count
     }
 }
 `;
 
-
 const Dashboard = () => {
     const [skip, setSkip] = useState(0);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(4);
     const dataStoreContext = useContext(DataStoreContext);
     const [current, setCurrent] = useState(1);
     const [visible, setVisible] = useState(false);
     const [project, setProject] = useState({});
+    const [searchText, setSearchText] = useState("");
 
     const { loading, error, data, refetch } = useQuery(projectsQuery, {
-        variables: {skip, limit: pageSize}
+        variables: { skip, limit: pageSize }
     });
 
     const onChange = page => {
-        console.log("Page no is: ", page);
         setSkip((page - 1) * pageSize);
         setCurrent(page);
     };
@@ -52,7 +62,7 @@ const Dashboard = () => {
         console.log("Effect 1 called");
         if (dataStoreContext.projectListUpdated) {
             dataStoreContext.setProjectListUpdated(false);
-            refetch({variables: {skip, limit: pageSize}});
+            refetch({ variables: { skip, limit: pageSize } });
         }
     }, [dataStoreContext.projectListUpdated]);
 
@@ -80,13 +90,110 @@ const Dashboard = () => {
         setVisible(false);
     };
 
-    const handleClick = (project_handle) => {
+    const handleClick = project_handle => {
         setVisible(true);
         setProject(project_handle);
     };
     const onDeleteProjectSuccess = () => {
         setVisible(false);
     };
+    let searchInput;
+
+    const getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({
+            // eslint-disable-next-line react/prop-types
+            setSelectedKeys,
+            // eslint-disable-next-line react/prop-types
+            selectedKeys,
+            // eslint-disable-next-line react/prop-types
+            confirm,
+            // eslint-disable-next-line react/prop-types
+            clearFilters
+        }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        searchInput = node;
+                    }}
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e =>
+                        setSelectedKeys(e.target.value ? [e.target.value] : [])
+                    }
+                    onPressEnter={() => handleSearch(selectedKeys, confirm)}
+                    style={{ width: 188, marginBottom: 8, display: "block" }}
+                />
+                <Button
+                    type="primary"
+                    onClick={() => handleSearch(selectedKeys, confirm)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    Search
+                </Button>
+
+                <Button
+                    onClick={() => handleReset(clearFilters)}
+                    size="small"
+                    style={{ width: 90 }}
+                >
+                    Reset
+                </Button>
+            </div>
+        ),
+
+        
+
+        filterIcon: filtered => (
+            <Icon
+                type="search"
+                style={{ color: filtered ? "#1890ff" : undefined }}
+            />
+        ),
+        onFilter: (value, record) =>{
+            if(record[dataIndex]){
+                return record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase());
+            }
+            else
+            {
+                dataStoreContext.setProjectListUpdated(true);
+                return record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase());
+            }
+            
+        },
+
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => searchInput.select());
+            }
+        },
+        render: text => (
+            <Highlighter
+                highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+                searchWords={[searchText]}
+                autoEscape
+                textToHighlight={text.toString()}
+            />
+        ),
+
+    });
+
+    const handleSearch = (selectedKeys, confirm) => {
+        confirm();
+        setSearchText(selectedKeys[0]);
+      };
+    
+    const handleReset = clearFilters => {
+        clearFilters();
+        setSearchText("");
+      };
 
     const columns = [
         // {
@@ -98,22 +205,26 @@ const Dashboard = () => {
             title: "Title",
             dataIndex: "title",
             key: "title",
-            editable: true
+            ...getColumnSearchProps("title")
+
         },
         {
             title: "Description",
             dataIndex: "description",
-            key: "description"
+            key: "description",
+            ...getColumnSearchProps("description")
         },
         {
             title: "WebsiteUrl",
             dataIndex: "websiteUrl",
-            key: "websiteUrl"
+            key: "websiteUrl",
+            ...getColumnSearchProps("websiteUrl")
         },
         {
             title: "ModifiedAt",
             dataIndex: "modifiedAt",
-            key: "modifiedAt"
+            key: "modifiedAt",
+            ...getColumnSearchProps("modifiedAt")
         },
         {
             title: "Action",
@@ -130,7 +241,6 @@ const Dashboard = () => {
                         <a onClick={() => handleClick(record)}>
                             <Icon style={{ color: "red" }} type="delete" />
                         </a>
-
                     </Fragment>
                 </span>
             )
@@ -174,7 +284,6 @@ const Dashboard = () => {
                     project={project}
                     handleCancel={onCancel}
                     onSuccess={onDeleteProjectSuccess}
-
                 />
             </Fragment>
         </PageWrapper>
@@ -186,4 +295,5 @@ Dashboard.routeInfo = {
     path: "/dashboard",
     pathAs: "/dashboard"
 };
+
 export default withAuthSync(Dashboard);
