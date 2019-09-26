@@ -20,6 +20,7 @@ import { DataStoreContext } from "../contexts/DataStoreContextProvider";
 import DeleteWarningModal from "../components/projects/DeleteWarningModal";
 import Highlighter from "react-highlight-words";
 import * as PropTypes from "prop-types";
+import * as moment from "moment";
 
 const { publicRuntimeConfig } = getConfig();
 const { CREATE_PROJECT_PATH, PROJECT_PATH } = publicRuntimeConfig;
@@ -85,6 +86,11 @@ const Dashboard = () => {
 
     if (error || !data) return null;
     const { projects, _projectsMeta } = data;
+    
+    //-------- Change ISOdate to general date format ----------
+    projects.map (item => {
+        item.modifiedAt = moment(item.modifiedAt).format("DD-MMM-YYYY");
+    });
 
     const onCancel = () => {
         setVisible(false);
