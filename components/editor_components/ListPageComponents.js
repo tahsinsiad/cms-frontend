@@ -10,8 +10,8 @@ import AddComponentModal from "./AddComponentModal";
 const { TreeNode } = Tree;
 
 const ADD_COMPONENT = `
-mutation addComponent($componentIds: [String!], $parent: JSONObject, $projectId: String!, $page: String!) {
-  addComponent(componentIds: $componentIds, parent: $parent, projectId: $projectId, page: $page)
+mutation addComponents($componentIds: [String!], $parent: JSONObject, $projectId: String!, $page: String!) {
+  addComponents(componentIds: $componentIds, parent: $parent, projectId: $projectId, page: $page)
 }`;
 
 const ListPageComponents = ({ pageDetails }) => {
@@ -122,11 +122,11 @@ const ListPageComponents = ({ pageDetails }) => {
         setPageChildren(data);
     };
 
-    const addComponentRequest = async (selectedComponents) => {
+    const addComponentRequest = async (selectedComponentIds) => {
         const selectedProjectItem = dataStoreContext.selectedProjectItem;
         const result = await addComponent({
             variables: {
-                componentIds: selectedComponents.map(sc => sc.id),
+                componentIds: selectedComponentIds,
                 parent: selectedProjectItem,
                 projectId: projectId,
                 page: pageName
@@ -194,7 +194,7 @@ const ListPageComponents = ({ pageDetails }) => {
                 handleCancel={handleCancel}
             />
             <Button type="primary" onClick={showModal}>
-                Component Lists
+                Add Component
             </Button>
         </div>
     );

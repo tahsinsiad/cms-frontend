@@ -149,7 +149,6 @@ const Dashboard = () => {
             </div>
         ),
 
-        
 
         filterIcon: filtered => (
             <Icon
@@ -158,23 +157,12 @@ const Dashboard = () => {
             />
         ),
         onFilter: (value, record) =>{
-            if(record[dataIndex]){
+            console.log(record[dataIndex]);
                 return record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase());
-            }
-            else
-            {
-                dataStoreContext.setProjectListUpdated(true);
-                return record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase());
-            }
-            
-        },
-
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase());
+            },
         onFilterDropdownVisibleChange: visible => {
             if (visible) {
                 setTimeout(() => searchInput.select());

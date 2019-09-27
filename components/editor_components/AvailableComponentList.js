@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Checkbox, Col, message, Row, List, Spin, AutoComplete } from "antd";
+import React, { useEffect, useState,useContext, Fragment } from "react";
+import { Checkbox, Col, message, Row, List, Spin, AutoComplete, Button } from "antd";
 import * as PropTypes from "prop-types";
 import { useQuery } from "graphql-hooks";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroller";
+import {AvailableComponentContext} from "../../contexts/AvailableComponentContextProvider";
 
 export const availableComponentQuery = `
   query availableComponentQuery($projectId: String!, $limit: Int!, $skip: Int!) {
     allAvailableComponents(projectId: $projectId, limit: $limit, skip: $skip) {
+      id
       importSignature
       name
       props
@@ -15,11 +17,12 @@ export const availableComponentQuery = `
   }
 `;
 
-const AvailableComponentList = ({ onSelect }) => {
+const AvailableComponentList = ({onSelect, selectedComponents}) => {
     const [skip, setSkip] = useState(0);
-    const [limit, setLimit] = useState(1);
+    const [limit, setLimit] = useState(10);
     const [load, setLoad] = useState(false);
     const [hasMore, setHasmore] = useState(true);
+    const componentContext = useContext(AvailableComponentContext);
     //const dataStoreContext = useContext(DataStoreContext);
     const router = useRouter();
     const projectId = router.query.id;
@@ -27,14 +30,14 @@ const AvailableComponentList = ({ onSelect }) => {
     const { loading, error, data, refetch } = useQuery(
         availableComponentQuery,
         {
-            variables: { projectId, skip: skip, limit: limit },
-            // updateData: (prevResult, result) => ({
-            //     ...result,
-            //     allAvailableComponents: [
-            //         ...prevResult.allAvailableComponents,
-            //         ...result.allAvailableComponents
-            //     ]
-            // })
+            variables: { projectId, skip, limit },
+            updateData: (prevResult, result) => ({
+                ...result,
+                allAvailableComponents: [
+                    ...prevResult.allAvailableComponents,
+                    ...result.allAvailableComponents
+                ]
+            })
         }
     );
 
@@ -67,82 +70,40 @@ const AvailableComponentList = ({ onSelect }) => {
     //     });
     // };
 
-    //----- Using it for infinite scroll view ------
-
-    // const getComponents = item => {
-    //     return item.map(item => {
-    //         return (
-    //             <List.Item key={item.importSignature}>
-    //                 <Checkbox value={item.importSignature}>{item.name}</Checkbox>
-    //             </List.Item>
-    //         );
-    //     });
-    // };
-
-    const handleInfiniteLoad = () =>{
-        window.addEventListener("wheel", function(event){
-            if(event.deltaY > 0){
-                setLoad(true);
-                if (allAvailableComponents.length <= limit) {
-                    setSkip(skip + limit);
-                    console.log("skip is : ", skip);
-                    setHasmore(false);
-                    setLoad(false);
-        
-                    return;
-                }
-                setLoad(false); 
-            }
-            else if(event.deltaY < 0){
-                setLoad(true);
-            if (allAvailableComponents.length <= limit) {
-                let newSkip = skip-limit < 0 ? 0 : skip - limit ;
-                setSkip(newSkip);
-                //console.log("skip is : ", skip);
-                setHasmore(false);
-                setLoad(false);
-    
-                return;
-            }
+    const handleInfiniteLoad = () => {
+        console.log("handle called");
+        setLoad(true);
+        if(skip >= 18){  
+            setHasmore(false);
             setLoad(false);
-            }
-        });
+        }
+        else {
+
+            let newSkip = skip + limit;
+            setSkip(newSkip);
+            console.log("new skip:" ,newSkip);
+            setLoad(false);
+
+        }
+        
+        
+        
+        
     };
     
-
-    // const handleInfiniteLoad = () => {
-    //     console.log("handle called");
-    //     setLoad(true);
-    //     if (allAvailableComponents.length <= limit) {
-    //         setSkip(skip + limit);
-    //         console.log("skip is : ", skip);
-    //         setHasmore(false);
-    //         setLoad(false);
-
-    //         return;
-    //     }
-    //     setLoad(false);
-        
-    //     //refetch({ variables: { skip, limit: limit } });
-        
+    // const onChange = checkedValues => {
+    //     console.log("checked = ", checkedValues);
+    //     onSelect(checkedValues);
     // };
-    
-
-    const onChange = checkedValues => {
-        console.log("checked = ", checkedValues);
-        onSelect(checkedValues);
-    };
     return (
-        // <Checkbox.Group style={{ width: "100%" }} onChange={onChange}>
-        //     <Row>{getComponents(allAvailableComponents)}</Row>
-        // </Checkbox.Group>
 
         //----- Using it for infinite scroll view -----
 
-        <div style={{border: "1px solid #e8e8e8", borderRadius: 4, overflow: "auto", padding: "8px 24px", height: "50px"}}>
+        <div style={{border: "1px solid #e8e8e8", borderRadius: 4, overflow: "auto", padding: "8px 24px", height: "420px"}}>
             <InfiniteScroll
                 initialLoad={false}
                 pageStart={0}
+                threshold={10}
                 loadMore={handleInfiniteLoad}
                 hasMore={!load && hasMore}
                 useWindow={false}
@@ -168,7 +129,8 @@ const AvailableComponentList = ({ onSelect }) => {
 
 
 AvailableComponentList.propTypes = {
-    onSelect: PropTypes.func
+    onSelect: PropTypes.func,
+    selectedComponents: PropTypes.array
 };
 
 export default AvailableComponentList;
