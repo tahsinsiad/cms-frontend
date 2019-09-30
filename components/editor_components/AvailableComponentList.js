@@ -4,7 +4,6 @@ import * as PropTypes from "prop-types";
 import { useQuery } from "graphql-hooks";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroller";
-import {AvailableComponentContext} from "../../contexts/AvailableComponentContextProvider";
 
 export const availableComponentQuery = `
   query availableComponentQuery($projectId: String!, $limit: Int!, $skip: Int!) {
@@ -22,7 +21,6 @@ const AvailableComponentList = ({onSelect, selectedComponents}) => {
     const [limit, setLimit] = useState(10);
     const [load, setLoad] = useState(false);
     const [hasMore, setHasmore] = useState(true);
-    const componentContext = useContext(AvailableComponentContext);
     //const dataStoreContext = useContext(DataStoreContext);
     const router = useRouter();
     const projectId = router.query.id;

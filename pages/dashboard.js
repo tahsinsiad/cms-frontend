@@ -27,15 +27,15 @@ const { CREATE_PROJECT_PATH, PROJECT_PATH } = publicRuntimeConfig;
 const { Title } = Typography;
 
 export const projectsQuery = `
-  query projectsQuery($limit: Int!, $skip: Int!) {
-    projects(limit: $limit, skip: $skip) {
+  query projectsQuery($title: String, $limit: Int!, $skip: Int!) {
+    projects(title: $title, limit: $limit, skip: $skip) {
         id
         title
         description
         websiteUrl
         modifiedAt
     }
-    _projectsMeta {
+    _projectsMeta(title: $title) {
       count
     }
 }
@@ -44,16 +44,19 @@ export const projectsQuery = `
 const Dashboard = () => {
     const [skip, setSkip] = useState(0);
     const [pageSize, setPageSize] = useState(4);
+    const [title, setTitle] = useState("");
     const dataStoreContext = useContext(DataStoreContext);
     const [current, setCurrent] = useState(1);
     const [visible, setVisible] = useState(false);
     const [project, setProject] = useState({});
     const [searchText, setSearchText] = useState("");
 
-    const { loading, error, data, refetch } = useQuery(projectsQuery, {
-        variables: { skip, limit: pageSize }
+
+    const { loading, error, data, refetch } = useQuery(projectsQuery , {
+        variables: {title, skip, limit: pageSize }
     });
 
+    
     const onChange = page => {
         setSkip((page - 1) * pageSize);
         setCurrent(page);
@@ -63,7 +66,7 @@ const Dashboard = () => {
         console.log("Effect 1 called");
         if (dataStoreContext.projectListUpdated) {
             dataStoreContext.setProjectListUpdated(false);
-            refetch({ variables: { skip, limit: pageSize } });
+            refetch({ variables: {skip, limit: pageSize } });
         }
     }, [dataStoreContext.projectListUpdated]);
 
@@ -85,7 +88,9 @@ const Dashboard = () => {
     }, [error, loading]);
 
     if (error || !data) return null;
-    const { projects, _projectsMeta } = data;
+
+    console.log("Data: ", data);
+    const { projects, _projectsMeta} = data;
     
     //-------- Change ISOdate to general date format ----------
     projects.map (item => {
@@ -123,8 +128,9 @@ const Dashboard = () => {
                     }}
                     placeholder={`Search ${dataIndex}`}
                     value={selectedKeys[0]}
-                    onChange={e =>
-                        setSelectedKeys(e.target.value ? [e.target.value] : [])
+                    onChange={e => 
+                       setSelectedKeys(e.target.value ? [e.target.value] : [])
+                       
                     }
                     onPressEnter={() => handleSearch(selectedKeys, confirm)}
                     style={{ width: 188, marginBottom: 8, display: "block" }}
@@ -158,7 +164,7 @@ const Dashboard = () => {
         ),
         onFilter: (value, record) =>{
             console.log(record[dataIndex]);
-                return record[dataIndex]
+            return record[dataIndex]
                 .toString()
                 .toLowerCase()
                 .includes(value.toLowerCase());
@@ -182,6 +188,8 @@ const Dashboard = () => {
     const handleSearch = (selectedKeys, confirm) => {
         confirm();
         setSearchText(selectedKeys[0]);
+        setTitle(selectedKeys[0]);
+        console.log("Search text: ", selectedKeys[0]);
       };
     
     const handleReset = clearFilters => {
@@ -267,7 +275,7 @@ const Dashboard = () => {
                     columns={columns}
                     pagination={{
                         pageSize: pageSize,
-                        total: _projectsMeta.count,
+                        total: title === "" ? _projectsMeta.count : projects.length,
                         current,
                         onChange
                     }}

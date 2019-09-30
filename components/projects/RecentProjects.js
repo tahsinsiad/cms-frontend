@@ -13,8 +13,8 @@ const { Meta } = Card;
 const { confirm } = Modal;
 
 export const recentProjectsQuery = `
-  query recentProjectsQuery($limit: Int!, $skip: Int!) {
-    projects(limit: $limit, skip: $skip) {
+  query recentProjectsQuery($title: String, $limit: Int!, $skip: Int!) {
+    projects(title: $title, limit: $limit, skip: $skip) {
       id
       title
       description
@@ -30,12 +30,13 @@ export const recentProjectsQuery = `
 
 const RecentProjects = () => {
     const [skip, setSkip] = useState(0);
+    const [title,setTitle]=useState("");
     const [visible, setVisible] = useState(false);
     const dataStoreContext = useContext(DataStoreContext);
     const [project, setProject] = useState({});
 
     const { loading, error, data, refetch } = useQuery(recentProjectsQuery, {
-        variables: { skip, limit: 4 },
+        variables: {title, skip, limit: 4 },
         updateData: (prevResult, result) => ({
             ...result,
             projects: [...prevResult.projects, ...result.projects]
@@ -45,7 +46,7 @@ const RecentProjects = () => {
     useEffect(() => {
         if (dataStoreContext.projectListUpdated) {
             dataStoreContext.setProjectListUpdated(false);
-            refetch({ variables: { skip, limit: 4 } });
+            refetch({ variables: {title, skip, limit: 4 } });
         }
     }, [dataStoreContext.projectListUpdated]);
 
