@@ -21,13 +21,14 @@ import DeleteWarningModal from "../components/projects/DeleteWarningModal";
 import Highlighter from "react-highlight-words";
 import * as PropTypes from "prop-types";
 import * as moment from "moment";
+import DateRangePicker from "../components/editor_components/DateRangePicker";
 
 const { publicRuntimeConfig } = getConfig();
 const { CREATE_PROJECT_PATH, PROJECT_PATH } = publicRuntimeConfig;
 const { Title } = Typography;
 
 export const projectsQuery = `
-  query projectsQuery($title: String, $limit: Int!, $skip: Int!) {
+  query projectsQuery($title: String,$limit: Int!, $skip: Int!) {
     projects(title: $title, limit: $limit, skip: $skip) {
         id
         title
@@ -35,7 +36,7 @@ export const projectsQuery = `
         websiteUrl
         modifiedAt
     }
-    _projectsMeta(title: $title) {
+    _projectsMeta(title: $title){
       count
     }
 }
@@ -50,6 +51,8 @@ const Dashboard = () => {
     const [visible, setVisible] = useState(false);
     const [project, setProject] = useState({});
     const [searchText, setSearchText] = useState("");
+    const [startValue, setStartValue] = useState(null);
+    const [endValue, setEndValue] = useState(null);
 
 
     const { loading, error, data, refetch } = useQuery(projectsQuery , {
@@ -60,6 +63,16 @@ const Dashboard = () => {
     const onChange = page => {
         setSkip((page - 1) * pageSize);
         setCurrent(page);
+    };
+
+    const getStartValue = (start) =>{
+        setStartValue(moment(start).format());
+        console.log("Start Value: ", moment(start).format());
+    };
+
+    const getEndValue = (end) =>{
+        setEndValue(moment(end).format());
+        console.log("End value: ", moment(end).format());
     };
 
     useEffect(() => {
@@ -226,7 +239,6 @@ const Dashboard = () => {
             title: "ModifiedAt",
             dataIndex: "modifiedAt",
             key: "modifiedAt",
-            ...getColumnSearchProps("modifiedAt")
         },
         {
             title: "Action",
@@ -269,13 +281,15 @@ const Dashboard = () => {
 
                 <Divider />
 
+                <DateRangePicker start={getStartValue} end={getEndValue}/>
+
                 <Title level={3}>All Project</Title>
                 <Table
                     dataSource={projects}
                     columns={columns}
                     pagination={{
                         pageSize: pageSize,
-                        total: title === "" ? _projectsMeta.count : projects.length,
+                        total: _projectsMeta.count,
                         current,
                         onChange
                     }}
